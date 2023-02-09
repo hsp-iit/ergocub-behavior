@@ -21,6 +21,6 @@ find_package(ament_index_cpp REQUIRED)
 
 find_package(YARP COMPONENTS os idl_tools dev REQUIRED)
 
-add_subdirectory(bts/src)
-add_subdirectory(interfaces)
 add_subdirectory(components)
+add_subdirectory(bts/src)
+

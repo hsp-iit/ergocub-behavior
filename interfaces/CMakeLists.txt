@@ -5,6 +5,5 @@
 #                                                                              #
 ################################################################################
 
-add_subdirectory(counter)
 add_subdirectory(action_recognition)
 add_subdirectory(object_detection)
