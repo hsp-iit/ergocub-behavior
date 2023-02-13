@@ -17,6 +17,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
  # Create the component (navigation client)
 find_package(YARP COMPONENTS os dev REQUIRED)
 include_directories(include)
+
 add_executable(action_recognition)  # ADDED
 target_sources(action_recognition  # DECOMMENfED
   PRIVATE

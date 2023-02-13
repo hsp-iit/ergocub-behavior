@@ -35,7 +35,7 @@
 #include <thread>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
-#include <ActionRecognition.h>
+#include <ActionRecognitionInterface.h>
 
 
 CorrectActionRecognized::CorrectActionRecognized(string name, const NodeConfiguration& config) :

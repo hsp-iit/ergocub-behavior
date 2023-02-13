@@ -27,7 +27,7 @@
 
 
 #include <behaviortree_cpp_v3/condition_node.h>
-/*#include <ActionRecognition.h>*/
+#include <ActionRecognitionInterface.h>
 #include <string>
 #include <future>
 using namespace BT;
@@ -42,7 +42,7 @@ public:
 private:
     bool init(std::string);
     static BT::PortsList providedPorts() {}
-    ActionRecognition action_recognition_client_;
+    ActionRecognitionInterface action_recognition_client_;
     bool is_ok_{false};
 
 
