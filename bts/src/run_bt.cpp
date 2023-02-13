@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
     BehaviorTreeFactory bt_factory;
     bt_factory.registerNodeType<AskToGetCloser>("AskToGetCloser");
     bt_factory.registerNodeType<HandoutSuccessful>("HandoutSuccessful");
+    bt_factory.registerNodeType<CorrectActionRecognized>("CorrectActionRecognized");
 
     BT::Tree tree = bt_factory.createTreeFromFile(fileName);
 

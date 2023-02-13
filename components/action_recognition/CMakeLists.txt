@@ -27,3 +27,17 @@ target_link_libraries(action_recognition  # DECOMMENTED
     YARP::YARP_os
     YARP::YARP_init
     YARP::YARP_dev)
+
+
+find_package(YARP COMPONENTS os dev REQUIRED)
+include_directories(include)
+
+add_library(action_recognition_interface)  # ADDED
+target_sources(action_recognition_interface  # DECOMMENfED
+        PRIVATE
+        ActionRecognitionInterface.cpp)  # DECOMMENTED
+target_link_libraries(action_recognition_interface  # DECOMMENTED
+        PRIVATE
+        YARP::YARP_os
+        YARP::YARP_init
+        YARP::YARP_dev)
