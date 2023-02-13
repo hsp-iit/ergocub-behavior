@@ -29,16 +29,16 @@
 
 
 #include <behaviortree_cpp_v3/condition_node.h>
-#include "person_is_focused.h"
+#include "human_paying_attention.h"
 
 #include <chrono>
 #include <thread>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
-#include <ActionRecognition.h>
+#include <ActionRecognitionInterface.h>
 
 
-PersonIsFocused::PersonIsFocused(string name, const NodeConfiguration& config) :
+HumanPayingAttention::HumanPayingAttention(string name, const NodeConfiguration& config) :
     ConditionNode(name, config)
 {
     is_ok_ = init(name);
@@ -46,7 +46,7 @@ PersonIsFocused::PersonIsFocused(string name, const NodeConfiguration& config) :
 
 }
 
-bool PersonIsFocused::init(std::string name)
+bool HumanPayingAttention::init(std::string name)
 {
   yarp::os::Network yarp;
 
@@ -68,7 +68,7 @@ bool PersonIsFocused::init(std::string name)
   return true;
 }
 
-NodeStatus PersonIsFocused::tick()
+NodeStatus HumanPayingAttention::tick()
 {
     return action_recognition_client_.is_focused() ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 }

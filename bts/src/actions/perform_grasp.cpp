@@ -28,27 +28,37 @@
  *                                                                            *
  ******************************************************************************/
 
+#include <behaviortree_cpp_v3/action_node.h>
 
-#include <behaviortree_cpp_v3/condition_node.h>
-#include "human_not_too_far.h"
+#include "perform_grasp.h"
 
 #include <chrono>
 #include <thread>
+#include <unistd.h>
 
 
-HumanNotTooFar::HumanNotTooFar(string name, const NodeConfiguration& config) :
-    ConditionNode(name, config)
+PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
+    CoroActionNode(name, config)
 {
 
 }
 
-NodeStatus HumanNotTooFar::tick()
+NodeStatus PerformGrasp::tick()
 {
-
-    return NodeStatus::FAILURE;
+    setStatusRunningAndYield();
+    cout << "Please get closer!" << endl;
+    sleep(5);
+    return NodeStatus::SUCCESS;
 }
 
-PortsList HumanNotTooFar::providedPorts()
+void PerformGrasp::halt()
+{
+
+    CoroActionNode::halt();
+}
+
+
+PortsList PerformGrasp::providedPorts()
 {
     return { };
 }
