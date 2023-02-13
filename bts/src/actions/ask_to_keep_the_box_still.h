@@ -28,27 +28,22 @@
  *                                                                            *
  ******************************************************************************/
 
-
-#include <behaviortree_cpp_v3/condition_node.h>
-#include "human_not_too_far.h"
-
-#include <chrono>
-#include <thread>
+#pragma once
 
 
-HumanNotTooFar::HumanNotTooFar(string name, const NodeConfiguration& config) :
-    ConditionNode(name, config)
+#include <behaviortree_cpp_v3/action_node.h>
+
+#include <string>
+#include <future>
+using namespace BT;
+using namespace std;
+
+class AskToKeepTheBoxStill :  public CoroActionNode
 {
+public:
+    AskToKeepTheBoxStill(string name, const NodeConfiguration &config);
+    void halt() override;
+    NodeStatus tick() override;
+    static PortsList providedPorts();
 
-}
-
-NodeStatus HumanNotTooFar::tick()
-{
-
-    return NodeStatus::FAILURE;
-}
-
-PortsList HumanNotTooFar::providedPorts()
-{
-    return { };
-}
+};

@@ -12,7 +12,7 @@
                     <Condition ID="IsBoxStill"/>
                     <Action ID="AskToKeepTheBoxStill"/>
                 </ReactiveFallback>
-                <Action ID="PerformTheGrasp"/>
+                <Action ID="PerformGrasp"/>
             </ReactiveSequence>
         </ReactiveFallback>
     </BehaviorTree>
@@ -20,7 +20,7 @@
     <BehaviorTree ID="GraspingPointsDetected">
         <ReactiveFallback>
             <Condition ID="ArePointsReachable"/>
-            <Action ID="AskToMoveTheObjectCloser"/>
+            <Action ID="AskToMoveObjectCloser"/>
         </ReactiveFallback>
     </BehaviorTree>
     <!-- ////////// -->
@@ -29,7 +29,7 @@
             <ReactiveFallback>
                 <Condition ID="HumanNotTooFar"/>
                 <ReactiveFallback>
-                    <Condition ID="HumanIsNotMovingTowardsCamera"/>
+                    <Condition ID="HumanNotGettingCloser"/>
                     <Action ID="AskToGetCloser"/>
                 </ReactiveFallback>
             </ReactiveFallback>
@@ -44,17 +44,17 @@
         <Condition ID="ArePointsReachable"/>
         <Action ID="AskToGetCloser"/>
         <Action ID="AskToKeepTheBoxStill"/>
-        <Action ID="AskToMoveTheObjectCloser"/>
+        <Action ID="AskToMoveObjectCloser"/>
         <Action ID="AskToPayAttention"/>
         <Condition ID="CorrectActionRecognized"/>
         <SubTree ID="GraspingPointsDetected"/>
         <SubTree ID="HRIEstablished"/>
         <Condition ID="HandoutSuccessful"/>
-        <Condition ID="HumanIsNotMovingTowardsCamera"/>
+        <Condition ID="HumanNotGettingCloser"/>
         <Condition ID="HumanNotTooFar"/>
         <Condition ID="HumanPayingAttention"/>
         <Condition ID="IsBoxStill"/>
-        <Action ID="PerformTheGrasp"/>
+        <Action ID="PerformGrasp"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>

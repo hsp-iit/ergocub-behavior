@@ -48,8 +48,19 @@
 #include <behaviortree_cpp_v3/loggers/bt_file_logger.h>
 
 #include <actions/ask_to_get_closer.h>
+#include <actions/ask_to_pay_attention.h>
+#include <actions/ask_to_move_object_closer.h>
+#include <actions/ask_to_keep_the_box_still.h>
+#include <actions/perform_grasp.h>
+
 #include <conditions/handout_successful.h>
 #include <conditions/correct_action_recognized.h>
+#include <conditions/human_not_too_far.h>
+#include <conditions/human_not_getting_closer.h>
+#include <conditions/human_paying_attention.h>
+
+#include <conditions/are_points_reachable.h>
+#include <conditions/is_box_still.h>
 
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
@@ -67,8 +78,19 @@ int main(int argc, char *argv[])
 
     BehaviorTreeFactory bt_factory;
     bt_factory.registerNodeType<AskToGetCloser>("AskToGetCloser");
+    bt_factory.registerNodeType<AskToPayAttention>("AskToPayAttention");
+    bt_factory.registerNodeType<AskToMoveObjectCloser>("AskToMoveObjectCloser");
+    bt_factory.registerNodeType<AskToKeepTheBoxStill>("AskToKeepTheBoxStill");
+    bt_factory.registerNodeType<PerformGrasp>("PerformGrasp");
+
     bt_factory.registerNodeType<HandoutSuccessful>("HandoutSuccessful");
     bt_factory.registerNodeType<CorrectActionRecognized>("CorrectActionRecognized");
+    bt_factory.registerNodeType<HumanNotTooFar>("HumanNotTooFar");
+    bt_factory.registerNodeType<HumanNotGettingCloser>("HumanNotGettingCloser");
+    bt_factory.registerNodeType<HumanPayingAttention>("HumanPayingAttention");
+
+    bt_factory.registerNodeType<ArePointsReachable>("ArePointsReachable");
+    bt_factory.registerNodeType<IsBoxStill>("IsBoxStill");
 
     BT::Tree tree = bt_factory.createTreeFromFile(fileName);
 

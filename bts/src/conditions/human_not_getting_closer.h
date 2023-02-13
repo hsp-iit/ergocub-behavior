@@ -28,27 +28,21 @@
  *                                                                            *
  ******************************************************************************/
 
+#pragma once
+
 
 #include <behaviortree_cpp_v3/condition_node.h>
-#include "human_not_too_far.h"
 
-#include <chrono>
-#include <thread>
+#include <string>
+#include <future>
+using namespace BT;
+using namespace std;
 
-
-HumanNotTooFar::HumanNotTooFar(string name, const NodeConfiguration& config) :
-    ConditionNode(name, config)
+class HumanNotGettingCloser :  public ConditionNode
 {
+public:
+    HumanNotGettingCloser(string name, const NodeConfiguration &config);
+    NodeStatus tick() override;
+    static PortsList providedPorts();
 
-}
-
-NodeStatus HumanNotTooFar::tick()
-{
-
-    return NodeStatus::FAILURE;
-}
-
-PortsList HumanNotTooFar::providedPorts()
-{
-    return { };
-}
+};

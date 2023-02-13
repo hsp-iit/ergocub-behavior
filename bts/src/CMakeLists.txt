@@ -18,8 +18,19 @@ include_directories(
 target_sources(custom_leaf_nodes
   PRIVATE
   actions/ask_to_get_closer.cpp
+  actions/ask_to_pay_attention.cpp
+  actions/ask_to_keep_the_box_still.cpp
+  actions/perform_grasp.cpp
+
+  actions/ask_to_move_object_closer.cpp
   conditions/handout_successful.cpp
   conditions/correct_action_recognized.cpp
+  conditions/human_not_too_far.cpp
+  conditions/human_not_getting_closer.cpp
+  conditions/human_paying_attention.cpp
+  conditions/are_points_reachable.cpp
+
+  conditions/is_box_still.cpp
 )
 
 target_include_directories(custom_leaf_nodes

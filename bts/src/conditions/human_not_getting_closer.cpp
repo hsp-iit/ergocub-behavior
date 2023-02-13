@@ -30,25 +30,25 @@
 
 
 #include <behaviortree_cpp_v3/condition_node.h>
-#include "human_not_too_far.h"
+#include "human_not_getting_closer.h"
 
 #include <chrono>
 #include <thread>
 
 
-HumanNotTooFar::HumanNotTooFar(string name, const NodeConfiguration& config) :
+HumanNotGettingCloser::HumanNotGettingCloser(string name, const NodeConfiguration& config) :
     ConditionNode(name, config)
 {
 
 }
 
-NodeStatus HumanNotTooFar::tick()
+NodeStatus HumanNotGettingCloser::tick()
 {
 
     return NodeStatus::FAILURE;
 }
 
-PortsList HumanNotTooFar::providedPorts()
+PortsList HumanNotGettingCloser::providedPorts()
 {
     return { };
 }
