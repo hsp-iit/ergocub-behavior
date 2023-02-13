@@ -72,3 +72,8 @@ NodeStatus CorrectActionRecognized::tick()
 {
     return action_recognition_client_.get_action() == 4 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 }
+
+PortsList CorrectActionRecognized::providedPorts()
+{
+    return { };
+}

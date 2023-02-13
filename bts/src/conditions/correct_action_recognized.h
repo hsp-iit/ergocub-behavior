@@ -38,17 +38,12 @@ class CorrectActionRecognized :  public ConditionNode
 public:
     CorrectActionRecognized(string name, const NodeConfiguration &config);
     NodeStatus tick() override;
+    static PortsList providedPorts();
 
 private:
     bool init(std::string);
-    static BT::PortsList providedPorts() {}
     ActionRecognitionInterface action_recognition_client_;
     bool is_ok_{false};
-
-
-
-
-
 };
 
 

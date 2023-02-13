@@ -17,7 +17,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
 # BehaviorTree.CPP links Boost::coroutine, but does not look for it
 find_package(Boost COMPONENTS coroutine REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
-find_package(ament_index_cpp REQUIRED)
 
 find_package(YARP COMPONENTS os idl_tools dev REQUIRED)
 

@@ -38,10 +38,10 @@
 using namespace BT;
 using namespace std;
 
-class HandoutSuccessful :  public ConditionNode
+class HumanNotTooFar :  public ConditionNode
 {
 public:
-    HandoutSuccessful(string name, const NodeConfiguration &config);
+    HumanNotTooFar(string name, const NodeConfiguration &config);
     NodeStatus tick() override;
     static PortsList providedPorts();
 
