@@ -41,10 +41,10 @@ target_include_directories(custom_leaf_nodes
 target_link_libraries(custom_leaf_nodes
   PRIVATE
     action_recognition_interface
+    object_detection_interface
     BT::behaviortree_cpp_v3
     YARP::YARP_os
     )
-
 
 
 add_executable(run_bt)

@@ -48,27 +48,27 @@ HumanPayingAttention::HumanPayingAttention(string name, const NodeConfiguration&
 
 bool HumanPayingAttention::init(std::string name)
 {
-  yarp::os::Network yarp;
-
-  yarp::os::Port client_port;
-
-  std::string server_name = "/Components/FakeActionRecognition/Server"s;
-  std::string client_name = "/BT/" + name + "/FakeActionRecognition/Client"s;
-
-  client_port.open("client_name");
-
-  // connect to server
-  if (!yarp.connect("client_name",server_name))
-  {
-     std::cout << "Error! Could not connect to server " << server_name << '\n';
-     return false;
-  }
-
-  action_recognition_client_.yarp().attachAsClient(client_port);
-  return true;
+//  yarp::os::Network yarp;
+//
+//  yarp::os::Port client_port;
+//
+//  std::string server_name = "/Components/FakeActionRecognition/Server"s;
+//  std::string client_name = "/BT/" + name + "/FakeActionRecognition/Client"s;
+//
+//  client_port.open("client_name");
+//
+//  // connect to server
+//  if (!yarp.connect("client_name",server_name))
+//  {
+//     std::cout << "Error! Could not connect to server " << server_name << '\n';
+//     return false;
+//  }
+//
+//  action_recognition_client_.yarp().attachAsClient(client_port);
+//  return true;
 }
 
 NodeStatus HumanPayingAttention::tick()
 {
-    return action_recognition_client_.is_focused() ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+//    return action_recognition_client_.is_focused() ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 }

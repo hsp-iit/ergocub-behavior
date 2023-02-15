@@ -26,3 +26,13 @@ target_link_libraries(object_detection  # DECOMMENTED
     YARP::YARP_os
     YARP::YARP_init
     YARP::YARP_dev)
+
+add_library(object_detection_interface)  # ADDED
+target_sources(object_detection_interface  # DECOMMENfED
+        PRIVATE
+        ObjectDetectionInterface.cpp)  # DECOMMENTED
+target_link_libraries(object_detection_interface  # DECOMMENTED
+        PRIVATE
+        YARP::YARP_os
+        YARP::YARP_init
+        YARP::YARP_dev)

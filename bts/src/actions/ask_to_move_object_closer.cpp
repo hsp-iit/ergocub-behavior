@@ -35,6 +35,7 @@
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include <ctime>
 
 
 AskToMoveObjectCloser::AskToMoveObjectCloser(string name, const NodeConfiguration& config) :
@@ -45,10 +46,11 @@ AskToMoveObjectCloser::AskToMoveObjectCloser(string name, const NodeConfiguratio
 
 NodeStatus AskToMoveObjectCloser::tick()
 {
-    setStatusRunningAndYield();
-    cout << "Please get closer!" << endl;
-    sleep(5);
-    return NodeStatus::SUCCESS;
+    if((std::time(NULL) - last_tick) > 5)
+        cout << "I can't reach the box. Please move it closer" << endl;
+
+    last_tick = std::time(NULL);
+    return NodeStatus::FAILURE;
 }
 
 void AskToMoveObjectCloser::halt()

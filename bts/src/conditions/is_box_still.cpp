@@ -40,17 +40,31 @@
 IsBoxStill::IsBoxStill(string name, const NodeConfiguration& config) :
     ConditionNode(name, config)
 {
-
+    is_ok_ = init(name);
 }
 
 bool IsBoxStill::init(std::string name)
 {
+    std::string server_name = "/Components/ObjectDetection"s;
+    std::string client_name = "/BT/" + name + "/ObjectDetection"s;
 
+    client_port.open(client_name);
+
+    if (!yarp.connect(client_name,server_name))
+    {
+        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        return false;
+    }
+    object_detection_client_.yarp().attachAsClient(client_port);
+    return true;
 }
 
 NodeStatus IsBoxStill::tick()
 {
-
+    auto poses = object_detection_client_.get_distance();
+//    At every tick get hands poses anc check if they are
+//    similar to an average of the previous ones
+    return  BT::NodeStatus::SUCCESS;
 }
 
 PortsList IsBoxStill::providedPorts()

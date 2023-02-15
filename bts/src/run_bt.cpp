@@ -73,27 +73,31 @@ using namespace BT;
 int main(int argc, char *argv[])
 {
 
-    std::string fileName = "/home/btuc/bt-assignment/bts/descriptions/ergotree.xml";
+    std::string fileName = "/home/btuc/bt-assignment/bts/descriptions/ergotree_grasping.xml";
 
 
     BehaviorTreeFactory bt_factory;
-    bt_factory.registerNodeType<AskToGetCloser>("AskToGetCloser");
-    bt_factory.registerNodeType<AskToPayAttention>("AskToPayAttention");
+//    bt_factory.registerNodeType<AskToGetCloser>("AskToGetCloser");
+//    bt_factory.registerNodeType<AskToPayAttention>("AskToPayAttention");
     bt_factory.registerNodeType<AskToMoveObjectCloser>("AskToMoveObjectCloser");
     bt_factory.registerNodeType<AskToKeepTheBoxStill>("AskToKeepTheBoxStill");
     bt_factory.registerNodeType<PerformGrasp>("PerformGrasp");
 
-    bt_factory.registerNodeType<HandoutSuccessful>("HandoutSuccessful");
-    bt_factory.registerNodeType<CorrectActionRecognized>("CorrectActionRecognized");
-    bt_factory.registerNodeType<HumanNotTooFar>("HumanNotTooFar");
-    bt_factory.registerNodeType<HumanNotGettingCloser>("HumanNotGettingCloser");
-    bt_factory.registerNodeType<HumanPayingAttention>("HumanPayingAttention");
+
+//    bt_factory.registerNodeType<CorrectActionRecognized>("CorrectActionRecognized");
+//    bt_factory.registerNodeType<HumanNotTooFar>("HumanNotTooFar");
+//    bt_factory.registerNodeType<HumanNotGettingCloser>("HumanNotGettingCloser");
+//    bt_factory.registerNodeType<HumanPayingAttention>("HumanPayingAttention");
 
     bt_factory.registerNodeType<ArePointsReachable>("ArePointsReachable");
     bt_factory.registerNodeType<IsBoxStill>("IsBoxStill");
 
-    BT::Tree tree = bt_factory.createTreeFromFile(fileName);
+    bt_factory.registerNodeType<HandoutSuccessful>("HandoutSuccessful");
 
+    auto blackboard = BT::Blackboard::create();
+    blackboard->set("grasp_success", false);
+
+    auto tree = bt_factory.createTreeFromFile(fileName, blackboard);
 
     // Create some logger
     StdCoutLogger logger_cout(tree);
@@ -106,10 +110,21 @@ int main(int argc, char *argv[])
     printTreeRecursively(tree.rootNode());
 
 
+
     while(true)
     {
-            tree.tickRoot();
+            auto status = tree.tickRoot();
             std::this_thread::sleep_for (std::chrono::milliseconds(100));
+
+            if (status == BT::NodeStatus::SUCCESS) {
+                std::cout << "Success" << std::endl;
+                break;
+            }
+//
+//            if (status == BT::NodeStatus::FAILURE) {
+//                std::cout << "Failure" << std::endl;
+//                break;
+//            }
     }
 
     return 0;

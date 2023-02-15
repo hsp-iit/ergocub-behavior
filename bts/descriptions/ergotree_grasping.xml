@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <ReactiveFallback>
+            <Condition ID="HandoutSuccessful" message="{grasp_success}"/>
+            <ReactiveSequence>
+                <SubTree ID="GraspingPointsDetected"/>
+                <ReactiveFallback>
+                    <Condition ID="IsBoxStill"/>
+                    <Action ID="AskToKeepTheBoxStill"/>
+                </ReactiveFallback>
+                <Action ID="PerformGrasp" message="{grasp_success}"/>
+            </ReactiveSequence>
+        </ReactiveFallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="GraspingPointsDetected">
+        <ReactiveFallback>
+            <Condition ID="ArePointsReachable"/>
+            <Action ID="AskToMoveObjectCloser"/>
+        </ReactiveFallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="HRIEstablished">
+        <ReactiveSequence>
+            <ReactiveFallback>
+                <Condition ID="HumanNotTooFar"/>
+                <ReactiveFallback>
+                    <Condition ID="HumanNotGettingCloser"/>
+                    <Action ID="AskToGetCloser"/>
+                </ReactiveFallback>
+            </ReactiveFallback>
+            <ReactiveFallback>
+                <Condition ID="HumanPayingAttention"/>
+                <Action ID="AskToPayAttention"/>
+            </ReactiveFallback>
+        </ReactiveSequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Condition ID="ArePointsReachable"/>
+        <Action ID="AskToGetCloser"/>
+        <Action ID="AskToKeepTheBoxStill"/>
+        <Action ID="AskToMoveObjectCloser"/>
+        <Action ID="AskToPayAttention"/>
+        <Condition ID="CorrectActionRecognized"/>
+        <SubTree ID="GraspingPointsDetected"/>
+        <SubTree ID="HRIEstablished"/>
+        <Condition ID="HandoutSuccessful"/>
+        <Condition ID="HumanNotGettingCloser"/>
+        <Condition ID="HumanNotTooFar"/>
+        <Condition ID="HumanPayingAttention"/>
+        <Condition ID="IsBoxStill"/>
+        <Action ID="PerformGrasp"/>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>
