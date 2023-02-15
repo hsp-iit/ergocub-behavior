@@ -30,10 +30,13 @@
 
 
 #include <behaviortree_cpp_v3/condition_node.h>
+//#include <behaviortree_cpp_v3/utils.h>
+//#include <behaviortree_cpp_v3/input_port.h>
 #include "handout_successful.h"
 
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 
 HandoutSuccessful::HandoutSuccessful(string name, const NodeConfiguration& config) :
@@ -44,10 +47,16 @@ HandoutSuccessful::HandoutSuccessful(string name, const NodeConfiguration& confi
 
 NodeStatus HandoutSuccessful::tick()
 {
-    return NodeStatus::FAILURE;
+    auto object_grasped = getInput<std::string>("message");
+    if (!object_grasped)
+    {
+        throw BT::RuntimeError("missing required input [message]: ",
+                               object_grasped.error() );
+    }
+    return object_grasped.value() == "true" ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 }
 
 PortsList HandoutSuccessful::providedPorts()
 {
-    return { };
+    return { BT::InputPort<std::string>("message") };
 }

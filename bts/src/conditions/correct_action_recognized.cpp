@@ -31,6 +31,7 @@
 #include <behaviortree_cpp_v3/condition_node.h>
 #include "correct_action_recognized.h"
 
+#include <iostream>
 #include <chrono>
 #include <thread>
 #include <yarp/os/Network.h>
@@ -42,35 +43,30 @@ CorrectActionRecognized::CorrectActionRecognized(string name, const NodeConfigur
     ConditionNode(name, config)
 {
     is_ok_ = init(name);
-
-
 }
 
 bool CorrectActionRecognized::init(std::string name)
 {
-  yarp::os::Network yarp;
+  std::string server_name = "/Components/ActionRecognition"s;
+  std::string client_name = "/BT/" + name + "/ActionRecognition/pippo"s;
 
-  yarp::os::Port client_port;
-
-  std::string server_name = "/Components/ActionRecognition/Server"s;
-  std::string client_name = "/BT/" + name + "/FakeActionRecognition/Client"s;
-
-  client_port.open("client_name");
+  client_port.open(client_name);
 
   // connect to server
-  if (!yarp.connect("client_name",server_name))
+  if (!yarp.connect(client_name,server_name))
   {
      std::cout << "Error! Could not connect to server " << server_name << '\n';
      return false;
   }
-
   action_recognition_client_.yarp().attachAsClient(client_port);
   return true;
 }
 
 NodeStatus CorrectActionRecognized::tick()
 {
-    return action_recognition_client_.get_action() == 4 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+    auto action = action_recognition_client_.get_action();
+    return action == 4 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+
 }
 
 PortsList CorrectActionRecognized::providedPorts()

@@ -45,5 +45,6 @@ public:
     void halt() override;
     NodeStatus tick() override;
     static PortsList providedPorts();
-
+private:
+    int last_tick = 0;
 };

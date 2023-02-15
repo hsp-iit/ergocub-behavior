@@ -45,20 +45,18 @@ PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
 
 NodeStatus PerformGrasp::tick()
 {
-    setStatusRunningAndYield();
-    cout << "Please get closer!" << endl;
-    sleep(5);
+    sleep(10);
+    setOutput("message", "true" );
     return NodeStatus::SUCCESS;
 }
 
 void PerformGrasp::halt()
 {
-
     CoroActionNode::halt();
 }
 
 
 PortsList PerformGrasp::providedPorts()
 {
-    return { };
+    return { OutputPort<std::string>("message") };
 }
