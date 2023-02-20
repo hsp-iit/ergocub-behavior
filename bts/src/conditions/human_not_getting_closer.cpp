@@ -45,7 +45,7 @@ HumanNotGettingCloser::HumanNotGettingCloser(string name, const NodeConfiguratio
 NodeStatus HumanNotGettingCloser::tick()
 {
 
-    return NodeStatus::FAILURE;
+    return BT::NodeStatus::SUCCESS;
 }
 
 PortsList HumanNotGettingCloser::providedPorts()

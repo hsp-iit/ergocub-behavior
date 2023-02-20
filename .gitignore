@@ -3,3 +3,10 @@
 .idea
 
 docker-compose.yaml
+start.sh
+.bash_history
+.config
+.dbus
+.local
+.sudo_as_admin_successful
+home-volume

@@ -45,10 +45,11 @@ AskToPayAttention::AskToPayAttention(string name, const NodeConfiguration& confi
 
 NodeStatus AskToPayAttention::tick()
 {
-    setStatusRunningAndYield();
-    cout << "Please get closer!" << endl;
-    sleep(5);
-    return NodeStatus::SUCCESS;
+    if((std::time(NULL) - last_tick) > 5)
+        cout << "Please be focus while performing handover" << endl;
+
+    last_tick = std::time(NULL);
+    return NodeStatus::FAILURE;
 }
 
 void AskToPayAttention::halt()

@@ -3,7 +3,7 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveFallback>
-            <Condition ID="HandoutSuccessful"/>
+            <Condition ID="HandoutSuccessful" message="{grasp_success}"/>
             <ReactiveSequence>
                 <Condition ID="CorrectActionRecognized"/>
                 <SubTree ID="HRIEstablished"/>
@@ -12,7 +12,7 @@
                     <Condition ID="IsBoxStill"/>
                     <Action ID="AskToKeepTheBoxStill"/>
                 </ReactiveFallback>
-                <Action ID="PerformGrasp"/>
+                <Action ID="PerformGrasp" message="{grasp_success}"/>
             </ReactiveSequence>
         </ReactiveFallback>
     </BehaviorTree>
