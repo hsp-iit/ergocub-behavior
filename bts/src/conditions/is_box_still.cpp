@@ -61,9 +61,18 @@ bool IsBoxStill::init(std::string name)
 
 NodeStatus IsBoxStill::tick()
 {
-    auto poses = object_detection_client_.get_distance();
-//    At every tick get hands poses anc check if they are
-//    similar to an average of the previous ones
+
+    auto distance = object_detection_client_.get_distance();
+//    auto start = std::time(NULL);
+//
+//    while((std::time(NULL) - start) < 2) {
+//        auto poses = object_detection_client_.get_distance();
+//
+//        if (distance == -1 or distance >= threshold)
+//            return BT::NodeStatus::FAILURE;
+//
+//        setStatusRunningAndYield();
+//    }
     return  BT::NodeStatus::SUCCESS;
 }
 
