@@ -48,7 +48,7 @@ CorrectActionRecognized::CorrectActionRecognized(string name, const NodeConfigur
 bool CorrectActionRecognized::init(std::string name)
 {
   std::string server_name = "/Components/ActionRecognition"s;
-  std::string client_name = "/BT/" + name + "/ActionRecognition/pippo"s;
+  std::string client_name = "/BT/" + name + "/ActionRecognition/correct_action_recognized"s;
 
   client_port.open(client_name);
 

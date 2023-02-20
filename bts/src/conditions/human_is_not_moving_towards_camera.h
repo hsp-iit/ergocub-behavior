@@ -28,35 +28,21 @@
  *                                                                            *
  ******************************************************************************/
 
+#pragma once
+
 
 #include <behaviortree_cpp_v3/condition_node.h>
-//#include <behaviortree_cpp_v3/utils.h>
-//#include <behaviortree_cpp_v3/input_port.h>
-#include "handout_successful.h"
 
-#include <chrono>
-#include <thread>
-#include <iostream>
+#include <string>
+#include <future>
+using namespace BT;
+using namespace std;
 
-
-HandoutSuccessful::HandoutSuccessful(string name, const NodeConfiguration& config) :
-    ConditionNode(name, config)
+class HumanIsNotMovingTowardsCamera :  public ConditionNode
 {
+public:
+    HumanIsNotMovingTowardsCamera(string name, const NodeConfiguration &config);
+    NodeStatus tick() override;
+    static PortsList providedPorts();
 
-}
-
-NodeStatus HandoutSuccessful::tick()
-{
-    auto object_grasped = getInput<std::string>("message");
-    if (!object_grasped)
-    {
-        throw BT::RuntimeError("[handout_succesful] missing required input [message]: ",
-                               object_grasped.error() );
-    }
-    return object_grasped.value() == "true" ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
-}
-
-PortsList HandoutSuccessful::providedPorts()
-{
-    return { BT::InputPort<std::string>("message") };
-}
+};
