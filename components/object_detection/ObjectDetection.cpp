@@ -119,8 +119,11 @@ private:
             this->msg_type = data.data_type; }
         else if ( !success && errno == ENOMSG) {
             printf("Empty queue");
-            this->distance = -1;
-		    std::fill(this->poses.begin(), this->poses.end(), -1);
+//          If the queue is empty we use the last recorded value
+//          This is necessary aas the bt calls the component at higher frequency than
+//          the one at which the module is running
+//            this->distance = -1;
+//		    std::fill(this->poses.begin(), this->poses.end(), -1);
 		    return;}
 		else {
 		    this->msg_type = TYPE_NONE;

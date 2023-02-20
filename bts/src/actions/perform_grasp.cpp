@@ -40,12 +40,36 @@
 PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
     CoroActionNode(name, config)
 {
+    is_ok_ = init(name);
+}
 
+bool PerformGrasp::init(std::string name)
+{
+    std::string server_name = "/command"s;
+    std::string client_name = "/BT/" + name + "/Manipulation"s;
+
+    client_port.open(client_name);
+
+    if (!yarp.connect(client_name,server_name))
+    {
+        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        return false;
+    }
+    manipulation_client_.yarp().attachAsClient(client_port);
+    return true;
 }
 
 NodeStatus PerformGrasp::tick()
 {
-    sleep(10);
+    cout << "Performing grasp..." << endl;
+    manipulation_client_.grasp();
+
+    auto start = std::time(NULL);
+
+    while((std::time(NULL) - start) < 5) {
+        setStatusRunningAndYield();
+    }
+
     setOutput("message", "true" );
     return NodeStatus::SUCCESS;
 }

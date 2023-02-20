@@ -73,8 +73,7 @@ using namespace BT;
 int main(int argc, char *argv[])
 {
 
-    std::string fileName = "/home/ecub/Ergocub-Behaviour-Trees/bts/descriptions/ergotree.xml";
-
+    std::string fileName = "./bts/descriptions/ergotree_grasping.xml";
 
     BehaviorTreeFactory bt_factory;
 
@@ -110,7 +109,6 @@ int main(int argc, char *argv[])
     PublisherZMQ publisher_zmq(tree);
 #endif
     printTreeRecursively(tree.rootNode());
-
 
 
     while(true)
