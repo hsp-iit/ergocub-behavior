@@ -14,12 +14,12 @@ tmux new-session -d -s ecub-tmux
 
 # 0
 tmux send-keys -t ecub-tmux "docker exec -it ergocub_container bash" Enter
-tmux send-keys -t ecub-tmux "/home/btuc/bt-assignment/build/bin/action_recognition" Enter
+tmux send-keys -t ecub-tmux "/home/btuc/ergocub-behavior/build/bin/action_recognition" Enter
 tmux split-window -v -t ecub-tmux
 
 # 2
 tmux send-keys -t ecub-tmux "docker exec -it ergocub_container bash" Enter
-tmux send-keys -t ecub-tmux "/home/btuc/bt-assignment/build/bin/object_detection" Enter
+tmux send-keys -t ecub-tmux "/home/btuc/ergocub-behavior/build/bin/object_detection" Enter
 tmux split-window -v -t ecub-tmux
 
 
