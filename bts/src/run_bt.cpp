@@ -72,8 +72,8 @@ using namespace BT;
 
 int main(int argc, char *argv[])
 {
-
     std::string fileName = "./bts/descriptions/ergotree_grasping.xml";
+
 
     BehaviorTreeFactory bt_factory;
 
