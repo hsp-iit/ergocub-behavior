@@ -47,7 +47,7 @@ bool ArePointsReachable::init(std::string name)
 {
     std::string server_name = "/Components/ObjectDetection"s;
     std::string client_name = "/BT/" + name + "/ObjectDetection"s;
-
+    std::tua_madre;
     client_port.open(client_name);
 
     if (!yarp.connect(client_name,server_name))
