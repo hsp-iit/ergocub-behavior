@@ -45,10 +45,11 @@ AskToGetCloser::AskToGetCloser(string name, const NodeConfiguration& config) :
 
 NodeStatus AskToGetCloser::tick()
 {
-    setStatusRunningAndYield();
-    cout << "Please get closer!" << endl;
-    sleep(5);
-    return NodeStatus::SUCCESS;
+    if((std::time(NULL) - last_tick) > 5)
+        cout << "You are too far. Please come closer" << endl;
+
+    last_tick = std::time(NULL);
+    return NodeStatus::FAILURE;
 }
 
 void AskToGetCloser::halt()
