@@ -1,17 +1,16 @@
 /*
  *   Copyright (c) 2022 Michele Colledanchise
  *   All rights reserved.
-
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- 
+
  *   The above copyright notice and this permission notice shall be included in all
  *   copies or substantial portions of the Software.
- 
+
  *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,35 +29,47 @@
 
 
 #include <behaviortree_cpp_v3/condition_node.h>
-//#include <behaviortree_cpp_v3/utils.h>
-//#include <behaviortree_cpp_v3/input_port.h>
-#include "handout_successful.h"
+#include "handshake_action_recognized.h"
 
+#include <iostream>
 #include <chrono>
 #include <thread>
-#include <iostream>
+#include <yarp/os/Network.h>
+#include <yarp/os/Port.h>
+#include <ActionRecognitionInterface.h>
 
 
-HandoutSuccessful::HandoutSuccessful(string name, const NodeConfiguration& config) :
+HandshakeActionRecognized::HandshakeActionRecognized(string name, const NodeConfiguration& config) :
     ConditionNode(name, config)
 {
+    is_ok_ = init(name);
+}
+
+bool HandshakeActionRecognized::init(std::string name)
+{
+  std::string server_name = "/Components/ActionRecognition"s;
+  std::string client_name = "/BT/" + name + "/ActionRecognition/handshake_action_recognized"s;
+
+  client_port.open(client_name);
+
+  // connect to server
+  if (!yarp.connect(client_name,server_name))
+  {
+     std::cout << "Error! Could not connect to server " << server_name << '\n';
+     return false;
+  }
+  action_recognition_client_.yarp().attachAsClient(client_port);
+  return true;
+}
+
+NodeStatus HandshakeActionRecognized::tick()
+{
+    auto action = action_recognition_client_.get_action();
+    return action == 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 
 }
 
-NodeStatus HandoutSuccessful::tick()
+PortsList HandshakeActionRecognized::providedPorts()
 {
-    return BT::NodeStatus::FAILURE;
-//    cout << "FIX handout_successfull.cpp" << endl;
-//    auto object_grasped = getInput<std::string>("message");
-//    if (!object_grasped)
-//    {
-//        throw BT::RuntimeError("[handout_succesful] missing required input [message]: ",
-//                               object_grasped.error() );
-//    }
-//    return object_grasped.value() == "true" ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
-}
-
-PortsList HandoutSuccessful::providedPorts()
-{
-    return { BT::InputPort<std::string>("message") };
+    return { };
 }

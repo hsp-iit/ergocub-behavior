@@ -72,14 +72,20 @@ using namespace BT;
 
 int main(int argc, char *argv[])
 {
-    std::string fileName = "./bts/descriptions/ergotree_grasping.xml";
+    std::string fileName = "./bts/descriptions/ergotree.xml";
 
 
     BehaviorTreeFactory bt_factory;
 
     bt_factory.registerNodeType<HandoutSuccessful>("HandoutSuccessful");
 
-    bt_factory.registerNodeType<HandoutSuccessful>("CorrectActionRecognized");
+//    bt_factory.registerNodeType<HandoutSuccessful>("CorrectActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("StandActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("HelloActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("LiftActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("GetActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("HandshakeActionRecognized");
+
     bt_factory.registerNodeType<HandoutSuccessful>("HumanNotTooFar");
     bt_factory.registerNodeType<HandoutSuccessful>("HumanIsNotMovingTowardsCamera");
     bt_factory.registerNodeType<HandoutSuccessful>("AskToGetCloser");
