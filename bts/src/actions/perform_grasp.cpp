@@ -56,7 +56,6 @@ bool PerformGrasp::init(std::string name)
         return false;
     }
     manipulation_client_.yarp().attachAsClient(client_port);
-    return true;
 }
 
 NodeStatus PerformGrasp::tick()
@@ -67,9 +66,9 @@ NodeStatus PerformGrasp::tick()
     auto start = std::time(NULL);
 
     while((std::time(NULL) - start) < 5) {
-        setStatusRunningAndYield();
-    }
-
+          setStatusRunningAndYield();
+      }
+  
     setOutput("message", "true" );
     return NodeStatus::SUCCESS;
 }

@@ -48,18 +48,18 @@
 #include <behaviortree_cpp_v3/loggers/bt_file_logger.h>
 
 #include <actions/ask_to_get_closer.h>
-#include <actions/ask_to_pay_attention.h>
-#include <actions/ask_to_move_object_closer.h>
 #include <actions/ask_to_keep_the_box_still.h>
+#include <actions/ask_to_move_object_closer.h>
+#include <actions/ask_to_pay_attention.h>
 #include <actions/perform_grasp.h>
 
-#include <conditions/handout_successful.h>
-#include <conditions/correct_action_recognized.h>
-#include <conditions/human_not_too_far.h>
-#include <conditions/human_not_getting_closer.h>
-#include <conditions/human_paying_attention.h>
-
 #include <conditions/are_points_reachable.h>
+#include <conditions/correct_action_recognized.h>
+#include <conditions/handout_successful.h>
+#include <conditions/human_is_not_moving_towards_camera.h>
+#include <conditions/human_not_getting_closer.h>
+#include <conditions/human_not_too_far.h>
+#include <conditions/human_paying_attention.h>
 #include <conditions/is_box_still.h>
 
 #include <yarp/os/Network.h>
@@ -72,27 +72,34 @@ using namespace BT;
 
 int main(int argc, char *argv[])
 {
-
-    std::string fileName = "/home/btuc/ergocub-behavior/bts/descriptions/ergotree_grasping.xml";
+    std::string fileName = "./bts/descriptions/ergotree.xml";
 
 
     BehaviorTreeFactory bt_factory;
-//    bt_factory.registerNodeType<AskToGetCloser>("AskToGetCloser");
-//    bt_factory.registerNodeType<AskToPayAttention>("AskToPayAttention");
-    bt_factory.registerNodeType<AskToMoveObjectCloser>("AskToMoveObjectCloser");
-    bt_factory.registerNodeType<AskToKeepTheBoxStill>("AskToKeepTheBoxStill");
-    bt_factory.registerNodeType<PerformGrasp>("PerformGrasp");
-
-
-//    bt_factory.registerNodeType<CorrectActionRecognized>("CorrectActionRecognized");
-//    bt_factory.registerNodeType<HumanNotTooFar>("HumanNotTooFar");
-//    bt_factory.registerNodeType<HumanNotGettingCloser>("HumanNotGettingCloser");
-//    bt_factory.registerNodeType<HumanPayingAttention>("HumanPayingAttention");
-
-    bt_factory.registerNodeType<ArePointsReachable>("ArePointsReachable");
-    bt_factory.registerNodeType<IsBoxStill>("IsBoxStill");
 
     bt_factory.registerNodeType<HandoutSuccessful>("HandoutSuccessful");
+
+//    bt_factory.registerNodeType<HandoutSuccessful>("CorrectActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("StandActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("HelloActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("LiftActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("GetActionRecognized");
+    bt_factory.registerNodeType<HandoutSuccessful>("HandshakeActionRecognized");
+
+    bt_factory.registerNodeType<HandoutSuccessful>("HumanNotTooFar");
+    bt_factory.registerNodeType<HandoutSuccessful>("HumanIsNotMovingTowardsCamera");
+    bt_factory.registerNodeType<HandoutSuccessful>("AskToGetCloser");
+    bt_factory.registerNodeType<HumanNotGettingCloser>("HumanNotGettingCloser");
+    bt_factory.registerNodeType<HumanPayingAttention>("HumanPayingAttention");
+    bt_factory.registerNodeType<AskToPayAttention>("AskToPayAttention");
+
+    bt_factory.registerNodeType<ArePointsReachable>("ArePointsReachable");
+    bt_factory.registerNodeType<AskToMoveObjectCloser>("AskToMoveObjectCloser");
+    bt_factory.registerNodeType<IsBoxStill>("IsBoxStill");
+    bt_factory.registerNodeType<AskToKeepTheBoxStill>("AskToKeepTheBoxStill");
+
+    bt_factory.registerNodeType<PerformGrasp>("PerformGrasp");
+
 
     auto blackboard = BT::Blackboard::create();
     blackboard->set("grasp_success", false);

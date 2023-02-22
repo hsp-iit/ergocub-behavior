@@ -28,38 +28,21 @@
  *                                                                            *
  ******************************************************************************/
 
-#include <behaviortree_cpp_v3/action_node.h>
-
-#include "ask_to_get_closer.h"
-
-#include <chrono>
-#include <thread>
-#include <unistd.h>
+#pragma once
 
 
-AskToGetCloser::AskToGetCloser(string name, const NodeConfiguration& config) :
-    CoroActionNode(name, config)
+#include <behaviortree_cpp_v3/condition_node.h>
+
+#include <string>
+#include <future>
+using namespace BT;
+using namespace std;
+
+class HumanIsNotMovingTowardsCamera :  public ConditionNode
 {
+public:
+    HumanIsNotMovingTowardsCamera(string name, const NodeConfiguration &config);
+    NodeStatus tick() override;
+    static PortsList providedPorts();
 
-}
-
-NodeStatus AskToGetCloser::tick()
-{
-    if((std::time(NULL) - last_tick) > 5)
-        cout << "You are too far. Please come closer" << endl;
-
-    last_tick = std::time(NULL);
-    return NodeStatus::FAILURE;
-}
-
-void AskToGetCloser::halt()
-{
-
-    CoroActionNode::halt();
-}
-
-
-PortsList AskToGetCloser::providedPorts()
-{
-    return { };
-}
+};

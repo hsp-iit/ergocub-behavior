@@ -31,6 +31,7 @@
 #include <behaviortree_cpp_v3/condition_node.h>
 #include "human_paying_attention.h"
 
+#include <iostream>
 #include <chrono>
 #include <thread>
 #include <yarp/os/Network.h>
@@ -42,33 +43,32 @@ HumanPayingAttention::HumanPayingAttention(string name, const NodeConfiguration&
     ConditionNode(name, config)
 {
     is_ok_ = init(name);
-
-
 }
 
 bool HumanPayingAttention::init(std::string name)
 {
-//  yarp::os::Network yarp;
-//
-//  yarp::os::Port client_port;
-//
-//  std::string server_name = "/Components/FakeActionRecognition/Server"s;
-//  std::string client_name = "/BT/" + name + "/FakeActionRecognition/Client"s;
-//
-//  client_port.open("client_name");
-//
-//  // connect to server
-//  if (!yarp.connect("client_name",server_name))
-//  {
-//     std::cout << "Error! Could not connect to server " << server_name << '\n';
-//     return false;
-//  }
-//
-//  action_recognition_client_.yarp().attachAsClient(client_port);
-//  return true;
+  std::string server_name = "/Components/ActionRecognition"s;
+  std::string client_name = "/BT/" + name + "/ActionRecognition/human_paying_attention"s;
+
+  client_port.open(client_name);
+
+  // connect to server
+  if (!yarp.connect(client_name,server_name))
+  {
+     std::cout << "Error! Could not connect to server " << server_name << '\n';
+     return false;
+  }
+  action_recognition_client_.yarp().attachAsClient(client_port);
+  return true;
 }
 
 NodeStatus HumanPayingAttention::tick()
 {
-//    return action_recognition_client_.is_focused() ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+    auto focus = action_recognition_client_.is_focused();
+    return focus ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+}
+
+PortsList HumanPayingAttention::providedPorts()
+{
+    return { };
 }

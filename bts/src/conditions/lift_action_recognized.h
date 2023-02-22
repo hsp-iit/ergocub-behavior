@@ -1,17 +1,16 @@
 /*
  *   Copyright (c) 2022 Michele Colledanchise
  *   All rights reserved.
-
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- 
+
  *   The above copyright notice and this permission notice shall be included in all
  *   copies or substantial portions of the Software.
- 
+
  *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,45 +20,36 @@
  *   SOFTWARE.
  */
 
-/******************************************************************************
- *                                                                            *
- * Copyright (C) 2020 Fondazione Istituto Italiano di Tecnologia (IIT)        *
- * All Rights Reserved.                                                       *
- *                                                                            *
- ******************************************************************************/
-
-#include <behaviortree_cpp_v3/action_node.h>
-
-#include "ask_to_get_closer.h"
-
-#include <chrono>
-#include <thread>
-#include <unistd.h>
+/*
+#ifndef PERSON_IS_FOCUSED
+#define PERSON_IS_FOCUSED
+*/
 
 
-AskToGetCloser::AskToGetCloser(string name, const NodeConfiguration& config) :
-    CoroActionNode(name, config)
+#include <behaviortree_cpp_v3/condition_node.h>
+#include <ActionRecognitionInterface.h>
+#include <string>
+#include <future>
+#include <yarp/os/Network.h>
+#include <yarp/os/Port.h>
+
+using namespace BT;
+using namespace std;
+
+class LiftActionRecognized :  public ConditionNode
 {
+public:
+    LiftActionRecognized(string name, const NodeConfiguration &config);
+    NodeStatus tick() override;
+    static PortsList providedPorts();
 
-}
-
-NodeStatus AskToGetCloser::tick()
-{
-    if((std::time(NULL) - last_tick) > 5)
-        cout << "You are too far. Please come closer" << endl;
-
-    last_tick = std::time(NULL);
-    return NodeStatus::FAILURE;
-}
-
-void AskToGetCloser::halt()
-{
-
-    CoroActionNode::halt();
-}
+private:
+    bool init(std::string);
+    ActionRecognitionInterface action_recognition_client_;
+    bool is_ok_{false};
+    yarp::os::Network yarp;
+    yarp::os::Port client_port;
+};
 
 
-PortsList AskToGetCloser::providedPorts()
-{
-    return { };
-}
+/*#endif PERSON_IS_FOCUSED */
