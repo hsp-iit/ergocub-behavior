@@ -3,7 +3,6 @@
 .idea
 
 docker-compose.yaml
-start.sh
 .bash_history
 .config
 .dbus
