@@ -1,16 +1,17 @@
 /*
  *   Copyright (c) 2022 Michele Colledanchise
  *   All rights reserved.
+
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
-
+ 
  *   The above copyright notice and this permission notice shall be included in all
  *   copies or substantial portions of the Software.
-
+ 
  *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,52 +28,66 @@
  *                                                                            *
  ******************************************************************************/
 
+#include <behaviortree_cpp_v3/action_node.h>
 
-#include <behaviortree_cpp_v3/condition_node.h>
-#include "human_not_too_far.h"
+#include "robot_wave.h"
 
-#include <iostream>
 #include <chrono>
 #include <thread>
-#include <yarp/os/Network.h>
-#include <yarp/os/Port.h>
-#include <ActionRecognitionInterface.h>
+#include <unistd.h>
+#include <fstream>
 
 
-HumanNotTooFar::HumanNotTooFar(string name, const NodeConfiguration& config) :
-    ConditionNode(name, config)
+RobotWave::RobotWave(string name, const NodeConfiguration& config) :
+    CoroActionNode(name, config)
 {
     is_ok_ = init(name);
 }
 
-bool HumanNotTooFar::init(std::string name)
+bool RobotWave::init(std::string name)
 {
-  std::string server_name = "/Components/ActionRecognition"s;
-  std::string client_name = "/BT/" + name + "/ActionRecognition/human_not_too_far"s;
+    std::string server_name = "/command"s;
+    std::string client_name = "/BT/" + name + "/Manipulation"s;
 
-  client_port.open(client_name);
+    client_port.open(client_name);
 
-  // connect to server
-  if (!yarp.connect(client_name,server_name))
-  {
-     std::cout << "Error! Could not connect to server " << server_name << '\n';
-     return false;
-  }
-  action_recognition_client_.yarp().attachAsClient(client_port);
-  return true;
-}
-
-NodeStatus HumanNotTooFar::tick()
-{
-    auto distance = action_recognition_client_.get_distance();
-    if (distance == -1){
-        return BT::NodeStatus::FAILURE;
+    if (!yarp.connect(client_name,server_name))
+    {
+        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        return false;
     }
-    return distance < 1.1 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
-
+    manipulation_client_.yarp().attachAsClient(client_port);
+    return true;
 }
 
-PortsList HumanNotTooFar::providedPorts()
+NodeStatus RobotWave::tick()
 {
-    return { };
+    cout << "Waving..." << endl;
+    // write in file
+    std::ofstream outfile;
+    outfile.open("robot_commands.txt", std::ios_base::app); // append instead of overwrite
+    outfile << "Waving..." << std::endl;
+    // end
+    setOutput("message", "true" );
+    manipulation_client_.wave();
+
+    auto start = std::time(NULL);
+
+    while((std::time(NULL) - start) < 5) {
+        setStatusRunningAndYield();
+    }
+
+    setOutput("message", "true" );
+    return NodeStatus::SUCCESS;
+}
+
+void RobotWave::halt()
+{
+    CoroActionNode::halt();
+}
+
+
+PortsList RobotWave::providedPorts()
+{
+    return { OutputPort<std::string>("message") };
 }

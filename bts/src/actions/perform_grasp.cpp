@@ -56,6 +56,7 @@ bool PerformGrasp::init(std::string name)
         return false;
     }
     manipulation_client_.yarp().attachAsClient(client_port);
+    return true;
 }
 
 NodeStatus PerformGrasp::tick()

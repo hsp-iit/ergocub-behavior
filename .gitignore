@@ -9,3 +9,4 @@ docker-compose.yaml
 .local
 .sudo_as_admin_successful
 home-volume
+robot_commands.txt

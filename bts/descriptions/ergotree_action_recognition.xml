@@ -3,16 +3,26 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveFallback>
-            <Condition ID="HandoutSuccessful" message="{grasp_success}"/>
             <ReactiveSequence>
-                <Condition ID="GetActionRecognized"/>
+                <Condition ID="LiftActionRecognized"/>
+                <Action ID="RobotSaysBeCareful"/>
+            </ReactiveSequence>
+            <ReactiveSequence>
                 <SubTree ID="HRIEstablished"/>
-                <SubTree ID="GraspingPointsDetected"/>
                 <ReactiveFallback>
-                    <Condition ID="IsBoxStill"/>
-                    <Action ID="AskToKeepTheBoxStill"/>
+                    <ReactiveSequence>
+                        <Condition ID="GetActionRecognized"/>
+                        <Action ID="RobotGiveBox"/>
+                    </ReactiveSequence>
+                    <ReactiveSequence>
+                        <Condition ID="HelloActionRecognized"/>
+                        <Action ID="RobotWave"/>
+                    </ReactiveSequence>
+                    <ReactiveSequence>
+                        <Condition ID="HandshakeActionRecognized"/>
+                        <Action ID="RobotHandshake"/>
+                    </ReactiveSequence>
                 </ReactiveFallback>
-                <Action ID="PerformGrasp" message="{grasp_success}"/>
             </ReactiveSequence>
         </ReactiveFallback>
     </BehaviorTree>
@@ -50,11 +60,18 @@
         <SubTree ID="GraspingPointsDetected"/>
         <SubTree ID="HRIEstablished"/>
         <Condition ID="HandoutSuccessful"/>
+        <Condition ID="HandshakeActionRecognized"/>
+        <Condition ID="HelloActionRecognized"/>
         <Condition ID="HumanNotGettingCloser"/>
         <Condition ID="HumanNotTooFar"/>
         <Condition ID="HumanPayingAttention"/>
         <Condition ID="IsBoxStill"/>
+        <Condition ID="LiftActionRecognized"/>
         <Action ID="PerformGrasp"/>
+        <Action ID="RobotGiveBox"/>
+        <Action ID="RobotHandshake"/>
+        <Action ID="RobotSaysBeCareful"/>
+        <Action ID="RobotWave"/>
     </TreeNodesModel>
     <!-- ////////// -->
 </root>
