@@ -39,8 +39,7 @@
 #include <ActionRecognitionInterface.h>
 
 
-HumanIsNotMovingTowardsCamera::
-(string name, const NodeConfiguration& config) :
+HumanIsNotMovingTowardsCamera::HumanIsNotMovingTowardsCamera(string name, const NodeConfiguration& config) :
     ConditionNode(name, config)
 {
     is_ok_ = init(name);
@@ -65,7 +64,7 @@ bool HumanIsNotMovingTowardsCamera::init(std::string name)
 
 NodeStatus HumanIsNotMovingTowardsCamera::tick()
 {
-    return BT::NodeStatus::SUCCESS
+    return BT::NodeStatus::SUCCESS;
     /* TODO IMPLEMENT
     auto distance = action_recognition_client_.get_distance();
     if (distance == -1){

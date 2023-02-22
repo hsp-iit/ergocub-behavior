@@ -22,4 +22,3 @@ find_package(YARP COMPONENTS os idl_tools dev REQUIRED)
 
 add_subdirectory(components)
 add_subdirectory(bts/src)
-

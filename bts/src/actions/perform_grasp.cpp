@@ -45,17 +45,17 @@ PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
 
 bool PerformGrasp::init(std::string name)
 {
-//    std::string server_name = "/command"s;
-//    std::string client_name = "/BT/" + name + "/Manipulation"s;
-//
-//    client_port.open(client_name);
+    std::string server_name = "/command"s;
+    std::string client_name = "/BT/" + name + "/Manipulation"s;
 
-//    if (!yarp.connect(client_name,server_name))
-//    {
-//        std::cout << "Error! Could not connect to server " << server_name << '\n';
-//        return false;
-//    }
-//    manipulation_client_.yarp().attachAsClient(client_port);
+    client_port.open(client_name);
+
+    if (!yarp.connect(client_name,server_name))
+    {
+        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        return false;
+    }
+    manipulation_client_.yarp().attachAsClient(client_port);
     return true;
 }
 
@@ -63,18 +63,16 @@ NodeStatus PerformGrasp::tick()
 {
     cout << "Performing grasp..." << endl;
     setOutput("message", "true" );
-    cout << "REMEMBER TO ADD CALL TO GRASPING THRIFT" << endl;
+    manipulation_client_.grasp();
+
+    auto start = std::time(NULL);
+
+    while((std::time(NULL) - start) < 5) {
+        setStatusRunningAndYield();
+    }
+
+    setOutput("message", "true" );
     return NodeStatus::SUCCESS;
-//    manipulation_client_.grasp();
-//
-//    auto start = std::time(NULL);
-//
-//    while((std::time(NULL) - start) < 5) {
-//        setStatusRunningAndYield();
-//    }
-//
-//    setOutput("message", "true" );
-//    return NodeStatus::SUCCESS;
 }
 
 void PerformGrasp::halt()

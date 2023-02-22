@@ -120,10 +120,10 @@ private:
             printf("Reading message of type %ld", data.data_type);
             this->msg_type = data.data_type; }
         else if ( !success && errno == ENOMSG) {
-            printf("Empty queue");
-            this->distance = -1.;
-            this->action = -1;
-            this->focus = false;
+//            printf("Empty queue");
+//            this->distance = -1.;
+//            this->action = -1;
+//            this->focus = false;
             return;}
 		else {
 		    this->msg_type = TYPE_NONE;
