@@ -62,15 +62,14 @@ bool PerformGrasp::init(std::string name)
 NodeStatus PerformGrasp::tick()
 {
     cout << "Performing grasp..." << endl;
-    setOutput("message", "true" );
     manipulation_client_.grasp();
 
     auto start = std::time(NULL);
 
     while((std::time(NULL) - start) < 5) {
-        setStatusRunningAndYield();
-    }
-
+          setStatusRunningAndYield();
+      }
+  
     setOutput("message", "true" );
     return NodeStatus::SUCCESS;
 }
