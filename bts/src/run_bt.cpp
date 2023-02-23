@@ -56,6 +56,7 @@
 #include <actions/robot_handshake.h>
 #include <actions/robot_says_be_careful.h>
 #include <actions/robot_wave.h>
+#include <actions/go_home.h>
 
 #include <conditions/are_points_reachable.h>
 #include <conditions/get_action_recognized.h>
@@ -110,6 +111,7 @@ int main(int argc, char *argv[])
     bt_factory.registerNodeType<RobotGiveBox>("RobotGiveBox");
     bt_factory.registerNodeType<RobotHandshake>("RobotHandshake");
     bt_factory.registerNodeType<RobotSaysBeCareful>("RobotSaysBeCareful");
+    bt_factory.registerNodeType<GoHome>("GoHome");
     bt_factory.registerNodeType<RobotWave>("RobotWave");
 
 

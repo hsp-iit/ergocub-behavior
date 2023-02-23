@@ -30,6 +30,7 @@
                     </ReactiveSequence>
                 </ReactiveFallback>
             </ReactiveSequence>
+            <Action ID="GoHome"/>
         </ReactiveFallback>
     </BehaviorTree>
     <!-- ////////// -->
@@ -77,6 +78,7 @@
         <Action ID="AskToMoveObjectCloser"/>
         <Action ID="AskToPayAttention"/>
         <Condition ID="GetActionRecognized"/>
+        <Action ID="GoHome"/>
         <SubTree ID="GraspingPointsDetected"/>
         <SubTree ID="HRIEstablished"/>
         <Condition ID="HandoutSuccessful"/>
