@@ -1,42 +1,60 @@
 #!/bin/bash
 
+TMUX_NAME=tmux_behavior
+DOCKER_IMAGE_NAME=ergocub_behavior_container
+
+echo "Start this script inside the ergoCub behavior tree rooot folder"
+usage() { echo "Usage: $0 [-i ip_address]" 1>&2; exit 1; }
+
+while getopts i:h flag
+do
+    case "${flag}" in
+        i) SERVER_IP=${OPTARG};;
+        h) usage;;
+        *) usage;;
+    esac
+done
+
+# Start the container with the right options
 docker run -itd --rm --network=host --ipc=host \
   --env DISPLAY=:0 --env QT_X11_NO_MITSHM=1 --env XDG_RUNTIME_DIR=/root/1000 --env XAUTHORITY=/home/btuc/.Xauthority \
-  -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v ${XAUTHORITY}:/home/btuc/.Xauthority:rw \
-  -v /home/aros/projects/ergocub/ergocub-behavior:/home/btuc/ergocub-behavior \
-  --name ergocub_behavior_container \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v "${XAUTHORITY}":/home/btuc/.Xauthority:rw \
+  -v "$(pwd)":/home/btuc/ergocub-behavior \
+  --name $DOCKER_IMAGE_NAME \
   ar0s/bt-assignment bash
 
 # Create tmux session
-tmux new-session -d -s behavior-tmux
+tmux new-session -d -s $TMUX_NAME
 
-# 0
-  tmux send-keys -t behavior-tmux "docker exec -it ergocub_behavior_container bash" Enter
-#  tmux send-keys -t behavior-tmux "yarp conf 10.0.0.150 10000" Enter
-  tmux send-keys -t behavior-tmux "yarp detect --write" Enter
-  tmux send-keys -t behavior-tmux "/home/btuc/ergocub-behavior/build/bin/object_detection" Enter
+# Set server
+tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_IMAGE_NAME bash" Enter
+if [ -n "$SERVER_IP" ] # Variable is non-null
+then
+  tmux send-keys -t $TMUX_NAME "yarp conf $SERVER_IP 10000" Enter
+else
+  tmux send-keys -t $TMUX_NAME "yarp detect --write" Enter
+fi
 
-tmux split-window -h -t behavior-tmux
+# Action Recognition
+tmux send-keys -t $TMUX_NAME "sleep 2" Enter  # TODO TEST
+tmux send-keys -t $TMUX_NAME "/home/btuc/ergocub-behavior/build/bin/object_detection" Enter
+tmux split-window -h -t $TMUX_NAME
 
-# 2
-  tmux send-keys -t behavior-tmux "docker exec -it ergocub_behavior_container bash" Enter
-  tmux send-keys -t behavior-tmux "cd ergocub-behavior" Enter
-  tmux send-keys -t behavior-tmux "sleep 5" Enter
-  tmux send-keys -t behavior-tmux "/home/btuc/ergocub-behavior/build/bin/run_bt" Enter
+# Object Detection
+tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_IMAGE_NAME bash" Enter
+tmux send-keys -t $TMUX_NAME "sleep 2" Enter  # TODO TEST
+tmux send-keys -t $TMUX_NAME "/home/btuc/ergocub-behavior/build/bin/action_recognition" Enter
+tmux split-window -v -t $TMUX_NAME
 
-tmux select-pane -t behavior-tmux:0.0
-tmux split-window -v -t behavior-tmux
+# Behavior Tree
+  tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_IMAGE_NAME bash" Enter
+  tmux send-keys -t $TMUX_NAME "sleep 5" Enter
+  tmux send-keys -t $TMUX_NAME "/home/btuc/ergocub-behavior/build/bin/run_bt" Enter
+tmux select-pane -t $TMUX_NAME:0.0
+tmux split-window -v -t $TMUX_NAME
 
-#
-  tmux send-keys -t behavior-tmux "docker exec -it ergocub_behavior_container bash" Enter
-  tmux send-keys -t behavior-tmux "/home/btuc/ergocub-behavior/build/bin/action_recognition" Enter
+# Bash for fun
+tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_IMAGE_NAME bash" Enter
 
-#  tmux send-keys -t behavior-tmux "sleep 5" Enter
-#  tmux send-keys -t behavior-tmux "./grasp-demo /robotology-superbuild/build/install/share/iCub/robots/iCubGazeboV2_7/model.urdf" Enter
-#
-#tmux select-pane -t behavior-tmux:0.2
-#tmux split-window -v -t behavior-tmux
-#
-#tmux send-keys -t behavior-tmux "docker exec -it ergocub_manipulation_container bash" Enter
-
-tmux a -t behavior-tmux
+# Attach
+tmux a -t $TMUX_NAME

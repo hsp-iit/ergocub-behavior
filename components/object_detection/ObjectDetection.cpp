@@ -113,12 +113,12 @@ private:
 	    t_data   data;
 
         int success = msgrcv( this->msqid, &data, sizeof( t_data) - sizeof( long), 0, IPC_NOWAIT) != -1;
-        printf("%d", success);
+//        printf("%d", success);
         if (success) {
-            printf("Reading message of type %ld", data.data_type);
+//            printf("Reading message of type %ld", data.data_type);
             this->msg_type = data.data_type; }
         else if ( !success && errno == ENOMSG) {
-            printf("Empty queue");
+//            printf("Empty queue");
 //          If the queue is empty we use the last recorded value
 //          This is necessary aas the bt calls the component at higher frequency than
 //          the one at which the module is running

@@ -64,7 +64,6 @@ bool GetActionRecognized::init(std::string name)
 
 NodeStatus GetActionRecognized::tick()
 {
-    std::cout << action_recognition_client_.get_distance() << std::endl;
     auto action = action_recognition_client_.get_action();
     return action == 4 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 
