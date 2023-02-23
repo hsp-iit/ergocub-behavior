@@ -80,7 +80,7 @@ using namespace BT;
 
 int main(int argc, char *argv[])
 {
-    std::string fileName = "./bts/descriptions/ergotree_action_recognition.xml";
+    std::string fileName = "./ergocub-behavior/bts/descriptions/ergotree_action_recognition.xml";
 
 
     BehaviorTreeFactory bt_factory;
