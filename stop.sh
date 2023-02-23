@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TMUX_NAME=tmux_behavior
-DOCKER_IMAGE_NAME=ergocub_behavior_container
+DOCKER_CONTAINER_NAME=ergocub_behavior_container
 
-docker rm -f $DOCKER_IMAGE_NAME
+docker rm -f $DOCKER_CONTAINER_NAME
 tmux kill-session -t $TMUX_NAME
