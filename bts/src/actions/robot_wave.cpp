@@ -68,16 +68,15 @@ NodeStatus RobotWave::tick()
     outfile.open("robot_commands.txt", std::ios_base::app); // append instead of overwrite
     outfile << "Waving..." << std::endl;
     // end
-    setOutput("message", "true" );
     manipulation_client_.wave();
+
+    outfile << "Waved" << std::endl;
 
     auto start = std::time(NULL);
 
     while((std::time(NULL) - start) < 5) {
         setStatusRunningAndYield();
     }
-
-    setOutput("message", "true" );
     return NodeStatus::SUCCESS;
 }
 
@@ -89,5 +88,4 @@ void RobotWave::halt()
 
 PortsList RobotWave::providedPorts()
 {
-    return { OutputPort<std::string>("message") };
 }
