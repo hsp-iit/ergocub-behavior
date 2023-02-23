@@ -68,8 +68,7 @@ NodeStatus RobotGiveBox::tick()
     outfile.open("robot_commands.txt", std::ios_base::app); // append instead of overwrite
     outfile << "Giving box..."  << std::endl;
     // end
-    setOutput("message", "true" );
-    manipulation_client_.grasp();
+    manipulation_client_.ready();
 
     auto start = std::time(NULL);
 
@@ -77,7 +76,6 @@ NodeStatus RobotGiveBox::tick()
         setStatusRunningAndYield();
     }
 
-    setOutput("message", "true" );
     return NodeStatus::SUCCESS;
 }
 
@@ -89,5 +87,5 @@ void RobotGiveBox::halt()
 
 PortsList RobotGiveBox::providedPorts()
 {
-    return { OutputPort<std::string>("message") };
+
 }
