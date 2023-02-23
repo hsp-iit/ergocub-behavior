@@ -12,7 +12,7 @@ tmux new-session -d -s behavior-tmux
 
 # 0
   tmux send-keys -t behavior-tmux "docker exec -it ergocub_behavior_container bash" Enter
-  tmux send-keys -t behavior-tmux "yarp conf 10.0.0.150 10000" Enter
+#  tmux send-keys -t behavior-tmux "yarp conf 10.0.0.150 10000" Enter
   tmux send-keys -t behavior-tmux "yarp detect --write" Enter
   tmux send-keys -t behavior-tmux "/home/btuc/ergocub-behavior/build/bin/object_detection" Enter
 
@@ -20,6 +20,7 @@ tmux split-window -h -t behavior-tmux
 
 # 2
   tmux send-keys -t behavior-tmux "docker exec -it ergocub_behavior_container bash" Enter
+  tmux send-keys -t behavior-tmux "cd ergocub-behavior" Enter
   tmux send-keys -t behavior-tmux "sleep 5" Enter
   tmux send-keys -t behavior-tmux "/home/btuc/ergocub-behavior/build/bin/run_bt" Enter
 
@@ -28,6 +29,7 @@ tmux split-window -v -t behavior-tmux
 
 #
   tmux send-keys -t behavior-tmux "docker exec -it ergocub_behavior_container bash" Enter
+  tmux send-keys -t behavior-tmux "/home/btuc/ergocub-behavior/build/bin/action_recognition" Enter
 
 #  tmux send-keys -t behavior-tmux "sleep 5" Enter
 #  tmux send-keys -t behavior-tmux "./grasp-demo /robotology-superbuild/build/install/share/iCub/robots/iCubGazeboV2_7/model.urdf" Enter

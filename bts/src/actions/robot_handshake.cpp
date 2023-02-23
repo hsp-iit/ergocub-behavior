@@ -68,7 +68,6 @@ NodeStatus RobotHandshake::tick()
     outfile.open("robot_commands.txt", std::ios_base::app); // append instead of overwrite
     outfile << "Doing handshake..."  << std::endl;
     // end
-    setOutput("message", "true" );
     manipulation_client_.shake();
 
     auto start = std::time(NULL);
@@ -76,8 +75,6 @@ NodeStatus RobotHandshake::tick()
     while((std::time(NULL) - start) < 5) {
         setStatusRunningAndYield();
     }
-
-    setOutput("message", "true" );
     return NodeStatus::SUCCESS;
 }
 
@@ -89,5 +86,4 @@ void RobotHandshake::halt()
 
 PortsList RobotHandshake::providedPorts()
 {
-    return { OutputPort<std::string>("message") };
 }
