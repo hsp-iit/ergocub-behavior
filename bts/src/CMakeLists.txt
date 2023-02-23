@@ -27,6 +27,7 @@ target_sources(custom_leaf_nodes
   actions/robot_handshake.cpp
   actions/robot_says_be_careful.cpp
   actions/robot_wave.cpp
+  actions/go_home.cpp
 
   conditions/are_points_reachable.cpp
   conditions/get_action_recognized.cpp
