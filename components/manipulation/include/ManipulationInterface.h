@@ -31,7 +31,9 @@ public:
 
     virtual bool ready();
 
-    virtual bool grasp();
+    virtual bool scripted_grasp();
+
+    virtual bool grasp(const std::vector<double>& hand_frames);
 
     virtual bool release();
 

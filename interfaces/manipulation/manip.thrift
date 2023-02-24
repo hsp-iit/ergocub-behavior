@@ -4,7 +4,8 @@ service ManipulationInterface {
     bool wave();
     bool shake();
     bool ready();
-    bool grasp();
+    bool scripted_grasp();
+    bool grasp(1:list<double> hand_frames);
     bool release();
     bool ins();
     bool out();
