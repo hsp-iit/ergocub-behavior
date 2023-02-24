@@ -3,11 +3,11 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveFallback>
-            <Condition ID="HandoutSuccessful"/>
+            <Condition ID="HandoutSuccessful" message="{grasp_success}"/>
             <ReactiveSequence>
                 <Condition ID="ArePointsReachable"/>
                 <SubTree ID="ObjectStill"/>
-                <Action ID="PerformGrasp"/>
+                <Action ID="PerformGrasp" message="{grasp_success}"/>
             </ReactiveSequence>
             <ReactiveSequence>
                 <Condition ID="LiftActionRecognized"/>
@@ -81,7 +81,9 @@
         <Action ID="GoHome"/>
         <SubTree ID="GraspingPointsDetected"/>
         <SubTree ID="HRIEstablished"/>
-        <Condition ID="HandoutSuccessful"/>
+        <Condition ID="HandoutSuccessful">
+            <input_port name="message"/>
+        </Condition>
         <Condition ID="HandshakeActionRecognized"/>
         <Condition ID="HelloActionRecognized"/>
         <Condition ID="HumanNotGettingCloser"/>
@@ -91,7 +93,9 @@
         <Condition ID="LiftActionRecognized"/>
         <SubTree ID="ObjectClose"/>
         <SubTree ID="ObjectStill"/>
-        <Action ID="PerformGrasp"/>
+        <Action ID="PerformGrasp">
+            <output_port name="message"/>
+        </Action>
         <Action ID="RobotGiveBox"/>
         <Action ID="RobotHandshake"/>
         <Action ID="RobotSaysBeCareful"/>
