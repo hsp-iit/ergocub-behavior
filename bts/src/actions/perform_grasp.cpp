@@ -35,6 +35,7 @@
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include <iostream>
 
 
 PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
@@ -45,32 +46,57 @@ PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
 
 bool PerformGrasp::init(std::string name)
 {
-    std::string server_name = "/command"s;
-    std::string client_name = "/BT/" + name + "/Manipulation"s;
+//    Opening and Connecting Manipulation part
+    std::string manip_server_name = "/Components/Manipulation"s;
+    std::string manip_client_name = "/BT/" + name + "/Manipulation"s;
 
-    client_port.open(client_name);
+    manip_client_port.open(manip_client_name);
 
-    if (!yarp.connect(client_name,server_name))
+    if (!yarp.connect(manip_client_name,manip_server_name))
     {
-        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        std::cout << "Error! Could not connect to server " << manip_server_name << '\n';
         return false;
     }
-    manipulation_client_.yarp().attachAsClient(client_port);
+    manipulation_client_.yarp().attachAsClient(manip_client_port);
+
+//  Opening and Connecting Object Detection part
+    std::string od_server_name = "/Components/ObjectDetection"s;
+    std::string od_client_name = "/BT/" + name + "/ObjectDetection"s;
+
+    od_client_port.open(od_client_name);
+
+    if (!yarp.connect(od_client_name,od_server_name))
+    {
+        std::cout << "Error! Could not connect to server " << od_server_name << '\n';
+        return false;
+    }
+    object_detection_client_.yarp().attachAsClient(od_client_port);
+
     return true;
 }
 
 NodeStatus PerformGrasp::tick()
 {
     cout << "Performing grasp..." << endl;
-    manipulation_client_.ready();
+//    manipulation_client_.prescripted_grasp();
+    auto poses = object_detection_client_.get_poses();
 
+    for (auto & element : poses)
+    {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+
+    manipulation_client_.grasp(poses);
+
+    std::cout << "poses sent to manipulation module" << std::endl;
     auto start = std::time(NULL);
 
     while((std::time(NULL) - start) < 5) {
           setStatusRunningAndYield();
       }
 
-    setOutput("message", "true" );
+    setOutput("message", true );
     return NodeStatus::SUCCESS;
 }
 
@@ -82,5 +108,5 @@ void PerformGrasp::halt()
 
 PortsList PerformGrasp::providedPorts()
 {
-    return { OutputPort<std::string>("message") };
+    return { OutputPort<bool>("message") };
 }

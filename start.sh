@@ -54,7 +54,10 @@ tmux select-pane -t $TMUX_NAME:0.0
 tmux split-window -v -t $TMUX_NAME
 
 # Bash for fun
-tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter
+
+tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_IMAGE_NAME bash" Enter
+tmux send-keys -t $TMUX_NAME "source /ros_entrypoint.sh" Enter
+tmux send-keys -t $TMUX_NAME "ros2 run groot Groot --mode monitor $DOCKER_IMAGE_NAME bash" Enter
 
 # Attach
 tmux a -t $TMUX_NAME

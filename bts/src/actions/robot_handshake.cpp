@@ -46,7 +46,7 @@ RobotHandshake::RobotHandshake(string name, const NodeConfiguration& config) :
 
 bool RobotHandshake::init(std::string name)
 {
-    std::string server_name = "/command"s;
+    std::string server_name = "/Components/Manipulation"s;
     std::string client_name = "/BT/" + name + "/Manipulation"s;
 
     client_port.open(client_name);

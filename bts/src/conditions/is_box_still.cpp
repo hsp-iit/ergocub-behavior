@@ -63,16 +63,6 @@ NodeStatus IsBoxStill::tick()
 {
 
     auto distance = object_detection_client_.get_distance();
-//    auto start = std::time(NULL);
-//
-//    while((std::time(NULL) - start) < 2) {
-//        auto poses = object_detection_client_.get_distance();
-//
-//        if (distance == -1 or distance >= threshold)
-//            return BT::NodeStatus::FAILURE;
-//
-//        setStatusRunningAndYield();
-//    }
     return  BT::NodeStatus::SUCCESS;
 }
 

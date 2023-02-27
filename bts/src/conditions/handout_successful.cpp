@@ -47,18 +47,18 @@ HandoutSuccessful::HandoutSuccessful(string name, const NodeConfiguration& confi
 
 NodeStatus HandoutSuccessful::tick()
 {
-    return BT::NodeStatus::FAILURE;
-//    cout << "FIX handout_successfull.cpp" << endl;
-//    auto object_grasped = getInput<std::string>("message");
-//    if (!object_grasped)
-//    {
-//        throw BT::RuntimeError("[handout_succesful] missing required input [message]: ",
-//                               object_grasped.error() );
-//    }
-//    return object_grasped.value() == "true" ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+
+    auto object_grasped = getInput<bool>("message");
+    if (!object_grasped)
+    {
+        throw BT::RuntimeError("[handout_succesful] missing required input [message]: ",
+                               object_grasped.error() );
+    }
+
+    return object_grasped.value() ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 }
 
 PortsList HandoutSuccessful::providedPorts()
 {
-    return { BT::InputPort<std::string>("message") };
+    return { BT::InputPort<bool>("message") };
 }

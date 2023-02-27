@@ -115,9 +115,9 @@ int main(int argc, char *argv[])
 
 
     auto blackboard = BT::Blackboard::create();
-    blackboard->set("grasp_success", false);
-
     auto tree = bt_factory.createTreeFromFile(fileName, blackboard);
+
+    blackboard->set("grasp_success", false);
 
     // Create some logger
     StdCoutLogger logger_cout(tree);
@@ -139,11 +139,11 @@ int main(int argc, char *argv[])
                 std::cout << "Success" << std::endl;
 //                break;
             }
-//
-//            if (status == BT::NodeStatus::FAILURE) {
-//                std::cout << "Failure" << std::endl;
-//                break;
-//            }
+
+            if (status == BT::NodeStatus::FAILURE) {
+                std::cout << "Failure" << std::endl;
+                break;
+            }
     }
 
     return 0;
