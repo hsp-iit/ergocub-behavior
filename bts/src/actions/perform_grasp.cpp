@@ -78,16 +78,16 @@ bool PerformGrasp::init(std::string name)
 NodeStatus PerformGrasp::tick()
 {
     cout << "Performing grasp..." << endl;
-//    manipulation_client_.prescripted_grasp();
-    auto poses = object_detection_client_.get_poses();
-
-    for (auto & element : poses)
-    {
-        std::cout << element << " ";
-    }
-    std::cout << std::endl;
-
-    manipulation_client_.grasp(poses);
+    manipulation_client_.ready();
+//    auto poses = object_detection_client_.get_poses();
+//
+//    for (auto & element : poses)
+//    {
+//        std::cout << element << " ";
+//    }
+//    std::cout << std::endl;
+//
+//    manipulation_client_.grasp(poses);
 
     std::cout << "poses sent to manipulation module" << std::endl;
     auto start = std::time(NULL);
