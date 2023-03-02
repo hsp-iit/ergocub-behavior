@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <ReactiveFallback>
+            <ReactiveSequence>
+                <Condition ID="GetActionRecognized"/>
+                <Action ID="RobotGiveBox" message="{grasp_success}"/>
+                <Action ID="GoHome"/>
+            </ReactiveSequence>
+            <Condition ID="HandoutSuccessful" message="{grasp_success}"/>
+            <ReactiveSequence>
+                <Condition ID="ArePointsReachable"/>
+                <Action ID="PerformGrasp" message="{grasp_success}"/>
+            </ReactiveSequence>
+            <ReactiveSequence>
+                <Condition ID="LiftActionRecognized"/>
+                <Action ID="RobotSaysBeCareful"/>
+            </ReactiveSequence>
+            <ReactiveSequence>
+                <Condition ID="HelloActionRecognized"/>
+                <Action ID="RobotWave"/>
+            </ReactiveSequence>
+            <ReactiveSequence>
+                <Condition ID="HandshakeActionRecognized"/>
+                <Action ID="RobotHandshake"/>
+                <Action ID="GoHome"/>
+            </ReactiveSequence>
+        </ReactiveFallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="GraspingPointsDetected">
+        <ReactiveFallback>
+            <Condition ID="ArePointsReachable"/>
+            <Action ID="AskToMoveObjectCloser"/>
+        </ReactiveFallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="HRIEstablished">
+        <ReactiveSequence>
+            <ReactiveFallback>
+                <Condition ID="HumanNotTooFar"/>
+                <ReactiveFallback>
+                    <Condition ID="HumanNotGettingCloser"/>
+                    <Action ID="AskToGetCloser"/>
+                </ReactiveFallback>
+            </ReactiveFallback>
+            <ReactiveFallback>
+                <Condition ID="HumanPayingAttention"/>
+                <Action ID="AskToPayAttention"/>
+            </ReactiveFallback>
+        </ReactiveSequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="ObjectClose">
+        <ReactiveFallback>
+            <Condition ID="ArePointsReachable"/>
+            <Action ID="AskToMoveObjectCloser"/>
+        </ReactiveFallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <BehaviorTree ID="ObjectStill">
+        <ReactiveFallback>
+            <Condition ID="IsBoxStill"/>
+            <Action ID="AskToKeepTheBoxStill"/>
+        </ReactiveFallback>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Condition ID="ArePointsReachable"/>
+        <Action ID="AskToGetCloser"/>
+        <Action ID="AskToKeepTheBoxStill"/>
+        <Action ID="AskToMoveObjectCloser"/>
+        <Action ID="AskToPayAttention"/>
+        <Condition ID="GetActionRecognized"/>
+        <Action ID="GoHome"/>
+        <SubTree ID="GraspingPointsDetected"/>
+        <SubTree ID="HRIEstablished"/>
+        <Condition ID="HandoutSuccessful">
+            <input_port name="message"/>
+        </Condition>
+        <Condition ID="HandshakeActionRecognized"/>
+        <Condition ID="HelloActionRecognized"/>
+        <Condition ID="HumanNotGettingCloser"/>
+        <Condition ID="HumanNotTooFar"/>
+        <Condition ID="HumanPayingAttention"/>
+        <Condition ID="IsBoxStill"/>
+        <Condition ID="LiftActionRecognized"/>
+        <SubTree ID="ObjectClose"/>
+        <SubTree ID="ObjectStill"/>
+        <Action ID="PerformGrasp">
+            <output_port name="message"/>
+        </Action>
+        <Action ID="RobotGiveBox">
+            <output_port name="message"/>
+        </Action>
+        <Action ID="RobotHandshake"/>
+        <Action ID="RobotSaysBeCareful"/>
+        <Action ID="RobotWave"/>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>

@@ -72,13 +72,13 @@ bool PerformGrasp::init(std::string name)
     }
     object_detection_client_.yarp().attachAsClient(od_client_port);
 
+    head_control_ = new eCubHead("ergocubSim", name);
+
     return true;
 }
 
 NodeStatus PerformGrasp::tick()
 {
-    cout << "Performing grasp..." << endl;
-    manipulation_client_.ready();
 //    auto poses = object_detection_client_.get_poses();
 //
 //    for (auto & element : poses)
@@ -89,12 +89,33 @@ NodeStatus PerformGrasp::tick()
 //
 //    manipulation_client_.grasp(poses);
 
-    std::cout << "poses sent to manipulation module" << std::endl;
+    head_control_->set_camera_tilt(0.5);
+
+    manipulation_client_.ready(true);
+
     auto start = std::time(NULL);
 
-    while((std::time(NULL) - start) < 5) {
-          setStatusRunningAndYield();
+    while((std::time(NULL) - start) < 2) {
+//          setStatusRunningAndYield();
+          auto poses = object_detection_client_.get_poses();
+          std::this_thread::sleep_for(std::chrono::milliseconds(50));
+          if (poses[0] == -1)
+          {
+              return NodeStatus::FAILURE;
+          }
+
       }
+    while (true){
+        if (manipulation_client_.finished() == "Si"){
+            std::cout << manipulation_client_.finished() << std::endl;
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
+
+    manipulation_client_.grasp(true);
+
+    head_control_->set_camera_tilt(-0.5);
 
     setOutput("message", true );
     return NodeStatus::SUCCESS;

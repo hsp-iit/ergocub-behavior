@@ -47,7 +47,7 @@ HandoutSuccessful::HandoutSuccessful(string name, const NodeConfiguration& confi
 
 NodeStatus HandoutSuccessful::tick()
 {
-    return BT::NodeStatus::FAILURE;
+//    return BT::NodeStatus::FAILURE;
 
     auto object_grasped = getInput<bool>("message");
     if (!object_grasped)

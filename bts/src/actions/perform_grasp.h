@@ -34,6 +34,7 @@
 #include <behaviortree_cpp_v3/condition_node.h>
 #include <ManipulationInterface.h>
 #include <ObjectDetectionInterface.h>
+#include <ecub_head.h>
 #include <string>
 #include <future>
 #include <yarp/os/Network.h>
@@ -53,6 +54,8 @@ private:
     bool init(std::string);
     ManipulationInterface manipulation_client_;
     ObjectDetectionInterface object_detection_client_;
+    eCubHead* head_control_;
+
     bool is_ok_{false};
     yarp::os::Network yarp;
     yarp::os::Port manip_client_port;

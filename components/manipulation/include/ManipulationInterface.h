@@ -23,19 +23,19 @@ public:
 
     virtual bool stop();
 
-    virtual bool home();
+    virtual bool home(const bool block);
 
-    virtual bool wave();
+    virtual bool wave(const bool block);
 
-    virtual bool shake();
+    virtual bool shake(const bool block);
 
-    virtual bool ready();
+    virtual bool ready(const bool block);
 
-    virtual bool scripted_grasp();
+    virtual bool pose_grasp(const bool block, const std::vector<double>& hand_frames);
 
-    virtual bool grasp(const std::vector<double>& hand_frames);
+    virtual bool grasp(const bool block);
 
-    virtual bool release();
+    virtual bool release(const bool block);
 
     virtual bool ins();
 
@@ -48,6 +48,8 @@ public:
     virtual bool fore();
 
     virtual bool aft();
+
+    virtual std::string finished();
 
     // help method
     virtual std::vector<std::string> help(const std::string& functionName = "--all");

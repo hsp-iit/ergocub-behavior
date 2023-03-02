@@ -62,20 +62,19 @@ bool RobotHandshake::init(std::string name)
 
 NodeStatus RobotHandshake::tick()
 {
-    cout << "Doing handshake..." << endl;
+    cout << "===============================================================================================" << endl;
+    cout << "===============================================================================================" << endl;
+    cout << "===============================================================================================" << endl;
     // write in file
     std::ofstream outfile;
     outfile.open("robot_commands.txt", std::ios_base::app); // append instead of overwrite
     outfile << "Doing handshake..."  << std::endl;
     // end
-    manipulation_client_.shake();
-
-    auto start = std::time(NULL);
-
-    while((std::time(NULL) - start) < 5) {
-        setStatusRunningAndYield();
-    }
-    return NodeStatus::SUCCESS;
+//    setStatusRunningAndYield();
+    manipulation_client_.shake(false);
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    return NodeStatus::FAILURE;
+//    return NodeStatus::SUCCESS;
 }
 
 void RobotHandshake::halt()

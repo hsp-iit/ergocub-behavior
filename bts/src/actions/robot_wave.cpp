@@ -68,16 +68,17 @@ NodeStatus RobotWave::tick()
     outfile.open("robot_commands.txt", std::ios_base::app); // append instead of overwrite
     outfile << "Waving..." << std::endl;
     // end
-    manipulation_client_.wave();
-
+    manipulation_client_.wave(false);
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     outfile << "Waved" << std::endl;
-
-    auto start = std::time(NULL);
-
-    while((std::time(NULL) - start) < 5) {
-        setStatusRunningAndYield();
-    }
-    return NodeStatus::SUCCESS;
+    return NodeStatus::FAILURE;
+//
+//    auto start = std::time(NULL);
+//
+//    while((std::time(NULL) - start) < 5) {
+//        setStatusRunningAndYield();
+//    }
+//    return NodeStatus::SUCCESS;
 }
 
 void RobotWave::halt()

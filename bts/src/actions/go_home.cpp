@@ -62,19 +62,12 @@ bool GoHome::init(std::string name)
 
 NodeStatus GoHome::tick()
 {
-    cout << "Doing handshake..." << endl;
-    // write in file
-    std::ofstream outfile;
-    outfile.open("robot_commands.txt", std::ios_base::app); // append instead of overwrite
-    outfile << "Doing handshake..."  << std::endl;
     // end
-    manipulation_client_.home();
-
-    auto start = std::time(NULL);
-
-    while((std::time(NULL) - start) < 5) {
-        setStatusRunningAndYield();
-    }
+//    setStatusRunningAndYield();
+//    manipulation_client_.home(true);
+    manipulation_client_.home(false);
+//    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+//    return NodeStatus::FAILURE;
     return NodeStatus::SUCCESS;
 }
 
