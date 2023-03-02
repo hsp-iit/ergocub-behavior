@@ -81,7 +81,7 @@ using namespace BT;
 
 int main(int argc, char *argv[])
 {
-    std::string fileName = "./ergocub-behavior/bts/descriptions/ergotree.xml";
+    std::string fileName = "./ergocub-behavior/bts/descriptions/ergotree_simplified_2.xml";
 
     BehaviorTreeFactory bt_factory;
 
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 
             if (status == BT::NodeStatus::FAILURE) {
                 std::cout << "Failure" << std::endl;
-                break;
+//                break;
             }
     }
 
