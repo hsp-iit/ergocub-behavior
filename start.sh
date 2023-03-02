@@ -30,6 +30,7 @@ tmux new-session -d -s $TMUX_NAME
 tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter
 if [ -n "$SERVER_IP" ] # Variable is non-null
 then
+  tmux send-keys -t $TMUX_NAME "yarp namespace ergocub00" Enter
   tmux send-keys -t $TMUX_NAME "yarp conf $SERVER_IP 10000" Enter
 else
   tmux send-keys -t $TMUX_NAME "yarp detect --write" Enter
@@ -54,10 +55,10 @@ tmux select-pane -t $TMUX_NAME:0.0
 tmux split-window -v -t $TMUX_NAME
 
 # Bash for fun
-
-tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_IMAGE_NAME bash" Enter
+tmux send-keys -t $TMUX_NAME "sleep 7" Enter
+tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter
 tmux send-keys -t $TMUX_NAME "source /ros_entrypoint.sh" Enter
-tmux send-keys -t $TMUX_NAME "ros2 run groot Groot --mode monitor $DOCKER_IMAGE_NAME bash" Enter
+tmux send-keys -t $TMUX_NAME "ros2 run groot Groot --mode monitor" Enter
 
 # Attach
 tmux a -t $TMUX_NAME
