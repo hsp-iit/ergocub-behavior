@@ -6,7 +6,6 @@
             <ReactiveSequence>
                 <Condition ID="GetActionRecognized"/>
                 <Action ID="RobotGiveBox" message="{grasp_success}"/>
-                <Action ID="GoHome"/>
             </ReactiveSequence>
             <Condition ID="HandoutSuccessful" message="{grasp_success}"/>
             <ReactiveSequence>
@@ -24,7 +23,6 @@
             <ReactiveSequence>
                 <Condition ID="HandshakeActionRecognized"/>
                 <Action ID="RobotHandshake"/>
-                <Action ID="GoHome"/>
             </ReactiveSequence>
         </ReactiveFallback>
     </BehaviorTree>
