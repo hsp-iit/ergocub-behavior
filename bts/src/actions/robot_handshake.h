@@ -33,6 +33,7 @@
 
 #include <behaviortree_cpp_v3/condition_node.h>
 #include <ManipulationInterface.h>
+#include <ActionRecognitionInterface.h>
 #include <string>
 #include <future>
 #include <yarp/os/Network.h>
@@ -53,5 +54,8 @@ private:
     ManipulationInterface manipulation_client_;
     bool is_ok_{false};
     yarp::os::Network yarp;
-    yarp::os::Port client_port;
+    yarp::os::Port man_client_port;
+
+    ActionRecognitionInterface action_recognition_client_;
+    yarp::os::Port act_client_port;
 };
