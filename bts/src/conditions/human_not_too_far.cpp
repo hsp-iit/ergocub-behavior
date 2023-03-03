@@ -68,7 +68,8 @@ NodeStatus HumanNotTooFar::tick()
     if (distance == -1){
         return BT::NodeStatus::FAILURE;
     }
-    return distance < 1.5 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+
+    return distance < 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 
 }
 

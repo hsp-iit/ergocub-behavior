@@ -46,17 +46,32 @@ RobotHandshake::RobotHandshake(string name, const NodeConfiguration& config) :
 
 bool RobotHandshake::init(std::string name)
 {
-    std::string server_name = "/Components/Manipulation"s;
-    std::string client_name = "/BT/" + name + "/Manipulation"s;
+    // MANIPULATION
+    std::string man_server_name = "/Components/Manipulation"s;
+    std::string man_client_name = "/BT/" + name + "/Manipulation"s;
 
-    client_port.open(client_name);
+    man_client_port.open(man_client_name);
 
-    if (!yarp.connect(client_name,server_name))
+    if (!yarp.connect(man_client_name,man_server_name))
     {
-        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        std::cout << "Error! Could not connect to server " << man_server_name << '\n';
         return false;
     }
-    manipulation_client_.yarp().attachAsClient(client_port);
+    manipulation_client_.yarp().attachAsClient(man_client_port);
+
+    // ACTION
+    std::string act_server_name = "/Components/ActionRecognition"s;
+    std::string act_client_name = "/BT/" + name + "/ActionRecognition/handshake_action_recognized"s;
+
+    act_client_port.open(act_client_name);
+
+    // connect to server
+    if (!yarp.connect(act_client_name,act_server_name))
+    {
+       std::cout << "Error! Could not connect to server " << act_server_name << '\n';
+       return false;
+    }
+    action_recognition_client_.yarp().attachAsClient(act_client_port);
     return true;
 }
 
@@ -75,8 +90,19 @@ NodeStatus RobotHandshake::tick()
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     manipulation_client_.home(false);
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    return NodeStatus::FAILURE;
-//    return NodeStatus::SUCCESS;
+    while (true){
+        auto action = action_recognition_client_.get_action();
+        if (action == 2){
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        else{
+            break;
+        }
+    }
+//    return NodeStatus::FAILURE;
+    manipulation_client_.home(false);
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    return NodeStatus::SUCCESS;
 }
 
 void RobotHandshake::halt()

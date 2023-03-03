@@ -1,17 +1,16 @@
 /*
  *   Copyright (c) 2022 Michele Colledanchise
  *   All rights reserved.
-
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
  *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *   copies of the Software, and to permit persons to whom the Software is
  *   furnished to do so, subject to the following conditions:
- 
+
  *   The above copyright notice and this permission notice shall be included in all
  *   copies or substantial portions of the Software.
- 
+
  *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,34 +27,47 @@
  *                                                                            *
  ******************************************************************************/
 
-#pragma once
-
 
 #include <behaviortree_cpp_v3/condition_node.h>
-#include <ManipulationInterface.h>
-#include <ActionRecognitionInterface.h>
-#include <string>
-#include <future>
+#include "no_box_close.h"
+
+#include <chrono>
+#include <thread>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
 
-using namespace BT;
-using namespace std;
 
-class RobotHandshake :  public CoroActionNode
+NoBoxClose::NoBoxClose(string name, const NodeConfiguration& config) :
+    ConditionNode(name, config)
 {
-public:
-    RobotHandshake(string name, const NodeConfiguration &config);
-    void halt() override;
-    NodeStatus tick() override;
-    static PortsList providedPorts();
-private:
-    bool init(std::string);
-    ManipulationInterface manipulation_client_;
-    bool is_ok_{false};
-    yarp::os::Network yarp;
-    yarp::os::Port man_client_port;
+    is_ok_ = init(name);
+}
 
-    ActionRecognitionInterface action_recognition_client_;
-    yarp::os::Port act_client_port;
-};
+bool NoBoxClose::init(std::string name)
+{
+    std::string server_name = "/Components/ObjectDetection"s;
+    std::string client_name = "/BT/" + name + "/ObjectDetection"s;
+
+    client_port.open(client_name);
+
+    if (!yarp.connect(client_name,server_name))
+    {
+        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        return false;
+    }
+    object_detection_client_.yarp().attachAsClient(client_port);
+    return true;
+}
+
+NodeStatus NoBoxClose::tick()
+{
+    auto distance = object_detection_client_.get_distance();
+    if (distance == -1 or distance >= threshold)
+        return BT::NodeStatus::SUCCESS;
+    return  BT::NodeStatus::FAILURE;
+}
+
+PortsList NoBoxClose::providedPorts()
+{
+    return { };
+}

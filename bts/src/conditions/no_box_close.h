@@ -1,6 +1,7 @@
 /*
  *   Copyright (c) 2022 Michele Colledanchise
  *   All rights reserved.
+
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
@@ -20,40 +21,38 @@
  *   SOFTWARE.
  */
 
-/*
-#ifndef PERSON_IS_FOCUSED
-#define PERSON_IS_FOCUSED
-*/
+/******************************************************************************
+ *                                                                            *
+ * Copyright (C) 2020 Fondazione Istituto Italiano di Tecnologia (IIT)        *
+ * All Rights Reserved.                                                       *
+ *                                                                            *
+ ******************************************************************************/
+
+#pragma once
 
 
 #include <behaviortree_cpp_v3/condition_node.h>
-#include <ActionRecognitionInterface.h>
+#include <ObjectDetectionInterface.h>
 #include <string>
 #include <future>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
-#include <ObjectDetectionInterface.h>
 
 using namespace BT;
 using namespace std;
 
-class HelloActionRecognized :  public ConditionNode
+class NoBoxClose :  public ConditionNode
 {
 public:
-    HelloActionRecognized(string name, const NodeConfiguration &config);
+    NoBoxClose(string name, const NodeConfiguration &config);
     NodeStatus tick() override;
     static PortsList providedPorts();
-
 private:
     bool init(std::string);
-    ActionRecognitionInterface action_recognition_client_;
+    ObjectDetectionInterface object_detection_client_;
     bool is_ok_{false};
     yarp::os::Network yarp;
-    yarp::os::Port man_client_port;
+    yarp::os::Port client_port;
 
-    ObjectDetectionInterface object_detection_client_;
-    yarp::os::Port obj_client_port;
+    int threshold = 3000;
 };
-
-
-/*#endif PERSON_IS_FOCUSED */

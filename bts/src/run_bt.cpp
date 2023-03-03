@@ -68,6 +68,7 @@
 #include <conditions/human_not_too_far.h>
 #include <conditions/human_paying_attention.h>
 #include <conditions/is_box_still.h>
+#include <conditions/no_box_close.h>
 #include <conditions/lift_action_recognized.h>
 #include <conditions/stand_action_recognized.h>
 
@@ -89,6 +90,7 @@ int main(int argc, char **argv)
 
     bt_factory.registerNodeType<StandActionRecognized>("StandActionRecognized");
     bt_factory.registerNodeType<HelloActionRecognized>("HelloActionRecognized");
+    bt_factory.registerNodeType<HelloActionRecognized>("NoBoxClose");
     bt_factory.registerNodeType<LiftActionRecognized>("LiftActionRecognized");
     bt_factory.registerNodeType<GetActionRecognized>("GetActionRecognized");
     bt_factory.registerNodeType<HandshakeActionRecognized>("HandshakeActionRecognized");
@@ -133,7 +135,7 @@ int main(int argc, char **argv)
     while(true)
     {
             auto status = tree.tickRoot();
-            std::this_thread::sleep_for (std::chrono::milliseconds(100));
+            std::this_thread::sleep_for (std::chrono::milliseconds(250));
 
             if (status == BT::NodeStatus::SUCCESS) {
                 std::cout << "Success" << std::endl;
