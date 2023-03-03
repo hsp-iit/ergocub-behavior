@@ -41,6 +41,11 @@
 PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
     CoroActionNode(name, config)
 {
+    this->grasp_distance_thr = 200;
+    this->use_neck = false;
+    this->neck_angle = 0;
+    this->robot_name= "ergocub";
+
     is_ok_ = init(name);
 }
 
@@ -72,7 +77,8 @@ bool PerformGrasp::init(std::string name)
     }
     object_detection_client_.yarp().attachAsClient(od_client_port);
 
-    head_control_ = new eCubHead("ergocubSim", name);
+    if (this->use_neck)
+        head_control_ = new eCubHead(this->robot_name, name);
 
     return true;
 }
@@ -89,7 +95,8 @@ NodeStatus PerformGrasp::tick()
 //
 //    manipulation_client_.grasp(poses);
 
-    head_control_->set_camera_tilt(0.5);
+    if (this->use_neck)
+        head_control_->set_camera_tilt(this->neck_angle);
 
     manipulation_client_.ready(true);
 
@@ -97,10 +104,12 @@ NodeStatus PerformGrasp::tick()
 
     while((std::time(NULL) - start) < 2) {
 //          setStatusRunningAndYield();
-          auto poses = object_detection_client_.get_poses();
+          auto distance = object_detection_client_.get_distance();
           std::this_thread::sleep_for(std::chrono::milliseconds(50));
-          if (poses[0] == -1)
+          if (distance < this->grasp_distance_thr)
           {
+              manipulation_client_.home(false);
+              std::this_thread::sleep_for(std::chrono::milliseconds(2000));
               return NodeStatus::FAILURE;
           }
 
@@ -115,7 +124,11 @@ NodeStatus PerformGrasp::tick()
 
     manipulation_client_.grasp(true);
 
-    head_control_->set_camera_tilt(-0.5);
+    if (this->use_neck)
+        head_control_->set_camera_tilt(-this->neck_angle);
+
+    manipulation_client_.home(false);
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     setOutput("message", true );
     return NodeStatus::SUCCESS;

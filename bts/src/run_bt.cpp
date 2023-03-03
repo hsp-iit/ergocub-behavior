@@ -80,7 +80,7 @@ using namespace std;
 using namespace BT;
 
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
     std::string fileName = "./ergocub-behavior/bts/descriptions/ergotree_simplified_2.xml";
 
