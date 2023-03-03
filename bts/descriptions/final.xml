@@ -5,6 +5,8 @@
         <ReactiveFallback>
             <ReactiveSequence>
                 <Condition ID="GetActionRecognized"/>
+                <Condition ID="NoBoxClose"/>
+                <Condition ID="HandoutSuccessful" message="{grasp_success}"/>
                 <Action ID="RobotGiveBox" message="{grasp_success}"/>
             </ReactiveSequence>
             <Condition ID="HandoutSuccessful" message="{grasp_success}"/>
@@ -15,7 +17,6 @@
             <ReactiveSequence>
                 <Condition ID="HumanPayingAttention"/>
                 <Condition ID="HumanNotTooFar"/>
-                <Condition ID="NoBoxClose"/>
                 <ReactiveFallback>
                     <ReactiveSequence>
                         <Condition ID="HelloActionRecognized"/>

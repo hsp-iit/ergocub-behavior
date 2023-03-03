@@ -28,6 +28,7 @@
 
 #include <behaviortree_cpp_v3/condition_node.h>
 #include <ActionRecognitionInterface.h>
+#include <ObjectDetectionInterface.h>
 #include <string>
 #include <future>
 #include <yarp/os/Network.h>
@@ -48,7 +49,10 @@ private:
     ActionRecognitionInterface action_recognition_client_;
     bool is_ok_{false};
     yarp::os::Network yarp;
-    yarp::os::Port client_port;
+    yarp::os::Port act_client_port;
+
+    ObjectDetectionInterface object_detection_client_;
+    yarp::os::Port obj_client_port;
 };
 
 
