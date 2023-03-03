@@ -47,29 +47,48 @@ HumanNotTooFar::HumanNotTooFar(string name, const NodeConfiguration& config) :
 
 bool HumanNotTooFar::init(std::string name)
 {
-  std::string server_name = "/Components/ActionRecognition"s;
-  std::string client_name = "/BT/" + name + "/ActionRecognition/human_not_too_far"s;
+    // ACT
+    std::string act_server_name = "/Components/ActionRecognition"s;
+    std::string act_client_name = "/BT/" + name + "/ActionRecognition/human_not_too_far"s;
 
-  client_port.open(client_name);
+    act_client_port.open(act_client_name);
 
-  // connect to server
-  if (!yarp.connect(client_name,server_name))
-  {
-     std::cout << "Error! Could not connect to server " << server_name << '\n';
+    // connect to server
+    if (!yarp.connect(act_client_name,act_server_name))
+    {
+     std::cout << "Error! Could not connect to server " << act_server_name << '\n';
      return false;
-  }
-  action_recognition_client_.yarp().attachAsClient(client_port);
+    }
+    action_recognition_client_.yarp().attachAsClient(act_client_port);
+
+    // OD
+    std::string obj_server_name = "/Components/ObjectDetection"s;
+    std::string obj_client_name = "/BT/" + name + "/ObjectDetection"s;
+
+    obj_client_port.open(obj_client_name);
+
+    if (!yarp.connect(obj_client_name,obj_server_name))
+    {
+        std::cout << "Error! Could not connect to server " << obj_server_name << '\n';
+        return false;
+    }
+    object_detection_client_.yarp().attachAsClient(obj_client_port);
   return true;
 }
 
 NodeStatus HumanNotTooFar::tick()
 {
-    auto distance = action_recognition_client_.get_distance();
-    if (distance == -1){
+    auto human_distance = action_recognition_client_.get_distance();
+    if (human_distance == -1){
         return BT::NodeStatus::FAILURE;
     }
-
-    return distance < 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+    auto box_distance = object_detection_client_.get_distance();
+    if (box_distance == -1 or box_distance >= 1500){
+        return human_distance < 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+    }
+    else{
+        return BT::NodeStatus::FAILURE;
+    }
 
 }
 
