@@ -42,6 +42,7 @@ target_sources(custom_leaf_nodes
   conditions/is_box_still.cpp
   conditions/lift_action_recognized.cpp
   conditions/stand_action_recognized.cpp
+  conditions/no_box_close.cpp
 )
 
 target_include_directories(custom_leaf_nodes

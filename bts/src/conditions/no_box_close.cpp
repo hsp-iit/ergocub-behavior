@@ -29,69 +29,45 @@
 
 
 #include <behaviortree_cpp_v3/condition_node.h>
-#include "hello_action_recognized.h"
+#include "no_box_close.h"
 
-#include <iostream>
 #include <chrono>
 #include <thread>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
-#include <ActionRecognitionInterface.h>
 
 
-HelloActionRecognized::HelloActionRecognized(string name, const NodeConfiguration& config) :
+NoBoxClose::NoBoxClose(string name, const NodeConfiguration& config) :
     ConditionNode(name, config)
 {
     is_ok_ = init(name);
 }
 
-bool HelloActionRecognized::init(std::string name)
+bool NoBoxClose::init(std::string name)
 {
-    // MANIPULATION
-    std::string man_server_name = "/Components/ActionRecognition"s;
-    std::string man_client_name = "/BT/" + name + "/ActionRecognition/hello_action_recognized"s;
+    std::string server_name = "/Components/ObjectDetection"s;
+    std::string client_name = "/BT/" + name + "/ObjectDetection"s;
 
-    man_client_port.open(man_client_name);
+    client_port.open(client_name);
 
-    // connect to server
-    if (!yarp.connect(man_client_name,man_server_name))
+    if (!yarp.connect(client_name,server_name))
     {
-     std::cout << "Error! Could not connect to server " << man_server_name << '\n';
-     return false;
+        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        return false;
     }
-    action_recognition_client_.yarp().attachAsClient(man_client_port);
-
-//      // NO BOX DETECTED
-//    std::string obj_server_name = "/Components/ObjectDetection"s;
-//    std::string obj_client_name = "/BT/" + name + "/ObjectDetection"s;
-//
-//    obj_client_port.open(obj_client_name);
-//
-//    if (!yarp.connect(obj_client_name,obj_server_name))
-//    {
-//        std::cout << "Error! Could not connect to server " << obj_server_name << '\n';
-//        return false;
-//    }
-//    object_detection_client_.yarp().attachAsClient(obj_client_port);
-
-  return true;
+    object_detection_client_.yarp().attachAsClient(client_port);
+    return true;
 }
 
-NodeStatus HelloActionRecognized::tick()
+NodeStatus NoBoxClose::tick()
 {
-    auto action = action_recognition_client_.get_action();
-    return action == 1 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
-//    auto distance = object_detection_client_.get_distance();
-//    if (distance == -1 || distance > 3000){
-//        return action == 1 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
-//    }
-//    else{
-//        return BT::NodeStatus::FAILURE;
-//    }
-
+    auto distance = object_detection_client_.get_distance();
+    if (distance == -1 or distance >= threshold)
+        return BT::NodeStatus::SUCCESS;
+    return  BT::NodeStatus::FAILURE;
 }
 
-PortsList HelloActionRecognized::providedPorts()
+PortsList NoBoxClose::providedPorts()
 {
     return { };
 }

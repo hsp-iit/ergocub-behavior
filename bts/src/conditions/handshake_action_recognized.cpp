@@ -61,31 +61,32 @@ bool HandshakeActionRecognized::init(std::string name)
     }
     action_recognition_client_.yarp().attachAsClient(man_client_port);
 
-    // NO BOX DETECTED
-    std::string obj_server_name = "/Components/ObjectDetection"s;
-    std::string obj_client_name = "/BT/" + name + "/ObjectDetection"s;
-
-    obj_client_port.open(obj_client_name);
-
-    if (!yarp.connect(obj_client_name,obj_server_name))
-    {
-        std::cout << "Error! Could not connect to server " << obj_server_name << '\n';
-        return false;
-    }
-    object_detection_client_.yarp().attachAsClient(obj_client_port);
+//    // NO BOX DETECTED
+//    std::string obj_server_name = "/Components/ObjectDetection"s;
+//    std::string obj_client_name = "/BT/" + name + "/ObjectDetection"s;
+//
+//    obj_client_port.open(obj_client_name);
+//
+//    if (!yarp.connect(obj_client_name,obj_server_name))
+//    {
+//        std::cout << "Error! Could not connect to server " << obj_server_name << '\n';
+//        return false;
+//    }
+//    object_detection_client_.yarp().attachAsClient(obj_client_port);
     return true;
 }
 
 NodeStatus HandshakeActionRecognized::tick()
 {
     auto action = action_recognition_client_.get_action();
-    auto distance = object_detection_client_.get_distance();
-    if(distance == -1 || distance > 3000){
-        return action == 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
-    }
-    else{
-        return BT::NodeStatus::FAILURE;
-    }
+    return action == 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+//    auto distance = object_detection_client_.get_distance();
+//    if(distance == -1 || distance > 3000){
+//        return action == 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+//    }
+//    else{
+//        return BT::NodeStatus::FAILURE;
+//    }
 
 }
 
