@@ -21,33 +21,35 @@ public:
     // Constructor
     ManipulationInterface();
 
-    virtual bool stop();
+    virtual std::string stop();
 
-    virtual bool home(const bool block);
+    virtual std::string home(const bool block);
 
-    virtual bool wave(const bool block);
+    virtual std::string wave(const bool block);
 
-    virtual bool shake(const bool block);
+    virtual std::string shake(const bool block);
 
-    virtual bool ready(const bool block);
+    virtual std::string ready(const bool block);
 
-    virtual bool pose_grasp(const bool block, const std::vector<double>& hand_frames);
+    virtual std::string pose_grasp(const bool block, const std::vector<double>& hand_frames);
 
-    virtual bool grasp(const bool block);
+    virtual std::string testgrasp();
 
-    virtual bool release(const bool block);
+    virtual std::string grasp(const bool block);
 
-    virtual bool ins();
+    virtual std::string release(const bool block);
 
-    virtual bool out();
+    virtual std::string ins();
 
-    virtual bool up();
+    virtual std::string out();
 
-    virtual bool down();
+    virtual std::string up();
 
-    virtual bool fore();
+    virtual std::string down();
 
-    virtual bool aft();
+    virtual std::string fore();
+
+    virtual std::string aft();
 
     virtual std::string finished();
 

@@ -88,12 +88,12 @@ NodeStatus RobotHandshake::tick()
 //    setStatusRunningAndYield();
     manipulation_client_.shake(false);
     std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-    manipulation_client_.home(false);
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+//    manipulation_client_.home(false);
+//    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     while (true){
         auto action = action_recognition_client_.get_action();
         if (action == 2){
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
         }
         else{
             break;

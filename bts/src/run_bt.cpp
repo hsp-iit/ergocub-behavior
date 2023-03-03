@@ -82,7 +82,7 @@ using namespace BT;
 
 int main(int argc, char **argv)
 {
-    std::string fileName = "./ergocub-behavior/bts/descriptions/ergotree_simplified_2.xml";
+    std::string fileName = "./ergocub-behavior/bts/descriptions/final.xml";
 
     BehaviorTreeFactory bt_factory;
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 
     bt_factory.registerNodeType<StandActionRecognized>("StandActionRecognized");
     bt_factory.registerNodeType<HelloActionRecognized>("HelloActionRecognized");
-    bt_factory.registerNodeType<HelloActionRecognized>("NoBoxClose");
+    bt_factory.registerNodeType<NoBoxClose>("NoBoxClose");
     bt_factory.registerNodeType<LiftActionRecognized>("LiftActionRecognized");
     bt_factory.registerNodeType<GetActionRecognized>("GetActionRecognized");
     bt_factory.registerNodeType<HandshakeActionRecognized>("HandshakeActionRecognized");
