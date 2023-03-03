@@ -57,6 +57,11 @@ private:
     eCubHead* head_control_;
 
     bool is_ok_{false};
+    bool use_neck;
+    float neck_angle;
+    std::string robot_name;
+    int grasp_distance_thr;
+
     yarp::os::Network yarp;
     yarp::os::Port manip_client_port;
     yarp::os::Port od_client_port;

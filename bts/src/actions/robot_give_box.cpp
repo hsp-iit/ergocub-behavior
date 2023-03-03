@@ -68,7 +68,9 @@ NodeStatus RobotGiveBox::tick()
     outfile.open("robot_commands.txt", std::ios_base::app); // append instead of overwrite
     outfile << "Giving box..."  << std::endl;
     // end
-    manipulation_client_.release(true);
+    manipulation_client_.release(false);  // WHY TRUE
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    manipulation_client_.home(false);
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     setOutput("message", false);

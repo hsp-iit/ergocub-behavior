@@ -72,6 +72,8 @@ NodeStatus RobotHandshake::tick()
     // end
 //    setStatusRunningAndYield();
     manipulation_client_.shake(false);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    manipulation_client_.home(false);
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     return NodeStatus::FAILURE;
 //    return NodeStatus::SUCCESS;
