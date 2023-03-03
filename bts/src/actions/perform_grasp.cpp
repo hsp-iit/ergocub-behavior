@@ -110,7 +110,7 @@ NodeStatus PerformGrasp::tick()
           auto distance = object_detection_client_.get_distance();
           std::this_thread::sleep_for(std::chrono::milliseconds(50));
           std::cout << distance << std::endl;
-          if (distance > this->grasp_distance_thr)
+          if (distance > this->grasp_distance_thr || distance == -1)
           {
               manipulation_client_.home(false);
               std::this_thread::sleep_for(std::chrono::milliseconds(2000));
