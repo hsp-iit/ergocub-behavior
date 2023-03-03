@@ -61,7 +61,7 @@ bool RobotHandshake::init(std::string name)
 
     // ACTION
     std::string act_server_name = "/Components/ActionRecognition"s;
-    std::string act_client_name = "/BT/" + name + "/ActionRecognition/handshake_action_recognized_internal"s;
+    std::string act_client_name = "/BT/" + name + "/ActionRecognition/handshake_action_recognized"s;
 
     act_client_port.open(act_client_name);
 

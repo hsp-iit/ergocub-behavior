@@ -47,25 +47,45 @@ HandshakeActionRecognized::HandshakeActionRecognized(string name, const NodeConf
 
 bool HandshakeActionRecognized::init(std::string name)
 {
-  std::string server_name = "/Components/ActionRecognition"s;
-  std::string client_name = "/BT/" + name + "/ActionRecognition/handshake_action_recognized"s;
+    // MANIPULATION
+    std::string man_server_name = "/Components/ActionRecognition"s;
+    std::string man_client_name = "/BT/" + name + "/ActionRecognition/handshake_action_recognized"s;
 
-  client_port.open(client_name);
+    man_client_port.open(man_client_name);
 
-  // connect to server
-  if (!yarp.connect(client_name,server_name))
-  {
-     std::cout << "Error! Could not connect to server " << server_name << '\n';
+    // connect to server
+    if (!yarp.connect(man_client_name,man_server_name))
+    {
+     std::cout << "Error! Could not connect to server " << man_server_name << '\n';
      return false;
-  }
-  action_recognition_client_.yarp().attachAsClient(client_port);
-  return true;
+    }
+    action_recognition_client_.yarp().attachAsClient(man_client_port);
+
+    // NO BOX DETECTED
+    std::string obj_server_name = "/Components/ObjectDetection"s;
+    std::string obj_client_name = "/BT/" + name + "/ObjectDetection"s;
+
+    obj_client_port.open(obj_client_name);
+
+    if (!yarp.connect(obj_client_name,obj_server_name))
+    {
+        std::cout << "Error! Could not connect to server " << obj_server_name << '\n';
+        return false;
+    }
+    object_detection_client_.yarp().attachAsClient(obj_client_port);
+    return true;
 }
 
 NodeStatus HandshakeActionRecognized::tick()
 {
     auto action = action_recognition_client_.get_action();
-    return action == 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+    auto distance = object_detection_client_.get_distance();
+    if(distance == -1 || distance > 3000){
+        return action == 2 ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
+    }
+    else{
+        return BT::NodeStatus::FAILURE;
+    }
 
 }
 

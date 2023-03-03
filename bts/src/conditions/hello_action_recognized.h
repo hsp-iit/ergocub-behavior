@@ -32,6 +32,7 @@
 #include <future>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
+#include <ObjectDetectionInterface.h>
 
 using namespace BT;
 using namespace std;
@@ -48,7 +49,10 @@ private:
     ActionRecognitionInterface action_recognition_client_;
     bool is_ok_{false};
     yarp::os::Network yarp;
-    yarp::os::Port client_port;
+    yarp::os::Port man_client_port;
+
+    ObjectDetectionInterface object_detection_client_;
+    yarp::os::Port obj_client_port;
 };
 
 
