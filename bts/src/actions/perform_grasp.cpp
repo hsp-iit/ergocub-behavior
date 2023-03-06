@@ -42,9 +42,9 @@ PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
     CoroActionNode(name, config)
 {
     this->grasp_distance_thr = 600;
-    this->use_neck = false;
-    this->neck_angle = 0;
-    this->robot_name= "ergocub";
+    this->use_neck = true;
+    this->neck_angle = -10;
+    this->robot_name= "ergocubSim";
 
     is_ok_ = init(name);
 }
@@ -131,11 +131,11 @@ NodeStatus PerformGrasp::tick()
     }
 
     std::cout << "test3" << std::endl;
-    manipulation_client_.testgrasp();
+    manipulation_client_.grasp(true);
     std::cout << "test4" << std::endl;
 
     if (this->use_neck)
-        head_control_->set_camera_tilt(-this->neck_angle);
+        head_control_->set_camera_tilt(0);
 
 //    manipulation_client_.home(false);
 //    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
