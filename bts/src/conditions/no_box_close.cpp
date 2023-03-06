@@ -62,7 +62,7 @@ bool NoBoxClose::init(std::string name)
 NodeStatus NoBoxClose::tick()
 {
     auto distance = object_detection_client_.get_distance();
-    if (distance == -1 or distance >= threshold)
+    if (distance == -1 or distance >= 600)
         return BT::NodeStatus::SUCCESS;
     return  BT::NodeStatus::FAILURE;
 }

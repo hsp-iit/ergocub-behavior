@@ -53,6 +53,10 @@ public:
 
     virtual std::string finished();
 
+    virtual std::string egrasprlc();
+
+    virtual std::string mgraspround();
+
     // help method
     virtual std::vector<std::string> help(const std::string& functionName = "--all");
 

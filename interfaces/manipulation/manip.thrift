@@ -15,4 +15,6 @@ service ManipulationInterface {
     string fore();
     string aft();
     string finished();
+    string egrasprlc();
+    string mgraspround();
 }
