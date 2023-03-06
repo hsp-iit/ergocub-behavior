@@ -43,8 +43,8 @@ PerformGrasp::PerformGrasp(string name, const NodeConfiguration& config) :
 {
     this->grasp_distance_thr = 600;
     this->use_neck = true;
-    this->neck_angle = -10;
-    this->robot_name= "ergocubSim";
+    this->neck_angle = -30;
+    this->robot_name= "icub";
 
     is_ok_ = init(name);
 }
@@ -79,6 +79,7 @@ bool PerformGrasp::init(std::string name)
 
     if (this->use_neck)
         head_control_ = new eCubHead(this->robot_name, name);
+        head_control_->set_neck_pitch_velocity(10.0);
 
     return true;
 }
@@ -96,7 +97,7 @@ NodeStatus PerformGrasp::tick()
 //    manipulation_client_.grasp(poses);
 
     if (this->use_neck)
-        head_control_->set_camera_tilt(this->neck_angle);
+        head_control_->set_neck_pitch(this->neck_angle);
 
     std::cout << "ready 1" << std::endl;
     manipulation_client_.ready(true);
@@ -112,6 +113,7 @@ NodeStatus PerformGrasp::tick()
           std::cout << distance << std::endl;
           if (distance > this->grasp_distance_thr || distance == -1)
           {
+              head_control_->set_neck_pitch(20);
               manipulation_client_.home(false);
               std::this_thread::sleep_for(std::chrono::milliseconds(2000));
               return NodeStatus::FAILURE;
@@ -131,11 +133,12 @@ NodeStatus PerformGrasp::tick()
     }
 
     std::cout << "test3" << std::endl;
-    manipulation_client_.grasp(true);
+//    manipulation_client_.grasp(true);
+    manipulation_client_.egrasprlc();
     std::cout << "test4" << std::endl;
 
     if (this->use_neck)
-        head_control_->set_camera_tilt(0);
+        head_control_->set_neck_pitch(20);
 
 //    manipulation_client_.home(false);
 //    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
