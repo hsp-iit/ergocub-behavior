@@ -17,6 +17,7 @@ find_package(ZMQ)
 find_package(Boost COMPONENTS coroutine REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
 
+
 find_package(YARP COMPONENTS os idl_tools dev REQUIRED)
 
 if( ZMQ_FOUND )
@@ -27,5 +28,6 @@ else()
     message(WARNING "ZeroMQ NOT found. The execution of the BT will not be visible with Groot.")
 endif()
 
+# add_subdirectory(interfaces)
 add_subdirectory(components)
 add_subdirectory(bts/src)

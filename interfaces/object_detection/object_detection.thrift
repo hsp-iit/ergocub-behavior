@@ -7,5 +7,6 @@
 
 service ObjectDetectionInterface {
     list<double> get_poses();
+    list<double> get_object_position();
     i16 get_distance();
 }

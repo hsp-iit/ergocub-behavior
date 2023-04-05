@@ -22,10 +22,11 @@ docker run -itd --rm --network=host --ipc=host \
   -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v "${XAUTHORITY}":/home/btuc/.Xauthority:rw \
   -v "$(pwd)":/home/btuc/ergocub-behavior \
   --name $DOCKER_CONTAINER_NAME \
-  ar0s/bt-assignment bash
+  ar0s/bt-assignment:idyntree bash
 
 # Create tmux session
 tmux new-session -d -s $TMUX_NAME
+tmux set -t $TMUX_NAME -g mouse on
 
 # Set server
 tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter

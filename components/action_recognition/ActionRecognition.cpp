@@ -48,7 +48,7 @@ const int TYPE_POSE = 3;
 const int TYPE_NONE = 4;
 
 
-#define  BUFF_SIZE   8+4+1
+#define  BUFF_SIZE   8+2+1+24
 
 typedef struct {
 	long  data_type;
@@ -102,11 +102,20 @@ public:
         return this->distance;
     }
 
+    std::vector<double> get_face_position()
+    {
+        this->read_queue();
+        auto face_position = this->face_position;
+
+        return face_position;
+    }
+
 private:
     yarp::os::RpcServer server_port;
     double distance;
     std::int16_t action;
     bool focus;
+    std::vector<double> face_position = std::vector<double>(3);
     long msg_type;
     int msqid;
 
@@ -132,7 +141,8 @@ private:
 
         memcpy(&this->action, data.data_buff, 2);
         memcpy(&this->distance, data.data_buff+2, 8);
-        memcpy(&this->focus, data.data_buff+10, 1);
+        memcpy(&this->focus, data.data_buff+10, 2);
+        memcpy(this->face_position.data(), data.data_buff+12, 24);
     }
 };
 
