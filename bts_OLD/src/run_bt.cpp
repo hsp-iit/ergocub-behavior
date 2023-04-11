@@ -57,6 +57,7 @@
 #include <actions/robot_says_be_careful.h>
 #include <actions/robot_wave.h>
 #include <actions/go_home.h>
+#include <actions
 
 #include <conditions/are_points_reachable.h>
 #include <conditions/get_action_recognized.h>

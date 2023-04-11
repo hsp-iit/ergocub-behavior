@@ -33,8 +33,8 @@ bool ObjectIsClose::init(std::string name)
 
 NodeStatus ObjectIsClose::tick()
 {
-    auto distance = object_detection_client_.get_distance();
-    // std::cout << distance << std::endl;
+    double distance = object_detection_client_.get_distance();
+    std::cout << distance << std::endl;
     if (distance == -1 or distance == 0 or distance >= threshold){
         return BT::NodeStatus::FAILURE;
     }

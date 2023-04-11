@@ -14,12 +14,14 @@
                 <Sequence>
                     <Condition ID="POIIsObject" poi="{the_poi}"/>
                     <Condition ID="ObjectIsClose"/>
+                    <Action ID="GoReady"/>
                 </Sequence>
                 <Sequence>
                     <Condition ID="POIIsFace" poi="{the_poi}"/>
                     <Condition ID="FocusDetected"/>
+                    <Action ID="DoResponseAction"/>
                 </Sequence>
-                <AlwaysSuccess/>
+                <Action ID="GoHome"/>
             </Fallback>
         </Sequence>
     </BehaviorTree>
@@ -27,11 +29,16 @@
     <TreeNodesModel>
         <Condition ID="BoxDetected">
             <output_port name="poi" type="std::string"/>
+            <output_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
         </Condition>
+        <Action ID="DoResponseAction"/>
         <Condition ID="FaceDetected">
             <output_port name="poi" type="std::string"/>
+            <output_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
         </Condition>
         <Condition ID="FocusDetected"/>
+        <Action ID="GoHome"/>
+        <Action ID="GoReady"/>
         <Condition ID="ObjectIsClose"/>
         <Condition ID="POIIsFace">
             <input_port name="poi" type="std::string"/>
@@ -44,6 +51,7 @@
         </Action>
         <Action ID="RobotLookAtPOI">
             <input_port name="poi" type="std::string"/>
+            <input_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
         </Action>
     </TreeNodesModel>
     <!-- ////////// -->

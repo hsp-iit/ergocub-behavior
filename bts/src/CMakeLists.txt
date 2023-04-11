@@ -21,12 +21,16 @@ target_sources(custom_leaf_nodes
   PRIVATE
   actions/robot_change_face.cpp
   actions/robot_look_at_poi.cpp
+  actions/do_response_action.cpp
+  actions/go_home.cpp
+  actions/go_ready.cpp
   conditions/box_detected.cpp
   conditions/face_detected.cpp
   conditions/poi_is_object.cpp
   conditions/object_is_close.cpp
   conditions/poi_is_face.cpp
   conditions/focus_detected.cpp
+  common.cpp
 )
 
 target_include_directories(custom_leaf_nodes

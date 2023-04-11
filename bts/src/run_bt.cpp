@@ -20,6 +20,9 @@
 /* INCLUDE NODES */
 #include <actions/robot_look_at_poi.h>
 #include <actions/robot_change_face.h>
+#include <actions/do_response_action.h>
+#include <actions/go_home.h>
+#include <actions/go_ready.h>
 
 #include <conditions/box_detected.h>
 #include <conditions/face_detected.h>
@@ -43,6 +46,9 @@ int main(int argc, char **argv)
     /* REGISTER NODES */
     bt_factory.registerNodeType<RobotLookAtPOI>("RobotLookAtPOI");
     bt_factory.registerNodeType<RobotChangeFace>("RobotChangeFace");
+    bt_factory.registerNodeType<DoResponseAction>("DoResponseAction");
+    bt_factory.registerNodeType<GoHome>("GoHome");
+    bt_factory.registerNodeType<GoReady>("GoReady");
 
     bt_factory.registerNodeType<BoxDetected>("BoxDetected");
     bt_factory.registerNodeType<FaceDetected>("FaceDetected");
@@ -70,7 +76,7 @@ int main(int argc, char **argv)
     while(true)
     {
             auto status = tree.tickRoot();
-            std::this_thread::sleep_for (std::chrono::milliseconds(100));
+            std::this_thread::sleep_for (std::chrono::milliseconds(50));
 
             //if (status == BT::NodeStatus::SUCCESS) {
                 // std::cout << "Success" << std::endl;

@@ -1,6 +1,7 @@
 #include <behaviortree_cpp_v3/action_node.h>
 
 #include "robot_look_at_poi.h"
+#include "common.h"
 
 #include <chrono>
 #include <thread>
@@ -16,8 +17,6 @@
 #include <iDynTree/Core/Direction.h>
 #include <iDynTree/Core/Transform.h>
 #include <iDynTree/Core/VectorFixSize.h>
-
-
 
 using yarp::os::BufferedPort;
 using yarp::os::Bottle;
@@ -35,6 +34,7 @@ bool RobotLookAtPOI::init(std::string name){
 
     yarp::os::Network yarp;
 
+    #ifdef GAZE
     // Connect to realsense-holder-publisher
     std::string rhp_server_name = "/realsense-holder-publisher/pose:o"s;
     std::string rhp_client_name = "/BT/" + name + "/realsense-holder-publisher"s;
@@ -59,9 +59,10 @@ bool RobotLookAtPOI::init(std::string name){
         throw(std::runtime_error(log_name_ + "::ctor. Error: cannot open IGazeControl interface."));
 
     gaze_->setTrackingMode(false);
-    gaze_->setNeckTrajTime(2.5);
+    gaze_->setNeckTrajTime(1);
     // gaze_->blockEyes(0.0);
     // gaze_->blockNeckRoll(0.0);
+    #endif
 
     // Connect to Object Detection
     std::string od_server_name = "/Components/ObjectDetection"s;
@@ -120,6 +121,7 @@ NodeStatus RobotLookAtPOI::tick()
         poi_position_converted(2) = poi_position[2];
 
         // read actual camera position
+        #ifdef GAZE
         yarp::os::Bottle input;
         rhp_client_port.read(input);
         iDynTree::Rotation rot;
@@ -140,16 +142,17 @@ NodeStatus RobotLookAtPOI::tick()
 
         setpoint.push_back(final(0));
         setpoint.push_back(final(1));
-        setpoint.push_back(final(2));
+        setpoint.push_back(final(2));  // TODO try to put +0.2 here (should look a bit higher)
+        #endif
     }
     else{
         setpoint.push_back(-1);
         setpoint.push_back(0);
         setpoint.push_back(0.7);
     }
-    std::cout<<"look at none"<<std::endl;
+    #ifdef GAZE
     gaze_->lookAtFixationPoint(setpoint);
-    std::cout<<"done"<<std::endl;
+    #endif
     return NodeStatus::SUCCESS;
 }
 

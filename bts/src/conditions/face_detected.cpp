@@ -1,5 +1,6 @@
 #include <behaviortree_cpp_v3/condition_node.h>
 #include "face_detected.h"
+#include "common.h"
 
 #include <chrono>
 #include <thread>
@@ -31,21 +32,13 @@ bool FaceDetected::init(std::string name)
     return true;
 }
 
-bool ar_are_all_elements_minus_one(const std::vector<double>& vec) {
-    for (double element : vec) {
-        if (element != -1.) {
-            return false;
-        }
-    }
-    return true;
-}
 
 NodeStatus FaceDetected::tick()
 {
     auto face_position = action_recognition_client_.get_face_position();
     // for(int i=0; i<3; i++)
         // std::cout << face_position[i] << std::endl;
-    if(ar_are_all_elements_minus_one(face_position)){
+    if(are_all_elements_minus_one(face_position)){
         setOutput("poi", "none" );
         return BT::NodeStatus::FAILURE;
     }

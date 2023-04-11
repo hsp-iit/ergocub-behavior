@@ -1,5 +1,6 @@
 #include <behaviortree_cpp_v3/condition_node.h>
 #include "box_detected.h"
+#include "common.h"
 
 #include <chrono>
 #include <thread>
@@ -31,20 +32,15 @@ bool BoxDetected::init(std::string name)
     return true;
 }
 
-bool obj_are_all_elements_minus_one(const std::vector<double>& vec) {
-    for (double element : vec) {
-        if (element != -1.) {
-            return false;
-        }
-    }
-    return true;
-}
 
 NodeStatus BoxDetected::tick()
 {
     auto object_position = object_detection_client_.get_object_position();
     // std::cout << distance << std::endl;
-    if (obj_are_all_elements_minus_one(object_position)){
+    if (are_all_elements_zero(object_position)){
+       throw(std::runtime_error("box_detected: received (0,0,0) as target position (maybe segmentation is dead?"));
+    }
+    if (are_all_elements_minus_one(object_position)){
         setOutput("poi", "none" );
         return BT::NodeStatus::FAILURE;
     }

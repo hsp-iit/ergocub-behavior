@@ -34,6 +34,7 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <iostream>
 
 #include <yarp/os/Network.h>
 #include <yarp/os/RpcServer.h>
@@ -121,7 +122,9 @@ private:
     {
 	    t_data   data;
 
-        int success = msgrcv( this->msqid, &data, sizeof( t_data) - sizeof( long), 0, IPC_NOWAIT) != -1;
+        int success = msgrcv( this->msqid, &data, sizeof( t_data) - sizeof( long), 0, IPC_NOWAIT);
+//        std::cout << "received" << success << "bytes" << std::endl;
+        success = success != -1;
 //        printf("%d", success);
         if (success) {
 //            printf("Reading message of type %ld", data.data_type);
