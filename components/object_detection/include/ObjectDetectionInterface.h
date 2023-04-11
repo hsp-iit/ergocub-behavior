@@ -31,6 +31,8 @@ public:
 
     virtual std::vector<double> get_poses();
 
+    virtual std::vector<double> get_object_position();
+
     virtual std::int16_t get_distance();
 
     // help method

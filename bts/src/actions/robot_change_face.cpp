@@ -1,0 +1,60 @@
+#include <behaviortree_cpp_v3/action_node.h>
+
+#include "robot_change_face.h"
+
+#include <chrono>
+#include <thread>
+#include <unistd.h>
+#include <yarp/os/Network.h>
+
+using yarp::os::Network;
+using yarp::os::Bottle;
+
+
+RobotChangeFace::RobotChangeFace(string name, const NodeConfiguration& config) :
+    SyncActionNode(name, config)
+{
+    is_ok_ = init(name);
+}
+
+bool RobotChangeFace::init(std::string){
+    port.open("/icub/face/emotions/in");
+    Network::connect("/icub/face/emotions/in","/icub/face/emotions/out");
+    return true;
+}
+
+NodeStatus RobotChangeFace::tick()
+{
+    Optional<std::string> msg = getInput<std::string>("poi");
+    if (!msg)
+    {
+      throw BT::RuntimeError("missing required input [message]: ",
+                              msg.error() );
+    }
+
+    // change face depending on object
+    std::string emotion = "";
+    if(msg=="none"){
+        emotion = "neu";
+    }
+    else if(msg=="face"){
+        emotion = "hap";
+    }
+    else if(msg=="object"){
+        emotion = "ang";
+    }
+
+    Bottle cmd;
+    cmd.addString("set all " + emotion);
+    Bottle response;
+    if (port.write(cmd, response)) {
+        cout << response.toString() << endl;
+    }
+
+    return NodeStatus::SUCCESS;
+}
+
+PortsList RobotChangeFace::providedPorts()
+{
+    return {InputPort<std::string>("poi")};
+}

@@ -11,10 +11,10 @@
 using namespace BT;
 using namespace std;
 
-class GoHome :  public SyncActionNode
+class GoReady :  public SyncActionNode
 {
 public:
-    GoHome(string name, const NodeConfiguration &config);
+    GoReady(string name, const NodeConfiguration &config);
     NodeStatus tick() override;
     static PortsList providedPorts();
 private:
@@ -23,5 +23,4 @@ private:
     bool is_ok_{false};
     yarp::os::Network yarp;
     yarp::os::Port client_port;
-    long last_time;
 };

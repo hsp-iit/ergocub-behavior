@@ -1,6 +1,6 @@
 #include <behaviortree_cpp_v3/action_node.h>
 
-#include "go_home.h"
+#include "go_ready.h"
 #include "common.h"
 
 #include <chrono>
@@ -8,13 +8,13 @@
 #include <unistd.h>
 #include <fstream>
 
-GoHome::GoHome(string name, const NodeConfiguration& config) :
+GoReady::GoReady(string name, const NodeConfiguration& config) :
     SyncActionNode(name, config)
 {
     is_ok_ = init(name);
 }
 
-bool GoHome::init(std::string name)
+bool GoReady::init(std::string name)
 {
     // MANIPULATION
     #ifdef REAL_ROBOT
@@ -32,26 +32,16 @@ bool GoHome::init(std::string name)
     return true;
 }
 
-NodeStatus GoHome::tick()
+NodeStatus GoReady::tick()
 {
-
-    auto now = std::chrono::system_clock::now();
-    long this_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
-
-    std::cout << "IN HOME NODE" << std::endl;
-    //if((this_time - last_time) > 3){
-    #ifdef REAL_ROBOT
-    std::cout << "GO HOME ICUB!" << std::endl;
-    manipulation_client_.home(false);
-    #endif
-    last_time = this_time;
-    //}
-
-    return NodeStatus::SUCCESS;
-}
+  // Here I simulate with sleep, this way should work, but the robot cannot be interrupted
+//  manipulation_client_.ready(true);
+  // std::this_thread::sleep_for( std::chrono::milliseconds(5000) );
+  return NodeStatus::SUCCESS;
+ }
 
 
-PortsList GoHome::providedPorts()
+PortsList GoReady::providedPorts()
 {
     return {};
 }

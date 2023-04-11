@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include <behaviortree_cpp_v3/action_node.h>
-#include <ManipulationInterface.h>
+#include <behaviortree_cpp_v3/condition_node.h>
+#include <ActionRecognitionInterface.h>
 #include <string>
 #include <future>
 #include <yarp/os/Network.h>
@@ -11,17 +11,16 @@
 using namespace BT;
 using namespace std;
 
-class GoHome :  public SyncActionNode
+class FaceDetected :  public ConditionNode
 {
 public:
-    GoHome(string name, const NodeConfiguration &config);
+    FaceDetected(string name, const NodeConfiguration &config);
     NodeStatus tick() override;
     static PortsList providedPorts();
 private:
     bool init(std::string);
-    ManipulationInterface manipulation_client_;
+    ActionRecognitionInterface action_recognition_client_;
     bool is_ok_{false};
     yarp::os::Network yarp;
     yarp::os::Port client_port;
-    long last_time;
 };

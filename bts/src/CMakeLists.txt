@@ -7,7 +7,7 @@
 
 # Create the custom_leaf_nodes library
 add_library(custom_leaf_nodes STATIC)
-
+find_package(iDynTree REQUIRED)
 include_directories(
         actions
         conditions
@@ -19,30 +19,18 @@ include_directories(
 
 target_sources(custom_leaf_nodes
   PRIVATE
-  actions/ask_to_get_closer.cpp
-  actions/ask_to_keep_the_box_still.cpp
-  actions/ask_to_move_object_closer.cpp
-  actions/ask_to_pay_attention.cpp
-  actions/perform_grasp.cpp
-  actions/robot_give_box.cpp
-  actions/robot_handshake.cpp
-  actions/robot_says_be_careful.cpp
-  actions/robot_wave.cpp
+  actions/robot_change_face.cpp
+  actions/robot_look_at_poi.cpp
+  actions/do_response_action.cpp
   actions/go_home.cpp
-
-  conditions/are_points_reachable.cpp
-  conditions/get_action_recognized.cpp
-  conditions/handout_successful.cpp
-  conditions/handshake_action_recognized.cpp
-  conditions/hello_action_recognized.cpp
-  conditions/human_is_not_moving_towards_camera.cpp
-  conditions/human_not_getting_closer.cpp
-  conditions/human_not_too_far.cpp
-  conditions/human_paying_attention.cpp
-  conditions/is_box_still.cpp
-  conditions/lift_action_recognized.cpp
-  conditions/stand_action_recognized.cpp
-  conditions/no_box_close.cpp
+  actions/go_ready.cpp
+  conditions/box_detected.cpp
+  conditions/face_detected.cpp
+  conditions/poi_is_object.cpp
+  conditions/object_is_close.cpp
+  conditions/poi_is_face.cpp
+  conditions/focus_detected.cpp
+  common.cpp
 )
 
 target_include_directories(custom_leaf_nodes
@@ -58,6 +46,7 @@ target_link_libraries(custom_leaf_nodes
     move_camera
     BT::behaviortree_cpp_v3
     YARP::YARP_os
+    iDynTree::idyntree-high-level
     )
 
 
@@ -73,4 +62,5 @@ target_link_libraries(run_bt  # DECOMMENTED
     custom_leaf_nodes
     YARP::YARP_os
     YARP::YARP_init
-    YARP::YARP_dev)
+    YARP::YARP_dev
+    )

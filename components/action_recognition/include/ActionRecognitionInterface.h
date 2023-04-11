@@ -35,6 +35,8 @@ public:
 
     virtual double get_distance();
 
+    virtual std::vector<double> get_face_position();
+
     // help method
     virtual std::vector<std::string> help(const std::string& functionName = "--all");
 

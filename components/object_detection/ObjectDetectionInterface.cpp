@@ -72,6 +72,64 @@ public:
     static constexpr const char* s_help{""};
 };
 
+// get_object_position helper class declaration
+class ObjectDetectionInterface_get_object_position_helper :
+        public yarp::os::Portable
+{
+public:
+    ObjectDetectionInterface_get_object_position_helper() = default;
+    bool write(yarp::os::ConnectionWriter& connection) const override;
+    bool read(yarp::os::ConnectionReader& connection) override;
+
+    class Command :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Command() = default;
+        ~Command() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
+        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
+
+        bool read(yarp::os::idl::WireReader& reader) override;
+        bool readTag(yarp::os::idl::WireReader& reader);
+        bool readArgs(yarp::os::idl::WireReader& reader);
+    };
+
+    class Reply :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Reply() = default;
+        ~Reply() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool read(yarp::os::idl::WireReader& reader) override;
+
+        std::vector<double> return_helper{};
+    };
+
+    using funcptr_t = std::vector<double> (*)();
+    void call(ObjectDetectionInterface* ptr);
+
+    Command cmd;
+    Reply reply;
+
+    static constexpr const char* s_tag{"get_object_position"};
+    static constexpr size_t s_tag_len{3};
+    static constexpr size_t s_cmd_len{3};
+    static constexpr size_t s_reply_len{1};
+    static constexpr const char* s_prototype{"std::vector<double> ObjectDetectionInterface::get_object_position()"};
+    static constexpr const char* s_help{""};
+};
+
 // get_distance helper class declaration
 class ObjectDetectionInterface_get_distance_helper :
         public yarp::os::Portable
@@ -280,6 +338,156 @@ void ObjectDetectionInterface_get_poses_helper::call(ObjectDetectionInterface* p
     reply.return_helper = ptr->get_poses();
 }
 
+// get_object_position helper class implementation
+bool ObjectDetectionInterface_get_object_position_helper::write(yarp::os::ConnectionWriter& connection) const
+{
+    return cmd.write(connection);
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::read(yarp::os::ConnectionReader& connection)
+{
+    return reply.read(connection);
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    if (!writer.writeListHeader(s_cmd_len)) {
+        return false;
+    }
+    return write(writer);
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Command::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    if (!reader.readListHeader()) {
+        reader.fail();
+        return false;
+    }
+    return read(reader);
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writeTag(writer)) {
+        return false;
+    }
+    if (!writeArgs(writer)) {
+        return false;
+    }
+    return true;
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.writeTag(s_tag, 1, s_tag_len)) {
+        return false;
+    }
+    return true;
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
+{
+    return true;
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Command::read(yarp::os::idl::WireReader& reader)
+{
+    if (!readTag(reader)) {
+        return false;
+    }
+    if (!readArgs(reader)) {
+        return false;
+    }
+    return true;
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+{
+    std::string tag = reader.readTag(s_tag_len);
+    if (reader.isError()) {
+        return false;
+    }
+    if (tag != s_tag) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+{
+    if (!reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    return write(writer);
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Reply::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    return read(reader);
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.isNull()) {
+        if (!writer.writeListHeader(s_reply_len)) {
+            return false;
+        }
+        if (!writer.writeListBegin(BOTTLE_TAG_FLOAT64, return_helper.size())) {
+            return false;
+        }
+        if (!writer.writeBlock(reinterpret_cast<const char*>(return_helper.data()), return_helper.size() * sizeof(double))) {
+            return false;
+        }
+        if (!writer.writeListEnd()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool ObjectDetectionInterface_get_object_position_helper::Reply::read(yarp::os::idl::WireReader& reader)
+{
+    if (!reader.readListReturn()) {
+        return false;
+    }
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    size_t _csize;
+    yarp::os::idl::WireState _etype;
+    reader.readListBegin(_etype, _csize);
+    // WireReader removes BOTTLE_TAG_LIST from the tag
+    constexpr int expected_tag = ((BOTTLE_TAG_FLOAT64) & (~BOTTLE_TAG_LIST));
+    if constexpr (expected_tag != 0) {
+        if (_csize != 0 && _etype.code != expected_tag) {
+            return false;
+        }
+    }
+    return_helper.resize(_csize);
+    if (_csize != 0 && !reader.readBlock(reinterpret_cast<char*>(return_helper.data()), return_helper.size() * sizeof(double))) {
+        return false;
+    }
+    reader.readListEnd();
+    return true;
+}
+
+void ObjectDetectionInterface_get_object_position_helper::call(ObjectDetectionInterface* ptr)
+{
+    reply.return_helper = ptr->get_object_position();
+}
+
 // get_distance helper class implementation
 bool ObjectDetectionInterface_get_distance_helper::write(yarp::os::ConnectionWriter& connection) const
 {
@@ -429,6 +637,16 @@ std::vector<double> ObjectDetectionInterface::get_poses()
     return ok ? helper.reply.return_helper : std::vector<double>{};
 }
 
+std::vector<double> ObjectDetectionInterface::get_object_position()
+{
+    if (!yarp().canWrite()) {
+        yError("Missing server method '%s'?", ObjectDetectionInterface_get_object_position_helper::s_prototype);
+    }
+    ObjectDetectionInterface_get_object_position_helper helper{};
+    bool ok = yarp().write(helper, helper);
+    return ok ? helper.reply.return_helper : std::vector<double>{};
+}
+
 std::int16_t ObjectDetectionInterface::get_distance()
 {
     if (!yarp().canWrite()) {
@@ -447,11 +665,15 @@ std::vector<std::string> ObjectDetectionInterface::help(const std::string& funct
     if (showAll) {
         helpString.emplace_back("*** Available commands:");
         helpString.emplace_back(ObjectDetectionInterface_get_poses_helper::s_tag);
+        helpString.emplace_back(ObjectDetectionInterface_get_object_position_helper::s_tag);
         helpString.emplace_back(ObjectDetectionInterface_get_distance_helper::s_tag);
         helpString.emplace_back("help");
     } else {
         if (functionName == ObjectDetectionInterface_get_poses_helper::s_tag) {
             helpString.emplace_back(ObjectDetectionInterface_get_poses_helper::s_prototype);
+        }
+        if (functionName == ObjectDetectionInterface_get_object_position_helper::s_tag) {
+            helpString.emplace_back(ObjectDetectionInterface_get_object_position_helper::s_prototype);
         }
         if (functionName == ObjectDetectionInterface_get_distance_helper::s_tag) {
             helpString.emplace_back(ObjectDetectionInterface_get_distance_helper::s_prototype);
@@ -472,7 +694,7 @@ std::vector<std::string> ObjectDetectionInterface::help(const std::string& funct
 // read from ConnectionReader
 bool ObjectDetectionInterface::read(yarp::os::ConnectionReader& connection)
 {
-    constexpr size_t max_tag_len = 2;
+    constexpr size_t max_tag_len = 3;
     size_t tag_len = 1;
 
     yarp::os::idl::WireReader reader(connection);
@@ -490,6 +712,21 @@ bool ObjectDetectionInterface::read(yarp::os::ConnectionReader& connection)
     while (tag_len <= max_tag_len && !reader.isError()) {
         if (tag == ObjectDetectionInterface_get_poses_helper::s_tag) {
             ObjectDetectionInterface_get_poses_helper helper;
+            if (!helper.cmd.readArgs(reader)) {
+                return false;
+            }
+
+            helper.call(this);
+
+            yarp::os::idl::WireWriter writer(reader);
+            if (!helper.reply.write(writer)) {
+                return false;
+            }
+            reader.accept();
+            return true;
+        }
+        if (tag == ObjectDetectionInterface_get_object_position_helper::s_tag) {
+            ObjectDetectionInterface_get_object_position_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }

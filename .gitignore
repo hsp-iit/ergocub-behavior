@@ -10,3 +10,7 @@ docker-compose.yaml
 .sudo_as_admin_successful
 home-volume
 robot_commands.txt
+build
+Dockerfile.save
+bts_OLD
+

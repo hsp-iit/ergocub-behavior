@@ -34,6 +34,7 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <iostream>
 
 #include <yarp/os/Network.h>
 #include <yarp/os/RpcServer.h>
@@ -48,7 +49,7 @@ const int TYPE_POSE = 3;
 const int TYPE_NONE = 4;
 
 
-#define  BUFF_SIZE   258
+#define  BUFF_SIZE   258+24
 
 typedef struct {
 	long  data_type;
@@ -101,10 +102,19 @@ public:
         return distance;
     }
 
+    std::vector<double> get_object_position()
+    {
+        this->read_queue();
+        auto object_position = this->object_position;
+
+        return object_position;
+    }
+
 private:
     yarp::os::RpcServer server_port;
     std::vector<double> poses = std::vector<double>(32);
     std::int16_t distance;
+    std::vector<double> object_position = std::vector<double>(3);
     long msg_type;
     int msqid;
 
@@ -112,7 +122,9 @@ private:
     {
 	    t_data   data;
 
-        int success = msgrcv( this->msqid, &data, sizeof( t_data) - sizeof( long), 0, IPC_NOWAIT) != -1;
+        int success = msgrcv( this->msqid, &data, sizeof( t_data) - sizeof( long), 0, IPC_NOWAIT);
+//        std::cout << "received" << success << "bytes" << std::endl;
+        success = success != -1;
 //        printf("%d", success);
         if (success) {
 //            printf("Reading message of type %ld", data.data_type);
@@ -133,6 +145,7 @@ private:
 
         memcpy(&this->distance, data.data_buff, 2);
         memcpy(this->poses.data(), data.data_buff+2, 256);
+        memcpy(this->object_position.data(), data.data_buff+258, 24);
 
 
 //		printf("*** New message received ***\nRaw data: ");

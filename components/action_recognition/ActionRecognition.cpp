@@ -1,33 +1,3 @@
-/*
- *   Copyright (c) 2022 Andrea Rosasco
- *   All rights reserved.
-
- *   Permission is hereby granted, free of charge, to any person obtaining a copy
- *   of this software and associated documentation files (the "Software"), to deal
- *   in the Software without restriction, including without limitation the rights
- *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *   copies of the Software, and to permit persons to whom the Software is
- *   furnished to do so, subject to the following conditions:
-
- *   The above copyright notice and this permission notice shall be included in all
- *   copies or substantial portions of the Software.
-
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *   SOFTWARE.
- */
-
-/******************************************************************************
- *                                                                            *
- * Copyright (C) 2020 Fondazione Istituto Italiano di Tecnologia (IIT)        *
- * All Rights Reserved.                                                       *
- *                                                                            *
- ******************************************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,6 +11,8 @@
 #include <ActionRecognitionInterface.h>
 #include <atomic>
 
+#include <iostream>
+
 
 const int TYPE_DISTANCE_POSE = 1;
 const int TYPE_DISTANCE = 2;
@@ -48,7 +20,7 @@ const int TYPE_POSE = 3;
 const int TYPE_NONE = 4;
 
 
-#define  BUFF_SIZE   8+4+1
+#define  BUFF_SIZE   8+2+1+24
 
 typedef struct {
 	long  data_type;
@@ -102,11 +74,20 @@ public:
         return this->distance;
     }
 
+    std::vector<double> get_face_position()
+    {
+        this->read_queue();
+        auto face_position = this->face_position;
+
+        return face_position;
+    }
+
 private:
     yarp::os::RpcServer server_port;
     double distance;
     std::int16_t action;
     bool focus;
+    std::vector<double> face_position = std::vector<double>(3);
     long msg_type;
     int msqid;
 
@@ -114,7 +95,9 @@ private:
     {
 	    t_data   data;
 
-        int success = msgrcv( this->msqid, &data, sizeof( t_data) - sizeof( long), 0, IPC_NOWAIT) != -1;
+        int success = msgrcv( this->msqid, &data, sizeof( t_data) - sizeof( long), 0, IPC_NOWAIT);
+//        std::cout << "received" << success << "bytes" << std::endl;
+        success = success != -1;
         if (success) {
 //            printf("Reading message of type %ld", data.data_type);
             this->msg_type = data.data_type; }
@@ -132,7 +115,8 @@ private:
 
         memcpy(&this->action, data.data_buff, 2);
         memcpy(&this->distance, data.data_buff+2, 8);
-        memcpy(&this->focus, data.data_buff+10, 1);
+        memcpy(&this->focus, data.data_buff+10, 2);
+        memcpy(this->face_position.data(), data.data_buff+12, 24);
     }
 };
 
