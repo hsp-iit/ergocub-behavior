@@ -115,10 +115,17 @@ NodeStatus RobotLookAtPOI::tick()
         std::vector<double> poi_position = poi_pos.value();
         std::cout << poi_position[0] << " " <<  poi_position[1] << " " <<  poi_position[2] << std::endl;
 
+        if(are_all_elements_minus_two(poi_position)){ // special value, do not send command
+            return NodeStatus::SUCCESS;
+        }
+        setpoint.push_back(poi_position[0]);
+        setpoint.push_back(poi_position[1]);
+        setpoint.push_back(poi_position[2]);
+        /*
         iDynTree::Position poi_position_converted;
         poi_position_converted(0) = poi_position[0];
         poi_position_converted(1) = poi_position[1];
-        poi_position_converted(2) = poi_position[2];
+        poi_position_converted(2) = poi_position[2] - 0.4;
 
         // read actual camera position
         #ifdef GAZE
@@ -144,6 +151,7 @@ NodeStatus RobotLookAtPOI::tick()
         setpoint.push_back(final(1));
         setpoint.push_back(final(2));  // TODO try to put +0.2 here (should look a bit higher)
         #endif
+        */
     }
     else{
         setpoint.push_back(-1);

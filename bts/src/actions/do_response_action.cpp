@@ -45,8 +45,8 @@ bool DoResponseAction::init(std::string name)
 
     // Others
     last_action = 0;
-    last_time = 0;
-
+    auto now = std::chrono::system_clock::now();
+    last_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count() - 4;
     return true;
 }
 
@@ -57,43 +57,31 @@ NodeStatus DoResponseAction::tick()
     auto now = std::chrono::system_clock::now();
     long this_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
 
-    if(action==-1 || action==0){
-        std::cout << "no action detected" << action << std::endl;
-        return NodeStatus::FAILURE;
-    }
-    else if(action==0){
-        std::cout << "detected stand" << std::endl;
-    }
-    else if(action==1){
-        std::cout << "detected hello" << std::endl;
+    std::cout << "received action " << action << std::endl;
+    std::cout << "last action " << last_action << std::endl;
+
+    if(action==1){
         #ifdef REAL_ROBOT
         // Check if this action is different w.r.t. last one and more than 3 seconds have passed
         if(last_action != action && (this_time - last_time) > 3){
-            std::cout << "sent hello" << std::endl;
             manipulation_client_.wave(false);
             last_action = action;
             last_time = this_time;
         }
         #endif
+        return NodeStatus::SUCCESS;
     }
-    else if(action==2){
-        std::cout << "detected handshake" << std::endl;
+    else if(action==2 || action==9){  // TODO REMOVE
         #ifdef REAL_ROBOT
         if(last_action != action && (this_time - last_time) > 3){
             manipulation_client_.shake(false);
             last_action = action;
             last_time = this_time;
         }
+        return NodeStatus::SUCCESS;
         #endif
     }
-    else if(action==3){
-        std::cout << "detected lift" << std::endl;
-    }
-    else if(action==4){
-        std::cout << "detected get" << std::endl;
-    }
     else if(action==5){
-        std::cout << "detected stop" << std::endl;
         #ifdef REAL_ROBOT
         if(last_action != action && (this_time - last_time) > 3){
             manipulation_client_.stop();
@@ -101,13 +89,15 @@ NodeStatus DoResponseAction::tick()
             last_time = this_time;
         }
         #endif
+        return NodeStatus::SUCCESS;
     }
-    else {
-        std::cout << "detected unknown action" << std::endl;
+    else if(action==-2){
+        if(last_action == 1 || last_action == 2 || last_action == 9 || last_action == 5)
+            return NodeStatus::SUCCESS;
+        return NodeStatus::FAILURE;
     }
-    //     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-
-    return NodeStatus::SUCCESS;
+    last_action = -1;
+    return NodeStatus::FAILURE;
 }
 
 

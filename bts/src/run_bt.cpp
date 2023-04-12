@@ -76,7 +76,7 @@ int main(int argc, char **argv)
     while(true)
     {
             auto status = tree.tickRoot();
-            std::this_thread::sleep_for (std::chrono::milliseconds(50));
+            std::this_thread::sleep_for (std::chrono::milliseconds(100));
 
             //if (status == BT::NodeStatus::SUCCESS) {
                 // std::cout << "Success" << std::endl;

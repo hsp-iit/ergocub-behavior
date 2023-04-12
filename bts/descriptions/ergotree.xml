@@ -2,28 +2,28 @@
 <root main_tree_to_execute="BehaviorTree">
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
-        <Sequence>
-            <Fallback>
+        <ReactiveSequence>
+            <ReactiveFallback>
                 <Condition ID="BoxDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
                 <Condition ID="FaceDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
                 <AlwaysSuccess/>
-            </Fallback>
+            </ReactiveFallback>
             <Action ID="RobotLookAtPOI" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
             <Action ID="RobotChangeFace" poi="{the_poi}"/>
-            <Fallback>
-                <Sequence>
+            <ReactiveFallback>
+                <ReactiveSequence>
                     <Condition ID="POIIsObject" poi="{the_poi}"/>
                     <Condition ID="ObjectIsClose"/>
                     <Action ID="GoReady"/>
-                </Sequence>
-                <Sequence>
+                </ReactiveSequence>
+                <ReactiveSequence>
                     <Condition ID="POIIsFace" poi="{the_poi}"/>
                     <Condition ID="FocusDetected"/>
                     <Action ID="DoResponseAction"/>
-                </Sequence>
+                </ReactiveSequence>
                 <Action ID="GoHome"/>
-            </Fallback>
-        </Sequence>
+            </ReactiveFallback>
+        </ReactiveSequence>
     </BehaviorTree>
     <!-- ////////// -->
     <TreeNodesModel>

@@ -29,6 +29,7 @@ bool FaceDetected::init(std::string name)
         return false;
     }
     action_recognition_client_.yarp().attachAsClient(client_port);
+    was_true = false;
     return true;
 }
 
@@ -36,14 +37,27 @@ bool FaceDetected::init(std::string name)
 NodeStatus FaceDetected::tick()
 {
     auto face_position = action_recognition_client_.get_face_position();
-    // for(int i=0; i<3; i++)
-        // std::cout << face_position[i] << std::endl;
+//     for(int i=0; i<3; i++)
+//         std::cout << face_position[i] << std::endl;
     if(are_all_elements_minus_one(face_position)){
         setOutput("poi", "none" );
+        was_true = false;
         return BT::NodeStatus::FAILURE;
+    }
+    if(are_all_elements_minus_two(face_position)){
+        if (was_true){  // continue following (special value)
+            setOutput("poi", "face");
+            setOutput("poi_pos", face_position);
+            return  BT::NodeStatus::SUCCESS;
+        }
+        else{  // do not follow
+        setOutput("poi", "none" );
+        return BT::NodeStatus::FAILURE;
+        }
     }
     setOutput("poi", "face");
     setOutput("poi_pos", face_position);
+    was_true = true;
     return  BT::NodeStatus::SUCCESS;
 }
 

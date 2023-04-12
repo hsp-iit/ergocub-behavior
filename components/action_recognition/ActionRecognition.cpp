@@ -103,9 +103,10 @@ private:
             this->msg_type = data.data_type; }
         else if ( !success && errno == ENOMSG) {
 //            printf("Empty queue");
-//            this->distance = -1.;
-//            this->action = -1;
+            this->distance = -2.;
+//            this->action = -2;
 //            this->focus = false;
+            std::fill(this->face_position.begin(), this->face_position.end(), -2.);
             return;}
 		else {
 		    this->msg_type = TYPE_NONE;
