@@ -11,10 +11,10 @@
 using namespace BT;
 using namespace std;
 
-class GoReady :  public StatefulActionNode
+class GoGrasp :  public StatefulActionNode
 {
 public:
-    GoReady(string name, const NodeConfiguration &config);
+    GoGrasp(string name, const NodeConfiguration &config);
     NodeStatus onStart() override;
     NodeStatus onRunning() override;
     void onHalted() override;

@@ -63,7 +63,7 @@ NodeStatus DoResponseAction::tick()
     if(action==1){
         #ifdef REAL_ROBOT
         // Check if this action is different w.r.t. last one and more than 3 seconds have passed
-        if(last_action != action && (this_time - last_time) > 3){
+        if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.wave(false);
             last_action = action;
             last_time = this_time;
@@ -73,7 +73,7 @@ NodeStatus DoResponseAction::tick()
     }
     else if(action==2 || action==9){  // TODO REMOVE
         #ifdef REAL_ROBOT
-        if(last_action != action && (this_time - last_time) > 3){
+        if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.shake(false);
             last_action = action;
             last_time = this_time;
@@ -83,7 +83,7 @@ NodeStatus DoResponseAction::tick()
     }
     else if(action==5){
         #ifdef REAL_ROBOT
-        if(last_action != action && (this_time - last_time) > 3){
+        if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.stop();
             last_action = action;
             last_time = this_time;

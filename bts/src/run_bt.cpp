@@ -23,6 +23,7 @@
 #include <actions/do_response_action.h>
 #include <actions/go_home.h>
 #include <actions/go_ready.h>
+#include <actions/go_grasp.h>
 
 #include <conditions/box_detected.h>
 #include <conditions/face_detected.h>
@@ -49,6 +50,7 @@ int main(int argc, char **argv)
     bt_factory.registerNodeType<DoResponseAction>("DoResponseAction");
     bt_factory.registerNodeType<GoHome>("GoHome");
     bt_factory.registerNodeType<GoReady>("GoReady");
+    bt_factory.registerNodeType<GoGrasp>("GoGrasp");
 
     bt_factory.registerNodeType<BoxDetected>("BoxDetected");
     bt_factory.registerNodeType<FaceDetected>("FaceDetected");
@@ -76,7 +78,7 @@ int main(int argc, char **argv)
     while(true)
     {
             auto status = tree.tickRoot();
-            std::this_thread::sleep_for (std::chrono::milliseconds(100));
+            std::this_thread::sleep_for (std::chrono::milliseconds(1000));
 
             //if (status == BT::NodeStatus::SUCCESS) {
                 // std::cout << "Success" << std::endl;

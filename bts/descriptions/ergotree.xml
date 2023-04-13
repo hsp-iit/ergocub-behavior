@@ -15,6 +15,7 @@
                     <Condition ID="POIIsObject" poi="{the_poi}"/>
                     <Condition ID="ObjectIsClose"/>
                     <Action ID="GoReady"/>
+                    <Action ID="GoGrasp"/>
                 </ReactiveSequence>
                 <ReactiveSequence>
                     <Condition ID="POIIsFace" poi="{the_poi}"/>
@@ -37,6 +38,7 @@
             <output_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
         </Condition>
         <Condition ID="FocusDetected"/>
+        <Action ID="GoGrasp"/>
         <Action ID="GoHome"/>
         <Action ID="GoReady"/>
         <Condition ID="ObjectIsClose"/>

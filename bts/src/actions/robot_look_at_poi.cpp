@@ -120,7 +120,7 @@ NodeStatus RobotLookAtPOI::tick()
         }
         setpoint.push_back(poi_position[0]);
         setpoint.push_back(poi_position[1]);
-        setpoint.push_back(poi_position[2]);
+        setpoint.push_back(poi_position[2] + 0.1);
         /*
         iDynTree::Position poi_position_converted;
         poi_position_converted(0) = poi_position[0];

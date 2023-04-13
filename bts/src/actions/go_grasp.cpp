@@ -1,6 +1,6 @@
 #include <behaviortree_cpp_v3/action_node.h>
 
-#include "go_ready.h"
+#include "go_grasp.h"
 #include "common.h"
 
 #include <chrono>
@@ -8,13 +8,13 @@
 #include <unistd.h>
 #include <fstream>
 
-GoReady::GoReady(string name, const NodeConfiguration& config) :
+GoGrasp::GoGrasp(string name, const NodeConfiguration& config) :
     StatefulActionNode(name, config)
 {
     is_ok_ = init(name);
 }
 
-bool GoReady::init(std::string name)
+bool GoGrasp::init(std::string name)
 {
     // MANIPULATION
     #ifdef REAL_ROBOT
@@ -32,27 +32,28 @@ bool GoReady::init(std::string name)
     return true;
 }
 
-NodeStatus GoReady::onStart()
+NodeStatus GoGrasp::onStart()
 {
-  manipulation_client_.ready(false);
+//  manipulation_client_.grasp(true);
   return NodeStatus::RUNNING;
 }
 
-NodeStatus GoReady::onRunning(){
-    auto fin = manipulation_client_.finished();
-    std::cout << fin << std::endl;
-    if (fin == "Si"){
-        return NodeStatus::SUCCESS;
-    }
-    return NodeStatus::RUNNING;
+NodeStatus GoGrasp::onRunning(){
+    std::cout << "grasp" << std::endl;
+    return NodeStatus::SUCCESS;
+//    auto fin = manipulation_client_.finished();
+//    if (fin == "Si"){
+//        return NodeStatus::SUCCESS;
+//    }
+//    return NodeStatus::RUNNING;
 }
 
-void GoReady::onHalted(){
+void GoGrasp::onHalted(){
     return;
 }
 
 
-PortsList GoReady::providedPorts()
+PortsList GoGrasp::providedPorts()
 {
     return {};
 }

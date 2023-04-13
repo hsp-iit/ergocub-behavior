@@ -24,6 +24,7 @@ target_sources(custom_leaf_nodes
   actions/do_response_action.cpp
   actions/go_home.cpp
   actions/go_ready.cpp
+  actions/go_grasp.cpp
   conditions/box_detected.cpp
   conditions/face_detected.cpp
   conditions/poi_is_object.cpp

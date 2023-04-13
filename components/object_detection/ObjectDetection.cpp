@@ -136,8 +136,7 @@ private:
 //          the one at which the module is running
 //            this->distance = -1;
 		    std::fill(this->poses.begin(), this->poses.end(), -2.);
-		    this->distance = -2;
-		    std::fill(this->poses.begin(), this->poses.end(), -2.);
+		    //this->distance = -2;
 		    return;}
 		else {
 		    this->msg_type = TYPE_NONE;
