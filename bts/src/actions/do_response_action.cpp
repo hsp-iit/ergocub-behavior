@@ -44,74 +44,58 @@ bool DoResponseAction::init(std::string name)
     action_recognition_client_.yarp().attachAsClient(ar_client_port);
 
     // Others
-    last_action = 0;
-    last_time = 0;
-
+    last_action = "";
+    auto now = std::chrono::system_clock::now();
+    last_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count() - 4;
     return true;
 }
 
 NodeStatus DoResponseAction::tick()
 {
 
-    int action = action_recognition_client_.get_action();
     auto now = std::chrono::system_clock::now();
     long this_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
 
-    if(action==-1 || action==0){
-        std::cout << "no action detected" << action << std::endl;
-        return NodeStatus::FAILURE;
+    Optional<std::string> msg = getInput<std::string>("action");
+    if (!msg)
+    {
+        throw BT::RuntimeError("missing required input [message]: ", msg.error() );
     }
-    else if(action==0){
-        std::cout << "detected stand" << std::endl;
-    }
-    else if(action==1){
-        std::cout << "detected hello" << std::endl;
-        #ifdef REAL_ROBOT
-        // Check if this action is different w.r.t. last one and more than 3 seconds have passed
-        if(last_action != action && (this_time - last_time) > 3){
-            std::cout << "sent hello" << std::endl;
+    std::string action = msg.value();
+
+    std::cout << "received action " << action << std::endl;
+    std::cout << "last action " << last_action << std::endl;
+
+    if (action == "wave"){
+        if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.wave(false);
             last_action = action;
             last_time = this_time;
         }
-        #endif
+        return NodeStatus::SUCCESS;
     }
-    else if(action==2){
-        std::cout << "detected handshake" << std::endl;
-        #ifdef REAL_ROBOT
-        if(last_action != action && (this_time - last_time) > 3){
+    if (action == "shake"){
+        if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.shake(false);
             last_action = action;
             last_time = this_time;
         }
-        #endif
+        return NodeStatus::SUCCESS;
     }
-    else if(action==3){
-        std::cout << "detected lift" << std::endl;
-    }
-    else if(action==4){
-        std::cout << "detected get" << std::endl;
-    }
-    else if(action==5){
-        std::cout << "detected stop" << std::endl;
-        #ifdef REAL_ROBOT
-        if(last_action != action && (this_time - last_time) > 3){
+    if (action == "stop"){
+        if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.stop();
             last_action = action;
             last_time = this_time;
         }
-        #endif
+        return NodeStatus::SUCCESS;
     }
-    else {
-        std::cout << "detected unknown action" << std::endl;
-    }
-    //     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-
-    return NodeStatus::SUCCESS;
+    last_action = -1;
+    return NodeStatus::FAILURE;
 }
 
 
 PortsList DoResponseAction::providedPorts()
 {
-    return {};
+    return {InputPort<std::string>("action")};
 }

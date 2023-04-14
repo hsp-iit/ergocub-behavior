@@ -23,13 +23,14 @@
 #include <actions/do_response_action.h>
 #include <actions/go_home.h>
 #include <actions/go_ready.h>
+#include <actions/go_grasp.h>
+#include <actions/go_release.h>
 
 #include <conditions/box_detected.h>
 #include <conditions/face_detected.h>
-#include <conditions/poi_is_object.h>
 #include <conditions/object_is_close.h>
-#include <conditions/poi_is_face.h>
 #include <conditions/focus_detected.h>
+#include <conditions/action_detected.h>
 
 /* END */
 
@@ -49,18 +50,20 @@ int main(int argc, char **argv)
     bt_factory.registerNodeType<DoResponseAction>("DoResponseAction");
     bt_factory.registerNodeType<GoHome>("GoHome");
     bt_factory.registerNodeType<GoReady>("GoReady");
+    bt_factory.registerNodeType<GoGrasp>("GoGrasp");
+    bt_factory.registerNodeType<GoRelease>("GoRelease");
 
     bt_factory.registerNodeType<BoxDetected>("BoxDetected");
     bt_factory.registerNodeType<FaceDetected>("FaceDetected");
-    bt_factory.registerNodeType<POIIsObject>("POIIsObject");
     bt_factory.registerNodeType<ObjectIsClose>("ObjectIsClose");
-    bt_factory.registerNodeType<POIIsFace>("POIIsFace");
     bt_factory.registerNodeType<FocusDetected>("FocusDetected");
+    bt_factory.registerNodeType<ActionDetected>("ActionDetected");
     /* END */
 
-    auto tree = bt_factory.createTreeFromFile(fileName);
-    // auto blackboard = BT::Blackboard::create();
-    // auto tree = bt_factory.createTreeFromFile(fileName, blackboard);
+//    auto tree = bt_factory.createTreeFromFile(fileName);
+     auto blackboard = BT::Blackboard::create();
+     blackboard->set("the_has_box", "no");
+     auto tree = bt_factory.createTreeFromFile(fileName, blackboard);
 
     // Create some logger
     StdCoutLogger logger_cout(tree);

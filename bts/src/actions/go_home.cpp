@@ -29,23 +29,23 @@ bool GoHome::init(std::string name)
     }
     manipulation_client_.yarp().attachAsClient(client_port);
     #endif
+    auto now = std::chrono::system_clock::now();
+    last_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count() - 4;
     return true;
 }
 
 NodeStatus GoHome::tick()
 {
-
     auto now = std::chrono::system_clock::now();
     long this_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
 
-    std::cout << "IN HOME NODE" << std::endl;
-    //if((this_time - last_time) > 3){
-    #ifdef REAL_ROBOT
-    std::cout << "GO HOME ICUB!" << std::endl;
-    manipulation_client_.home(false);
-    #endif
-    last_time = this_time;
-    //}
+//    std::cout << this_time - last_time << std::endl;
+    if((this_time - last_time) > 3){
+        //#ifdef REAL_ROBOT
+        manipulation_client_.home(false);
+        //#endif
+        last_time = this_time;
+    }
 
     return NodeStatus::SUCCESS;
 }

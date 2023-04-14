@@ -8,3 +8,5 @@
 bool are_all_elements_minus_one(const std::vector<double>& vec);
 
 bool are_all_elements_zero(const std::vector<double>& vec);
+
+bool are_all_elements_minus_two(const std::vector<double>& vec);

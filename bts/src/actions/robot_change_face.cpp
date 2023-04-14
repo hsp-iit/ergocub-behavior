@@ -18,8 +18,8 @@ RobotChangeFace::RobotChangeFace(string name, const NodeConfiguration& config) :
 }
 
 bool RobotChangeFace::init(std::string){
-    port.open("/icub/face/emotions/in");
-    Network::connect("/icub/face/emotions/in","/icub/face/emotions/out");
+    port.open("/BT/emotions/out");
+    Network::connect("/BT/emotions/out","/icub/face/emotions/in");
     return true;
 }
 
@@ -45,7 +45,9 @@ NodeStatus RobotChangeFace::tick()
     }
 
     Bottle cmd;
-    cmd.addString("set all " + emotion);
+    cmd.addString("set");
+    cmd.addString("all");
+    cmd.addString(emotion);
     Bottle response;
     if (port.write(cmd, response)) {
         cout << response.toString() << endl;

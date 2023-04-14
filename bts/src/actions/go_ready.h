@@ -11,11 +11,13 @@
 using namespace BT;
 using namespace std;
 
-class GoReady :  public SyncActionNode
+class GoReady :  public StatefulActionNode
 {
 public:
     GoReady(string name, const NodeConfiguration &config);
-    NodeStatus tick() override;
+    NodeStatus onStart() override;
+    NodeStatus onRunning() override;
+    void onHalted() override;
     static PortsList providedPorts();
 private:
     bool init(std::string);

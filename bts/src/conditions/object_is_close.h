@@ -24,5 +24,5 @@ private:
     yarp::os::Network yarp;
     yarp::os::Port client_port;
 
-    int threshold = 700;
+    int threshold = 350;
 };

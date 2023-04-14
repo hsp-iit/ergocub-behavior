@@ -1,6 +1,6 @@
 #include <behaviortree_cpp_v3/action_node.h>
 
-#include "go_ready.h"
+#include "go_release.h"
 #include "common.h"
 
 #include <chrono>
@@ -8,13 +8,13 @@
 #include <unistd.h>
 #include <fstream>
 
-GoReady::GoReady(string name, const NodeConfiguration& config) :
-    StatefulActionNode(name, config)
+GoRelease::GoRelease(string name, const NodeConfiguration& config) :
+    SyncActionNode(name, config)
 {
     is_ok_ = init(name);
 }
 
-bool GoReady::init(std::string name)
+bool GoRelease::init(std::string name)
 {
     // MANIPULATION
     #ifdef REAL_ROBOT
@@ -32,26 +32,15 @@ bool GoReady::init(std::string name)
     return true;
 }
 
-NodeStatus GoReady::onStart()
+NodeStatus GoRelease::tick()
 {
-    manipulation_client_.ready(false);
-    return NodeStatus::RUNNING;
-}
-
-NodeStatus GoReady::onRunning(){
-    auto fin = manipulation_client_.finished();
-    if (fin == "Si"){
-        return NodeStatus::SUCCESS;
-    }
-    return NodeStatus::RUNNING;
-}
-
-void GoReady::onHalted(){
-    return;
+    manipulation_client_.release(false);
+    setOutput<std::string>("has_box", "no");
+    return NodeStatus::SUCCESS;
 }
 
 
-PortsList GoReady::providedPorts()
+PortsList GoRelease::providedPorts()
 {
-    return {};
+    return {OutputPort<std::string>("has_box")};
 }
