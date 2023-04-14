@@ -44,7 +44,7 @@ bool DoResponseAction::init(std::string name)
     action_recognition_client_.yarp().attachAsClient(ar_client_port);
 
     // Others
-    last_action = 0;
+    last_action = "";
     auto now = std::chrono::system_clock::now();
     last_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count() - 4;
     return true;
@@ -53,48 +53,42 @@ bool DoResponseAction::init(std::string name)
 NodeStatus DoResponseAction::tick()
 {
 
-    int action = action_recognition_client_.get_action();
     auto now = std::chrono::system_clock::now();
     long this_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
+
+    Optional<std::string> msg = getInput<std::string>("action");
+    if (!msg)
+    {
+        throw BT::RuntimeError("missing required input [message]: ", msg.error() );
+    }
+    std::string action = msg.value();
 
     std::cout << "received action " << action << std::endl;
     std::cout << "last action " << last_action << std::endl;
 
-    if(action==1){
-        #ifdef REAL_ROBOT
-        // Check if this action is different w.r.t. last one and more than 3 seconds have passed
+    if (action == "wave"){
         if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.wave(false);
             last_action = action;
             last_time = this_time;
         }
-        #endif
         return NodeStatus::SUCCESS;
     }
-    else if(action==2 || action==9){  // TODO REMOVE
-        #ifdef REAL_ROBOT
+    if (action == "shake"){
         if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.shake(false);
             last_action = action;
             last_time = this_time;
         }
         return NodeStatus::SUCCESS;
-        #endif
     }
-    else if(action==5){
-        #ifdef REAL_ROBOT
+    if (action == "stop"){
         if(last_action != action || (this_time - last_time) > 3){
             manipulation_client_.stop();
             last_action = action;
             last_time = this_time;
         }
-        #endif
         return NodeStatus::SUCCESS;
-    }
-    else if(action==-2){
-        if(last_action == 1 || last_action == 2 || last_action == 9 || last_action == 5)
-            return NodeStatus::SUCCESS;
-        return NodeStatus::FAILURE;
     }
     last_action = -1;
     return NodeStatus::FAILURE;
@@ -103,5 +97,5 @@ NodeStatus DoResponseAction::tick()
 
 PortsList DoResponseAction::providedPorts()
 {
-    return {};
+    return {InputPort<std::string>("action")};
 }

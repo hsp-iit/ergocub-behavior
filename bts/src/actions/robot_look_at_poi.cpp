@@ -107,7 +107,7 @@ NodeStatus RobotLookAtPOI::tick()
     // Get poi_pos if there is poi
     if(msg!="none"){
         Optional<std::vector<double>> poi_pos = getInput<std::vector<double>>("poi_pos");
-        if (!msg)
+        if (!poi_pos)
         {
             throw BT::RuntimeError("missing required input [message]: ",
                               msg.error() );

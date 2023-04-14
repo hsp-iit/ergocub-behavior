@@ -34,13 +34,12 @@ bool GoReady::init(std::string name)
 
 NodeStatus GoReady::onStart()
 {
-  manipulation_client_.ready(false);
-  return NodeStatus::RUNNING;
+    manipulation_client_.ready(false);
+    return NodeStatus::RUNNING;
 }
 
 NodeStatus GoReady::onRunning(){
     auto fin = manipulation_client_.finished();
-    std::cout << fin << std::endl;
     if (fin == "Si"){
         return NodeStatus::SUCCESS;
     }

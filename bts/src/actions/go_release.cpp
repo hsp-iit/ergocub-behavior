@@ -1,6 +1,6 @@
 #include <behaviortree_cpp_v3/action_node.h>
 
-#include "go_grasp.h"
+#include "go_release.h"
 #include "common.h"
 
 #include <chrono>
@@ -8,13 +8,13 @@
 #include <unistd.h>
 #include <fstream>
 
-GoGrasp::GoGrasp(string name, const NodeConfiguration& config) :
+GoRelease::GoRelease(string name, const NodeConfiguration& config) :
     SyncActionNode(name, config)
 {
     is_ok_ = init(name);
 }
 
-bool GoGrasp::init(std::string name)
+bool GoRelease::init(std::string name)
 {
     // MANIPULATION
     #ifdef REAL_ROBOT
@@ -32,14 +32,15 @@ bool GoGrasp::init(std::string name)
     return true;
 }
 
-NodeStatus GoGrasp::tick(){
-    manipulation_client_.grasp(false);
-    setOutput<std::string>("has_box", "yes");
+NodeStatus GoRelease::tick()
+{
+    manipulation_client_.release(false);
+    setOutput<std::string>("has_box", "no");
     return NodeStatus::SUCCESS;
 }
 
 
-PortsList GoGrasp::providedPorts()
+PortsList GoRelease::providedPorts()
 {
     return {OutputPort<std::string>("has_box")};
 }

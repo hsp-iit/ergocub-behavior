@@ -45,7 +45,9 @@ NodeStatus RobotChangeFace::tick()
     }
 
     Bottle cmd;
-    cmd.addString("set all " + emotion);
+    cmd.addString("set");
+    cmd.addString("all");
+    cmd.addString(emotion);
     Bottle response;
     if (port.write(cmd, response)) {
         cout << response.toString() << endl;

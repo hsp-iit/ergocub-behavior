@@ -36,7 +36,6 @@ bool GoHome::init(std::string name)
 
 NodeStatus GoHome::tick()
 {
-
     auto now = std::chrono::system_clock::now();
     long this_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
 
