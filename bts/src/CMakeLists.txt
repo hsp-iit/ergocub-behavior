@@ -13,6 +13,7 @@ include_directories(
         conditions
         ${CMAKE_SOURCE_DIR}/components/action_recognition/include
         ${CMAKE_SOURCE_DIR}/components/object_detection/include
+        ${CMAKE_SOURCE_DIR}/components/ergocub_perception/include
         ${CMAKE_SOURCE_DIR}/components/manipulation/include
         ${CMAKE_SOURCE_DIR}/components/move_camera/include
 )
@@ -43,6 +44,7 @@ target_link_libraries(custom_leaf_nodes
   PRIVATE
     action_recognition_interface
     object_detection_interface
+    ergocub_perception_interface
     manipulation_interface
     move_camera
     BT::behaviortree_cpp_v3

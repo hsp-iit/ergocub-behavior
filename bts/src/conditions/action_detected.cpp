@@ -28,14 +28,14 @@ bool ActionDetected::init(std::string name)
         std::cout << "Error! Could not connect to server " << server_name << '\n';
         return false;
     }
-    action_recognition_client_.yarp().attachAsClient(client_port);
+    ecub_perception_client_.yarp().attachAsClient(client_port);
     return true;
 }
 
 
 NodeStatus ActionDetected::tick()
 {
-    int action = action_recognition_client_.get_action();
+    int action = ecub_perception_client_.get_action();
 
     switch (action){
         case 4:
