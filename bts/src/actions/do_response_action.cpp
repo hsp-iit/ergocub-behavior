@@ -31,18 +31,6 @@ bool DoResponseAction::init(std::string name)
     manipulation_client_.yarp().attachAsClient(man_client_port);
     #endif
 
-    // Connect to action recognition
-    std::string ar_server_name = "/Components/ActionRecognition"s;
-    std::string ar_client_name = "/BT/" + name + "/ActionRecognition/DoResponseAction"s;
-
-    ar_client_port.open(ar_client_name);
-
-    if (!yarp.connect(ar_client_name,ar_server_name))
-    {
-        throw BT::RuntimeError("Error! Could not connect to server ", ar_server_name);
-    }
-    action_recognition_client_.yarp().attachAsClient(ar_client_port);
-
     // Others
     last_action = "";
     auto now = std::chrono::system_clock::now();

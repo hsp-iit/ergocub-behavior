@@ -11,8 +11,6 @@ find_package(iDynTree REQUIRED)
 include_directories(
         actions
         conditions
-        ${CMAKE_SOURCE_DIR}/components/action_recognition/include
-        ${CMAKE_SOURCE_DIR}/components/object_detection/include
         ${CMAKE_SOURCE_DIR}/components/ergocub_perception/include
         ${CMAKE_SOURCE_DIR}/components/manipulation/include
         ${CMAKE_SOURCE_DIR}/components/move_camera/include
@@ -42,8 +40,6 @@ target_include_directories(custom_leaf_nodes
 
 target_link_libraries(custom_leaf_nodes
   PRIVATE
-    action_recognition_interface
-    object_detection_interface
     ergocub_perception_interface
     manipulation_interface
     move_camera
@@ -60,7 +56,7 @@ target_sources(run_bt
     run_bt.cpp
 )
 
-target_link_libraries(run_bt  # DECOMMENTED
+target_link_libraries(run_bt
     PRIVATE
     custom_leaf_nodes
     YARP::YARP_os

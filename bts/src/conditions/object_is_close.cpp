@@ -17,8 +17,8 @@ ObjectIsClose::ObjectIsClose(string name, const NodeConfiguration& config) :
 
 bool ObjectIsClose::init(std::string name)
 {
-    std::string server_name = "/Components/ObjectDetection"s;
-    std::string client_name = "/BT/" + name + "/ObjectDetection"s;
+    std::string server_name = "/Components/eCubPerception"s;
+    std::string client_name = "/BT/" + name + "/eCubPerception"s;
 
     client_port.open(client_name);
 
@@ -27,13 +27,13 @@ bool ObjectIsClose::init(std::string name)
         std::cout << "Error! Could not connect to server " << server_name << '\n';
         return false;
     }
-    object_detection_client_.yarp().attachAsClient(client_port);
+    ecub_perception_client_.yarp().attachAsClient(client_port);
     return true;
 }
 
 NodeStatus ObjectIsClose::tick()
 {
-    double distance = object_detection_client_.get_distance();
+    double distance = ecub_perception_client_.get_distance();
     std::cout << distance << std::endl;
     if (distance == -1 or distance == 0 or distance >= threshold){
         return BT::NodeStatus::FAILURE;

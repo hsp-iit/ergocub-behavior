@@ -18,8 +18,8 @@ ActionDetected::ActionDetected(string name, const NodeConfiguration& config) :
 
 bool ActionDetected::init(std::string name)
 {
-    std::string server_name = "/Components/ActionRecognition"s;
-    std::string client_name = "/BT/" + name + "/ActionRecognition"s;
+    std::string server_name = "/Components/eCubPerception"s;
+    std::string client_name = "/BT/" + name + "/eCubPerception"s;
 
     client_port.open(client_name);
 

@@ -35,18 +35,6 @@ bool RobotLookAtPOI::init(std::string name){
     yarp::os::Network yarp;
 
     #ifdef GAZE
-    // Connect to realsense-holder-publisher
-    std::string rhp_server_name = "/realsense-holder-publisher/pose:o"s;
-    std::string rhp_client_name = "/BT/" + name + "/realsense-holder-publisher"s;
-
-    rhp_client_port.open(rhp_client_name);
-
-    if (!yarp.connect(rhp_server_name, rhp_client_name))
-    {
-        throw(std::runtime_error(log_name_ + "::ctor. Error: cannot connect to raelsense-holder-publisher."));
-        return false;
-    }
-
     // Connect to gaze controller
     Property props;
     props.put("device", "gazecontrollerclient");
@@ -63,30 +51,6 @@ bool RobotLookAtPOI::init(std::string name){
     // gaze_->blockEyes(0.0);
     // gaze_->blockNeckRoll(0.0);
     #endif
-
-    // Connect to Object Detection
-    std::string od_server_name = "/Components/ObjectDetection"s;
-    std::string od_client_name = "/BT/" + name + "/ObjectDetection"s;
-
-    od_client_port.open(od_client_name);
-
-    if (!yarp.connect(od_client_name, od_server_name))
-    {
-        throw(std::runtime_error(log_name_ + "::ctor. Error: cannot connect to ObjectDetection interface."));
-    }
-    object_detection_client_.yarp().attachAsClient(od_client_port);
-
-    // Connect to Action Recognition
-    ar_server_name = "/Components/ActionRecognition"s;
-    ar_client_name = "/BT/" + name + "/RobotLookAtPOIAR"s;
-
-    ar_client_port.open(ar_client_name);
-
-    if (!yarp.connect(ar_client_name, ar_server_name))
-    {
-       throw(std::runtime_error(log_name_ + "::ctor. Error: cannot connect to ActionRecognition interface."));
-    }
-    action_recognition_client_.yarp().attachAsClient(ar_client_port);
     return true;
 }
 
@@ -121,37 +85,6 @@ NodeStatus RobotLookAtPOI::tick()
         setpoint.push_back(poi_position[0]);
         setpoint.push_back(poi_position[1]);
         setpoint.push_back(poi_position[2] + 0.1);
-        /*
-        iDynTree::Position poi_position_converted;
-        poi_position_converted(0) = poi_position[0];
-        poi_position_converted(1) = poi_position[1];
-        poi_position_converted(2) = poi_position[2] - 0.4;
-
-        // read actual camera position
-        #ifdef GAZE
-        yarp::os::Bottle input;
-        rhp_client_port.read(input);
-        iDynTree::Rotation rot;
-        iDynTree::Direction dir(input.get(3).asFloat64(), input.get(4).asFloat64(), input.get(5).asFloat64());
-        rot = iDynTree::Rotation::RotAxis(dir, input.get(6).asFloat64());
-        double x, y, z, w;
-        if(!rot.getQuaternion(w, x, y, z)){
-            std::cout << "unable to get quaternion" << std::endl;
-        }
-
-        iDynTree::Position pos;
-        pos(0) = input.get(0).asFloat64();
-        pos(1) = input.get(1).asFloat64();
-        pos(2) = input.get(2).asFloat64();  //+0.2; TODO remove translation on eCub -> keep it only for iCub
-        iDynTree::Transform T(rot, pos);
-
-        auto final = T * poi_position_converted;
-
-        setpoint.push_back(final(0));
-        setpoint.push_back(final(1));
-        setpoint.push_back(final(2));  // TODO try to put +0.2 here (should look a bit higher)
-        #endif
-        */
     }
     else{
         setpoint.push_back(-1);
@@ -163,13 +96,6 @@ NodeStatus RobotLookAtPOI::tick()
     #endif
     return NodeStatus::SUCCESS;
 }
-
-/*
-void RobotLookAtPOI::halt()
-{
-    SyncActionNode::halt();
-}
-*/
 
 PortsList RobotLookAtPOI::providedPorts()
 {

@@ -7,7 +7,6 @@
 #include <future>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
-#include <ActionRecognitionInterface.h>
 
 using namespace BT;
 using namespace std;
@@ -21,7 +20,6 @@ public:
 private:
     bool init(std::string);
     ManipulationInterface manipulation_client_;
-    ActionRecognitionInterface action_recognition_client_;
     bool is_ok_{false};
     yarp::os::Network yarp;
     yarp::os::Port man_client_port;
