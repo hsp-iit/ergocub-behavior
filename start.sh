@@ -6,11 +6,12 @@ DOCKER_CONTAINER_NAME=ergocub_behavior_container
 echo "Start this script inside the ergoCub behavior tree rooot folder"
 usage() { echo "Usage: $0 [-i ip_address] [-n nameserver]" 1>&2; exit 1; }
 
-while getopts i:hn: flag
+while getopts i:hbn: flag
 do
     case "${flag}" in
         i) SERVER_IP=${OPTARG};;
         n) YARP_NAMESERVER=${OPTARG};;
+        b) JUST_BASH='1';;
         h) usage;;
         *) usage;;
     esac
@@ -28,6 +29,14 @@ docker run -itd --rm --network=host --ipc=host \
 tmux new-session -d -s $TMUX_NAME
 tmux set -t $TMUX_NAME -g mouse on
 
+# Just bash?
+if [ -n "$JUST_BASH" ] # Variable is non-null
+then
+  tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter
+  tmux a -t $TMUX_NAME
+  exit 0
+fi
+
 # Set server
 tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter
 
@@ -43,26 +52,13 @@ else
   tmux send-keys -t $TMUX_NAME "yarp detect --write" Enter
 fi
 
-# Action Recognition
-tmux send-keys -t $TMUX_NAME "sleep 2" Enter  # TODO TEST
-tmux send-keys -t $TMUX_NAME "/home/btuc/ergocub-behavior/build/bin/object_detection" Enter
-tmux split-window -h -t $TMUX_NAME
-
-# Object Detection
-tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter
-tmux send-keys -t $TMUX_NAME "sleep 2" Enter  # TODO TEST
-tmux send-keys -t $TMUX_NAME "/home/btuc/ergocub-behavior/build/bin/action_recognition" Enter
-tmux split-window -v -t $TMUX_NAME
-
 # Behavior Tree
   tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter
-  tmux send-keys -t $TMUX_NAME "sleep 5" Enter
   tmux send-keys -t $TMUX_NAME "/home/btuc/ergocub-behavior/build/bin/run_bt" Enter
 tmux select-pane -t $TMUX_NAME:0.0
-tmux split-window -v -t $TMUX_NAME
+tmux split-window -h -t $TMUX_NAME
 
 # Bash for fun
-tmux send-keys -t $TMUX_NAME "sleep 7" Enter
 tmux send-keys -t $TMUX_NAME "docker exec -it $DOCKER_CONTAINER_NAME bash" Enter
 tmux send-keys -t $TMUX_NAME "source /ros_entrypoint.sh" Enter
 tmux send-keys -t $TMUX_NAME "ros2 run groot Groot --mode monitor" Enter

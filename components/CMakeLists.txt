@@ -5,6 +5,5 @@
 #                                                                              #
 ################################################################################
 
-add_subdirectory(ergocub_perception)
 add_subdirectory(manipulation)
 add_subdirectory(move_camera)

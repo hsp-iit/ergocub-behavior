@@ -17,7 +17,7 @@ GoGrasp::GoGrasp(string name, const NodeConfiguration& config) :
 bool GoGrasp::init(std::string name)
 {
     // MANIPULATION
-    #ifdef REAL_ROBOT
+    #ifdef MANIPULATION
     std::string server_name = "/Components/Manipulation"s;
     std::string client_name = "/BT/" + name + "/Manipulation"s;
 
@@ -33,7 +33,9 @@ bool GoGrasp::init(std::string name)
 }
 
 NodeStatus GoGrasp::tick(){
+    #ifdef MANIPULATION
     manipulation_client_.grasp(false);
+    #endif
     setOutput<std::string>("has_box", "yes");
     return NodeStatus::SUCCESS;
 }

@@ -6,7 +6,7 @@
 #include <future>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
-#include <eCubPerceptionInterface.h>
+#include <eCubPerceptionInterface/eCubPerceptionInterface.h>
 
 using namespace BT;
 using namespace std;

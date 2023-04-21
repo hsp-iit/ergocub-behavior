@@ -17,7 +17,7 @@ DoResponseAction::DoResponseAction(string name, const NodeConfiguration& config)
 
 bool DoResponseAction::init(std::string name)
 {
-    #ifdef REAL_ROBOT
+    #ifdef MANIPULATION
     // Connect to manipulation
     std::string man_server_name = "/Components/Manipulation"s;
     std::string man_client_name = "/BT/" + name + "/Manipulation"s;
@@ -56,7 +56,10 @@ NodeStatus DoResponseAction::tick()
 
     if (action == "wave"){
         if(last_action != action || (this_time - last_time) > 3){
+            std::cout << "WAVE" << std::endl;
+            #ifdef MANIPULATION
             manipulation_client_.wave(false);
+            #endif
             last_action = action;
             last_time = this_time;
         }
@@ -64,7 +67,9 @@ NodeStatus DoResponseAction::tick()
     }
     if (action == "shake"){
         if(last_action != action || (this_time - last_time) > 3){
+            #ifdef MANIPULATION
             manipulation_client_.shake(false);
+            #endif
             last_action = action;
             last_time = this_time;
         }
@@ -72,7 +77,9 @@ NodeStatus DoResponseAction::tick()
     }
     if (action == "stop"){
         if(last_action != action || (this_time - last_time) > 3){
+            #ifdef MANIPULATION
             manipulation_client_.stop();
+            #endif
             last_action = action;
             last_time = this_time;
         }

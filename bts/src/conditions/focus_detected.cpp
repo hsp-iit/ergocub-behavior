@@ -17,7 +17,7 @@ FocusDetected::FocusDetected(string name, const NodeConfiguration& config) :
 
 bool FocusDetected::init(std::string name)
 {
-    std::string server_name = "/Components/eCubPerception"s;
+    std::string server_name = "/eCubPerception/rpc:i"s;
     std::string client_name = "/BT/" + name + "/eCubPerception"s;
 
     client_port.open(client_name);

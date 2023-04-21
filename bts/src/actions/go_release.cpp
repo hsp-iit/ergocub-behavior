@@ -17,7 +17,7 @@ GoRelease::GoRelease(string name, const NodeConfiguration& config) :
 bool GoRelease::init(std::string name)
 {
     // MANIPULATION
-    #ifdef REAL_ROBOT
+    #ifdef MANIPULATION
     std::string server_name = "/Components/Manipulation"s;
     std::string client_name = "/BT/" + name + "/Manipulation"s;
 
@@ -34,7 +34,9 @@ bool GoRelease::init(std::string name)
 
 NodeStatus GoRelease::tick()
 {
+    #ifdef MANIPULATION   
     manipulation_client_.release(false);
+    #endif
     setOutput<std::string>("has_box", "no");
     return NodeStatus::SUCCESS;
 }

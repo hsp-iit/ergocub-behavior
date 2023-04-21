@@ -2,7 +2,7 @@
 
 
 #include <behaviortree_cpp_v3/condition_node.h>
-#include <eCubPerceptionInterface.h>
+#include <eCubPerceptionInterface/eCubPerceptionInterface.h>
 #include <string>
 #include <future>
 #include <yarp/os/Network.h>

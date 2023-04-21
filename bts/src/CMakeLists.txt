@@ -8,10 +8,10 @@
 # Create the custom_leaf_nodes library
 add_library(custom_leaf_nodes STATIC)
 find_package(iDynTree REQUIRED)
+find_package(eCubPerceptionInterface REQUIRED)
 include_directories(
         actions
         conditions
-        ${CMAKE_SOURCE_DIR}/components/ergocub_perception/include
         ${CMAKE_SOURCE_DIR}/components/manipulation/include
         ${CMAKE_SOURCE_DIR}/components/move_camera/include
 )
@@ -40,12 +40,12 @@ target_include_directories(custom_leaf_nodes
 
 target_link_libraries(custom_leaf_nodes
   PRIVATE
-    ergocub_perception_interface
     manipulation_interface
     move_camera
     BT::behaviortree_cpp_v3
     YARP::YARP_os
     iDynTree::idyntree-high-level
+    eCubPerceptionInterface::eCubPerceptionInterface
     )
 
 

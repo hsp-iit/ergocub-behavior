@@ -18,7 +18,7 @@ ActionDetected::ActionDetected(string name, const NodeConfiguration& config) :
 
 bool ActionDetected::init(std::string name)
 {
-    std::string server_name = "/Components/eCubPerception"s;
+    std::string server_name = "/eCubPerception/rpc:i"s;
     std::string client_name = "/BT/" + name + "/eCubPerception"s;
 
     client_port.open(client_name);
@@ -35,25 +35,15 @@ bool ActionDetected::init(std::string name)
 
 NodeStatus ActionDetected::tick()
 {
-    int action = ecub_perception_client_.get_action();
+    std::string action = ecub_perception_client_.get_action();
 
-    switch (action){
-        case 4:
-            setOutput<std::string>("action", "release");
-            return BT::NodeStatus::SUCCESS;
-        case 1:
-            setOutput<std::string>("action", "wave");
-            return BT::NodeStatus::SUCCESS;
-        case 2:
-        case 9:
-            setOutput<std::string>("action", "shake");
-            return BT::NodeStatus::SUCCESS;
-        case 5:
-            setOutput<std::string>("action", "stop");
-            return BT::NodeStatus::SUCCESS;
-        default:
-            setOutput<std::string>("action", "none");
-            return NodeStatus::FAILURE;
+    if(action == "release" || action == "wave" || action == "shake" || action == "stop"){
+        setOutput<std::string>("action", action);
+        return NodeStatus::SUCCESS;
+    }
+    else{
+        setOutput<std::string>("action", "none");
+        return NodeStatus::FAILURE;
     }
 }
 
