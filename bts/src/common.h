@@ -2,9 +2,9 @@
 
 #pragma once
 
-// #define MANIPULATION  // Comment to not connect to grasping interface
-// #define GAZE  // Comment to not use gaze controller
-// #define EMOTIONS
+#define MANIPULATION  // Comment to not connect to grasping interface
+#define GAZE  // Comment to not use gaze controller
+#define EMOTIONS
 
 bool are_all_elements_minus_one(const std::vector<double>& vec);
 

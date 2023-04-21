@@ -27,4 +27,6 @@ private:
     yarp::dev::IGazeControl* gaze_;
     const std::string log_name_ = "iCubGaze";
     yarp::os::BufferedPort<yarp::os::Bottle> port;
+    int none_counter;
+    int none_counter_thr = 15;
 };
