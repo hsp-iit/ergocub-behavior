@@ -1,7 +1,7 @@
 #include <behaviortree_cpp_v3/action_node.h>
 
 #include "robot_change_face.h"
-
+#include "common.h"
 #include <chrono>
 #include <thread>
 #include <unistd.h>
@@ -18,8 +18,10 @@ RobotChangeFace::RobotChangeFace(string name, const NodeConfiguration& config) :
 }
 
 bool RobotChangeFace::init(std::string){
+    #ifdef EMOTIONS
     port.open("/BT/emotions/out");
     Network::connect("/BT/emotions/out","/icub/face/emotions/in");
+    #endif
     return true;
 }
 
@@ -49,10 +51,11 @@ NodeStatus RobotChangeFace::tick()
     cmd.addString("all");
     cmd.addString(emotion);
     Bottle response;
+    #ifdef EMOTIONS
     if (port.write(cmd, response)) {
         cout << response.toString() << endl;
     }
-
+    #endif
     return NodeStatus::SUCCESS;
 }
 

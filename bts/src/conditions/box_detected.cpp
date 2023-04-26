@@ -18,8 +18,8 @@ BoxDetected::BoxDetected(string name, const NodeConfiguration& config) :
 
 bool BoxDetected::init(std::string name)
 {
-    std::string server_name = "/Components/ObjectDetection"s;
-    std::string client_name = "/BT/" + name + "/ObjectDetection"s;
+    std::string server_name = "/eCubPerception/rpc:i"s;
+    std::string client_name = "/BT/" + name + "/eCubPerception"s;
 
     client_port.open(client_name);
 
@@ -28,14 +28,18 @@ bool BoxDetected::init(std::string name)
         std::cout << "Error! Could not connect to server " << server_name << '\n';
         return false;
     }
-    object_detection_client_.yarp().attachAsClient(client_port);
+    ecub_perception_client_.yarp().attachAsClient(client_port);
     return true;
 }
 
 
 NodeStatus BoxDetected::tick()
 {
-    auto object_position = object_detection_client_.get_object_position();
+    auto object_position_yarp = ecub_perception_client_.get_center();
+    std::vector<double> object_position(3);
+    for (std::size_t i = 0; i < 3; ++i)
+        object_position[i] = object_position_yarp[i];
+
     // std::cout << distance << std::endl;
     if (are_all_elements_zero(object_position)){
        throw(std::runtime_error("box_detected: received (0,0,0) as target position (maybe segmentation is dead?"));

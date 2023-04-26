@@ -17,7 +17,7 @@ GoHome::GoHome(string name, const NodeConfiguration& config) :
 bool GoHome::init(std::string name)
 {
     // MANIPULATION
-    #ifdef REAL_ROBOT
+    #ifdef MANIPULATION
     std::string server_name = "/Components/Manipulation"s;
     std::string client_name = "/BT/" + name + "/Manipulation"s;
 
@@ -39,11 +39,10 @@ NodeStatus GoHome::tick()
     auto now = std::chrono::system_clock::now();
     long this_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
 
-//    std::cout << this_time - last_time << std::endl;
     if((this_time - last_time) > 3){
-        //#ifdef REAL_ROBOT
+        #ifdef MANIPULATION
         manipulation_client_.home(false);
-        //#endif
+        #endif
         last_time = this_time;
     }
 

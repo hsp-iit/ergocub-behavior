@@ -18,8 +18,8 @@ FaceDetected::FaceDetected(string name, const NodeConfiguration& config) :
 
 bool FaceDetected::init(std::string name)
 {
-    std::string server_name = "/Components/ActionRecognition"s;
-    std::string client_name = "/BT/" + name + "/ActionRecognition"s;
+    std::string server_name = "/eCubPerception/rpc:i"s;
+    std::string client_name = "/BT/" + name + "/eCubPerception"s;
 
     client_port.open(client_name);
 
@@ -28,7 +28,7 @@ bool FaceDetected::init(std::string name)
         std::cout << "Error! Could not connect to server " << server_name << '\n';
         return false;
     }
-    action_recognition_client_.yarp().attachAsClient(client_port);
+    ecub_perception_client_.yarp().attachAsClient(client_port);
     was_true = false;
     return true;
 }
@@ -36,9 +36,11 @@ bool FaceDetected::init(std::string name)
 
 NodeStatus FaceDetected::tick()
 {
-    auto face_position = action_recognition_client_.get_face_position();
-//     for(int i=0; i<3; i++)
-//         std::cout << face_position[i] << std::endl;
+    auto face_position_yarp = ecub_perception_client_.get_face_position();
+    std::vector<double> face_position(3);
+    for (std::size_t i = 0; i < 3; ++i)
+        face_position[i] = face_position_yarp[i];
+
     if(are_all_elements_minus_one(face_position)){
         setOutput("poi", "none" );
         was_true = false;

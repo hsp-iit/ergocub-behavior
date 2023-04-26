@@ -17,8 +17,8 @@ FocusDetected::FocusDetected(string name, const NodeConfiguration& config) :
 
 bool FocusDetected::init(std::string name)
 {
-    std::string server_name = "/Components/ActionRecognition"s;
-    std::string client_name = "/BT/" + name + "/ActionRecognition"s;
+    std::string server_name = "/eCubPerception/rpc:i"s;
+    std::string client_name = "/BT/" + name + "/eCubPerception"s;
 
     client_port.open(client_name);
 
@@ -27,13 +27,13 @@ bool FocusDetected::init(std::string name)
         std::cout << "Error! Could not connect to server " << server_name << '\n';
         return false;
     }
-    action_recognition_client_.yarp().attachAsClient(client_port);
+    ecub_perception_client_.yarp().attachAsClient(client_port);
     return true;
 }
 
 NodeStatus FocusDetected::tick()
 {
-    auto is_focused = action_recognition_client_.is_focused();
+    auto is_focused = ecub_perception_client_.is_focused();
     if(is_focused)
         return BT::NodeStatus::SUCCESS;
     else

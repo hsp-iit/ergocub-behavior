@@ -17,7 +17,7 @@ GoReady::GoReady(string name, const NodeConfiguration& config) :
 bool GoReady::init(std::string name)
 {
     // MANIPULATION
-    #ifdef REAL_ROBOT
+    #ifdef MANIPULATION
     std::string server_name = "/Components/Manipulation"s;
     std::string client_name = "/BT/" + name + "/Manipulation"s;
 
@@ -34,16 +34,21 @@ bool GoReady::init(std::string name)
 
 NodeStatus GoReady::onStart()
 {
+    #ifdef MANIPULATION
     manipulation_client_.ready(false);
+    #endif
     return NodeStatus::RUNNING;
 }
 
 NodeStatus GoReady::onRunning(){
+    #ifdef MANIPULATION
     auto fin = manipulation_client_.finished();
     if (fin == "Si"){
         return NodeStatus::SUCCESS;
     }
     return NodeStatus::RUNNING;
+    #endif
+    return NodeStatus::SUCCESS;
 }
 
 void GoReady::onHalted(){

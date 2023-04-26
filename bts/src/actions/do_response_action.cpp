@@ -17,7 +17,7 @@ DoResponseAction::DoResponseAction(string name, const NodeConfiguration& config)
 
 bool DoResponseAction::init(std::string name)
 {
-    #ifdef REAL_ROBOT
+    #ifdef MANIPULATION
     // Connect to manipulation
     std::string man_server_name = "/Components/Manipulation"s;
     std::string man_client_name = "/BT/" + name + "/Manipulation"s;
@@ -30,18 +30,6 @@ bool DoResponseAction::init(std::string name)
     }
     manipulation_client_.yarp().attachAsClient(man_client_port);
     #endif
-
-    // Connect to action recognition
-    std::string ar_server_name = "/Components/ActionRecognition"s;
-    std::string ar_client_name = "/BT/" + name + "/ActionRecognition/DoResponseAction"s;
-
-    ar_client_port.open(ar_client_name);
-
-    if (!yarp.connect(ar_client_name,ar_server_name))
-    {
-        throw BT::RuntimeError("Error! Could not connect to server ", ar_server_name);
-    }
-    action_recognition_client_.yarp().attachAsClient(ar_client_port);
 
     // Others
     last_action = "";
@@ -68,7 +56,10 @@ NodeStatus DoResponseAction::tick()
 
     if (action == "wave"){
         if(last_action != action || (this_time - last_time) > 3){
+            std::cout << "WAVE" << std::endl;
+            #ifdef MANIPULATION
             manipulation_client_.wave(false);
+            #endif
             last_action = action;
             last_time = this_time;
         }
@@ -76,7 +67,9 @@ NodeStatus DoResponseAction::tick()
     }
     if (action == "shake"){
         if(last_action != action || (this_time - last_time) > 3){
+            #ifdef MANIPULATION
             manipulation_client_.shake(false);
+            #endif
             last_action = action;
             last_time = this_time;
         }
@@ -84,7 +77,9 @@ NodeStatus DoResponseAction::tick()
     }
     if (action == "stop"){
         if(last_action != action || (this_time - last_time) > 3){
+            #ifdef MANIPULATION
             manipulation_client_.stop();
+            #endif
             last_action = action;
             last_time = this_time;
         }
