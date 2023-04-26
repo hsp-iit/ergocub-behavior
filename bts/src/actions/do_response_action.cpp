@@ -58,7 +58,7 @@ NodeStatus DoResponseAction::tick()
         if(last_action != action || (this_time - last_time) > 3){
             std::cout << "WAVE" << std::endl;
             #ifdef MANIPULATION
-            manipulation_client_.wave(false);
+            manipulation_client_.move_to_named_configuration("wave");
             #endif
             last_action = action;
             last_time = this_time;
@@ -68,7 +68,7 @@ NodeStatus DoResponseAction::tick()
     if (action == "shake"){
         if(last_action != action || (this_time - last_time) > 3){
             #ifdef MANIPULATION
-            manipulation_client_.shake(false);
+            manipulation_client_.move_to_named_configuration("shake");
             #endif
             last_action = action;
             last_time = this_time;
