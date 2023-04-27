@@ -71,7 +71,6 @@ NodeStatus RobotLookAtPOI::tick()
 
     // Get poi_pos if there is poi
     if(msg!="none"){
-        gaze_->setNeckTrajTime(1);
         none_counter = 0;
         Optional<std::vector<double>> poi_pos = getInput<std::vector<double>>("poi_pos");
         if (!poi_pos)
@@ -89,17 +88,18 @@ NodeStatus RobotLookAtPOI::tick()
         setpoint.push_back(poi_position[1]);
         setpoint.push_back(poi_position[2] + 0.1);  // offset for camera, remove it in ergoCub
         #ifdef GAZE
+        gaze_->setNeckTrajTime(1);
         gaze_->lookAtFixationPoint(setpoint);
         #endif
     }
     else{
         none_counter++;
         if(none_counter > none_counter_thr){
-            gaze_->setNeckTrajTime(2);
             setpoint.push_back(-1);
             setpoint.push_back(0);
             setpoint.push_back(0.7);
             #ifdef GAZE
+            gaze_->setNeckTrajTime(2);
             gaze_->lookAtFixationPoint(setpoint);
             #endif
         }

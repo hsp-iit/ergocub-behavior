@@ -28,7 +28,7 @@
 
 #include <conditions/box_detected.h>
 #include <conditions/face_detected.h>
-#include <conditions/object_is_close.h>
+#include <conditions/object_is_graspable.h>
 #include <conditions/focus_detected.h>
 #include <conditions/action_detected.h>
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
     bt_factory.registerNodeType<BoxDetected>("BoxDetected");
     bt_factory.registerNodeType<FaceDetected>("FaceDetected");
-    bt_factory.registerNodeType<ObjectIsClose>("ObjectIsClose");
+    bt_factory.registerNodeType<ObjectIsGraspable>("ObjectIsGraspable");
     bt_factory.registerNodeType<FocusDetected>("FocusDetected");
     bt_factory.registerNodeType<ActionDetected>("ActionDetected");
     /* END */

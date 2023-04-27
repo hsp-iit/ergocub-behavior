@@ -11,10 +11,10 @@
 using namespace BT;
 using namespace std;
 
-class ObjectIsClose :  public ConditionNode
+class ObjectIsGraspable :  public ConditionNode
 {
 public:
-    ObjectIsClose(string name, const NodeConfiguration &config);
+    ObjectIsGraspable(string name, const NodeConfiguration &config);
     NodeStatus tick() override;
     static PortsList providedPorts();
 private:

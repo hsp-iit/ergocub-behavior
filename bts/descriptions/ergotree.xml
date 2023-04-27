@@ -4,7 +4,9 @@
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
             <ReactiveFallback>
-                <Condition ID="BoxDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
+                <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
+                    <Condition ID="BoxDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
+                </BlackboardCheckString>
                 <Condition ID="FaceDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
                 <AlwaysSuccess/>
             </ReactiveFallback>
@@ -13,7 +15,7 @@
             <ReactiveFallback>
                 <ReactiveSequence>
                     <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_poi}" value_B="object">
-                        <Condition ID="ObjectIsClose"/>
+                        <Condition ID="ObjectIsGraspable" poi_pos="{the_poi_pos}"/>
                     </BlackboardCheckString>
                     <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
                         <Action ID="GoReady"/>
@@ -67,13 +69,15 @@
         <Action ID="GoRelease">
             <output_port name="has_box" type="std::string"/>
         </Action>
-        <Condition ID="ObjectIsClose"/>
+        <Condition ID="ObjectIsGraspable">
+            <input_port name="poi_pos"/>
+        </Condition>
         <Action ID="RobotChangeFace">
             <input_port name="poi" type="std::string"/>
         </Action>
         <Action ID="RobotLookAtPOI">
-            <input_port name="poi" type="std::string"/>
-            <input_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
+            <input_port name="poi"/>
+            <input_port name="poi_pos"/>
         </Action>
     </TreeNodesModel>
     <!-- ////////// -->

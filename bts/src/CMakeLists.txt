@@ -27,7 +27,7 @@ target_sources(custom_leaf_nodes
   actions/go_release.cpp
   conditions/box_detected.cpp
   conditions/face_detected.cpp
-  conditions/object_is_close.cpp
+  conditions/object_is_graspable.cpp
   conditions/focus_detected.cpp
   conditions/action_detected.cpp
   common.cpp
