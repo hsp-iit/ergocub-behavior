@@ -41,7 +41,7 @@ NodeStatus GoHome::tick()
 
     if((this_time - last_time) > 3){
         #ifdef MANIPULATION
-        manipulation_client_.home(false);
+        manipulation_client_.move_to_named_configuration("home");
         #endif
         last_time = this_time;
     }

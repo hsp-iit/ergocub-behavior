@@ -40,7 +40,7 @@ using namespace BT;
 
 int main(int argc, char **argv)
 {
-    std::string fileName = "./ergocub-behavior/bts/descriptions/ergotree.xml";
+    std::string fileName = "/home/btuc/ergocub-behavior/bts/descriptions/ergotree.xml";
 
     BehaviorTreeFactory bt_factory;
 
