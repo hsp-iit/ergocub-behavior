@@ -1,5 +1,4 @@
 #include <behaviortree_cpp_v3/action_node.h>
-
 #include "robot_change_face.h"
 #include "common.h"
 #include <chrono>
@@ -34,16 +33,26 @@ NodeStatus RobotChangeFace::tick()
                               msg.error() );
     }
 
+    Optional<std::string> has_box = getInput<std::string>("has_box");
+    if (!has_box)
+    {
+      throw BT::RuntimeError("missing required input [message]: ",
+                              msg.error() );
+    }
+
     // change face depending on object
     std::string emotion = "";
-    if(msg=="none"){
+    if(has_box=="yes"){
+        emotion = "evi";
+    }
+    else if(msg=="none"){
         emotion = "neu";
     }
     else if(msg=="face"){
         emotion = "hap";
     }
     else if(msg=="object"){
-        emotion = "ang";
+        emotion = "evi";
     }
 
     Bottle cmd;
@@ -61,5 +70,6 @@ NodeStatus RobotChangeFace::tick()
 
 PortsList RobotChangeFace::providedPorts()
 {
-    return {InputPort<std::string>("poi")};
+    return {InputPort<std::string>("poi"),
+            InputPort<std::string>("has_box")};
 }

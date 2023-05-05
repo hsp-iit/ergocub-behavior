@@ -6,5 +6,4 @@
 #                                                                              #
 ################################################################################
 
-add_subdirectory(action_recognition)
-add_subdirectory(object_detection)
+add_subdirectory(manipulation)

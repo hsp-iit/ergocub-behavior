@@ -8,36 +8,41 @@
 // This is an automatically generated file.
 // It could get re-generated if the ALLOW_IDL_GENERATION flag is on.
 
-#ifndef YARP_THRIFT_GENERATOR_SERVICE_MANIPULATIONINTERFACE_H
-#define YARP_THRIFT_GENERATOR_SERVICE_MANIPULATIONINTERFACE_H
+#ifndef YARP_THRIFT_GENERATOR_SERVICE_COMMANDINTERFACE_H
+#define YARP_THRIFT_GENERATOR_SERVICE_COMMANDINTERFACE_H
 
 #include <yarp/os/Wire.h>
 #include <yarp/os/idl/WireTypes.h>
+#include <yarp/sig/Matrix.h>
 
-class ManipulationInterface :
+class CommandInterface :
         public yarp::os::Wire
 {
 public:
     // Constructor
-    ManipulationInterface();
+    CommandInterface();
 
-    virtual bool grasp_object(const std::vector<double>& handPoses);
+    virtual bool grasp();
 
     virtual bool is_finished();
 
-    virtual bool move_object_to_pose(const std::vector<double>& pose, const double time);
+    virtual bool perform_cartesian_action(const std::string& actionName);
 
-    virtual bool move_hands_to_pose(const std::vector<double>& poses, const double time);
+    virtual bool perform_grasp_action(const std::string& actionName);
 
-    virtual bool move_hands_by_action(const std::string& actionName);
+    virtual bool perform_joint_space_action(const std::string& actionName);
 
-    virtual bool move_to_configuration(const std::vector<double>& jointConfiguration, const double time);
+    virtual bool move_hands_to_pose(const yarp::sig::Matrix& leftPose, const yarp::sig::Matrix& rightPose, const double time);
 
-    virtual bool move_to_named_configuration(const std::string& configName);
+    virtual bool move_joints_to_position(const std::vector<double>& position, const double time);
+
+    virtual bool move_object_to_pose(const yarp::sig::Matrix& pose, const double time);
 
     virtual bool release_object();
 
-    virtual bool stop();
+    virtual void stop();
+
+    virtual void shut_down();
 
     // help method
     virtual std::vector<std::string> help(const std::string& functionName = "--all");
@@ -46,4 +51,4 @@ public:
     bool read(yarp::os::ConnectionReader& connection) override;
 };
 
-#endif // YARP_THRIFT_GENERATOR_SERVICE_MANIPULATIONINTERFACE_H
+#endif // YARP_THRIFT_GENERATOR_SERVICE_COMMANDINTERFACE_H

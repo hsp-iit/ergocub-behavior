@@ -11,10 +11,10 @@
 using namespace BT;
 using namespace std;
 
-class GoGrasp :  public SyncActionNode
+class IsDoingAction :  public SyncActionNode
 {
 public:
-    GoGrasp(string name, const NodeConfiguration &config);
+    IsDoingAction(string name, const NodeConfiguration &config);
     NodeStatus tick() override;
     static PortsList providedPorts();
 private:

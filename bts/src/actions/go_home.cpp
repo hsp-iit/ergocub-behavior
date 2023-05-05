@@ -41,12 +41,14 @@ NodeStatus GoHome::tick()
 
     if((this_time - last_time) > 3){
         #ifdef MANIPULATION
-        manipulation_client_.move_to_named_configuration("home");
+        std::cout << "Before" << std::endl;
+        manipulation_client_.perform_joint_space_action("home");
+        std::cout << "asfter" << std::endl;
         #endif
         last_time = this_time;
+        return NodeStatus::SUCCESS;
     }
-
-    return NodeStatus::SUCCESS;
+    return NodeStatus::FAILURE;
 }
 
 

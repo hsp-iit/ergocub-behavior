@@ -89,8 +89,9 @@ NodeStatus RobotLookAtPOI::tick()
         }
         setpoint.push_back(poi_position[0]);
         setpoint.push_back(poi_position[1]);
-        setpoint.push_back(poi_position[2] + 0.1);  // offset for camera, remove it in ergoCub
+        setpoint.push_back(poi_position[2]);  // offset for camera, remove it in ergoCub
         #ifdef GAZE
+        gaze_->setNeckTrajTime(1);
         gaze_->lookAtFixationPoint(setpoint);
         #endif
     }
@@ -104,6 +105,7 @@ NodeStatus RobotLookAtPOI::tick()
             setpoint.push_back(0);
             setpoint.push_back(0.7);
             #ifdef GAZE
+            gaze_->setNeckTrajTime(2);
             gaze_->lookAtFixationPoint(setpoint);
             #endif
         }

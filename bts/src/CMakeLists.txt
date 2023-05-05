@@ -25,11 +25,13 @@ target_sources(custom_leaf_nodes
   actions/go_ready.cpp
   actions/go_grasp.cpp
   actions/go_release.cpp
+  actions/move_box.cpp
   conditions/box_detected.cpp
   conditions/face_detected.cpp
-  conditions/object_is_close.cpp
+  conditions/object_is_graspable.cpp
   conditions/focus_detected.cpp
   conditions/action_detected.cpp
+  conditions/is_doing_action.cpp
   common.cpp
 )
 
