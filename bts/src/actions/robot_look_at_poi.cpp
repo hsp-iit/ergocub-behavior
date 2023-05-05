@@ -71,6 +71,9 @@ NodeStatus RobotLookAtPOI::tick()
 
     // Get poi_pos if there is poi
     if(msg!="none"){
+        #ifdef GAZE
+        gaze_->setNeckTrajTime(1);
+        #endif
         none_counter = 0;
         Optional<std::vector<double>> poi_pos = getInput<std::vector<double>>("poi_pos");
         if (!poi_pos)
@@ -95,6 +98,9 @@ NodeStatus RobotLookAtPOI::tick()
     else{
         none_counter++;
         if(none_counter > none_counter_thr){
+            #ifdef GAZE
+            gaze_->setNeckTrajTime(2);
+            #endif
             setpoint.push_back(-1);
             setpoint.push_back(0);
             setpoint.push_back(0.7);

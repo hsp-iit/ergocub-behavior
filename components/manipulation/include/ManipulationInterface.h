@@ -21,22 +21,23 @@ public:
     // Constructor
     ManipulationInterface();
 
-    virtual std::string stop();
+    virtual bool grasp_object(const std::vector<double>& handPoses);
 
-    virtual std::string home(const bool block);
+    virtual bool is_finished();
 
-    virtual std::string wave(const bool block);
+    virtual bool move_object_to_pose(const std::vector<double>& pose, const double time);
 
-    virtual std::string shake(const bool block);
+    virtual bool move_hands_to_pose(const std::vector<double>& poses, const double time);
 
-    virtual std::string ready(const bool block);
+    virtual bool move_hands_by_action(const std::string& actionName);
 
-    virtual std::string pose_grasp(const bool block, const std::vector<double>& hand_frames);
+    virtual bool move_to_configuration(const std::vector<double>& jointConfiguration, const double time);
 
-    virtual std::string testgrasp();
+    virtual bool move_to_named_configuration(const std::string& configName);
 
-    virtual std::string grasp(const bool block);
+    virtual bool release_object();
 
+<<<<<<< HEAD
     virtual std::string release(const bool block);
 
     virtual std::string ins();
@@ -60,6 +61,9 @@ public:
     virtual std::string egrasprlc();
 
     virtual std::string mgraspround();
+=======
+    virtual bool stop();
+>>>>>>> 4e30317bec073bfd14d4546867160da931dc1c57
 
     // help method
     virtual std::vector<std::string> help(const std::string& functionName = "--all");

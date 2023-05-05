@@ -9,9 +9,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_CONFIG_PATH ${CMAKE_MODULE_PATH}  "${CMAKE_CURRENT_LIST_DIR}/bts/cmake-modules")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
 
-message(STATUS "CMAKE_CONFIG_PATH ${CMAKE_MODULE_PATH}  ${CMAKE_CURRENT_LIST_DIR}/bts/cmake-modules")
-message(STATUS ""${CMAKE_CONFIG_PATH}"")
-
 # BehaviorTree.CPP links Boost::coroutine, but does not look for it
 find_package(ZMQ)
 find_package(Boost COMPONENTS coroutine REQUIRED)

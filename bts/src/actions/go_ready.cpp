@@ -35,15 +35,14 @@ bool GoReady::init(std::string name)
 NodeStatus GoReady::onStart()
 {
     #ifdef MANIPULATION
-    manipulation_client_.ready(false);
+    manipulation_client_.move_to_named_configuration("ready");
     #endif
     return NodeStatus::RUNNING;
 }
 
 NodeStatus GoReady::onRunning(){
     #ifdef MANIPULATION
-    auto fin = manipulation_client_.finished();
-    if (fin == "Si"){
+    if (manipulation_client_.is_finished()){
         return NodeStatus::SUCCESS;
     }
     return NodeStatus::RUNNING;

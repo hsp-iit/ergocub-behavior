@@ -18,7 +18,7 @@ find_package(YARP COMPONENTS os dev idl_tools REQUIRED)
 
 add_library(manipulation_interface STATIC)
 # Create the grasp_interface C++ Library
-yarp_add_idl(IDL_GEN_FILES manip.thrift)
+yarp_add_idl(IDL_GEN_FILES manipulation.thrift)
 
 target_sources(manipulation_interface
     PRIVATE
