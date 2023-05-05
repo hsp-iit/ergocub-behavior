@@ -31,6 +31,7 @@ target_sources(custom_leaf_nodes
   conditions/object_is_graspable.cpp
   conditions/focus_detected.cpp
   conditions/action_detected.cpp
+  conditions/is_doing_action.cpp
   common.cpp
 )
 

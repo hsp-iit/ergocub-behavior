@@ -3,6 +3,7 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
+            <Condition ID="IsDoingAction" is_doing_action="{the_is_doing_action}"/>
             <ReactiveFallback>
                 <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
                     <Condition ID="BoxDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
@@ -37,12 +38,16 @@
                             </ReactiveFallback>
                         </BlackboardCheckString>
                         <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
-                            <Action ID="DoResponseAction" action="{the_action}"/>
+                            <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_is_doing_action}" value_B="no">
+                                <Action ID="DoResponseAction" action="{the_action}"/>
+                            </BlackboardCheckString>
                         </BlackboardCheckString>
                     </ReactiveFallback>
                 </ReactiveSequence>
                 <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
-                    <Action ID="GoHome"/>
+                    <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_is_doing_action}" value_B="no">
+                        <Action ID="GoHome"/>
+                    </BlackboardCheckString>
                 </BlackboardCheckString>
             </ReactiveFallback>
         </ReactiveSequence>
@@ -72,6 +77,9 @@
         <Action ID="GoRelease">
             <output_port name="has_box" type="std::string"/>
         </Action>
+        <Condition ID="IsDoingAction">
+            <output_port name="is_doing_action"/>
+        </Condition>
         <Action ID="MoveBox">
             <input_port name="action"/>
         </Action>

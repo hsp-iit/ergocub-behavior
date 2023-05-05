@@ -32,6 +32,7 @@
 #include <conditions/object_is_graspable.h>
 #include <conditions/focus_detected.h>
 #include <conditions/action_detected.h>
+#include <conditions/is_doing_action.h>
 
 /* END */
 
@@ -60,6 +61,7 @@ int main(int argc, char **argv)
     bt_factory.registerNodeType<ObjectIsGraspable>("ObjectIsGraspable");
     bt_factory.registerNodeType<FocusDetected>("FocusDetected");
     bt_factory.registerNodeType<ActionDetected>("ActionDetected");
+    bt_factory.registerNodeType<IsDoingAction>("IsDoingAction");
     /* END */
 
 //    auto tree = bt_factory.createTreeFromFile(fileName);
