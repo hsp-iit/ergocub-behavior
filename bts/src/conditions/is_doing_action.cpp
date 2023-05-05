@@ -35,8 +35,8 @@ bool IsDoingAction::init(std::string name)
 NodeStatus IsDoingAction::tick()
 {
     #ifdef MANIPULATION
-    auto fin = manipulation_client_.finished();
-    if (fin == "Si"){
+    auto fin = manipulation_client_.is_finished();
+    if (fin){
         setOutput("is_doing_action", "yes");
     }
     else{

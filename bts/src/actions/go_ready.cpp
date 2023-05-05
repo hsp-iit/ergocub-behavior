@@ -35,7 +35,7 @@ bool GoReady::init(std::string name)
 NodeStatus GoReady::onStart()
 {
     #ifdef MANIPULATION
-    manipulation_client_.move_to_named_configuration("ready");
+    manipulation_client_.perform_joint_space_action("ready");
     #endif
     return NodeStatus::RUNNING;
 }

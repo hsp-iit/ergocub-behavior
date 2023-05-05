@@ -21,7 +21,7 @@ public:
     static PortsList providedPorts();
 private:
     bool init(std::string);
-    ManipulationInterface manipulation_client_;
+    CommandInterface manipulation_client_;
     bool is_ok_{false};
     yarp::os::Network yarp;
     yarp::os::Port client_port;

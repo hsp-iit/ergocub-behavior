@@ -14,75 +14,12 @@
 
 #include <algorithm>
 
-// grasp_object helper class declaration
-class ManipulationInterface_grasp_object_helper :
+// grasp helper class declaration
+class CommandInterface_grasp_helper :
         public yarp::os::Portable
 {
 public:
-    ManipulationInterface_grasp_object_helper() = default;
-    explicit ManipulationInterface_grasp_object_helper(const std::vector<double>& handPoses);
-    bool write(yarp::os::ConnectionWriter& connection) const override;
-    bool read(yarp::os::ConnectionReader& connection) override;
-
-    class Command :
-            public yarp::os::idl::WirePortable
-    {
-    public:
-        Command() = default;
-        explicit Command(const std::vector<double>& handPoses);
-
-        ~Command() override = default;
-
-        bool write(yarp::os::ConnectionWriter& connection) const override;
-        bool read(yarp::os::ConnectionReader& connection) override;
-
-        bool write(const yarp::os::idl::WireWriter& writer) const override;
-        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
-        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
-
-        bool read(yarp::os::idl::WireReader& reader) override;
-        bool readTag(yarp::os::idl::WireReader& reader);
-        bool readArgs(yarp::os::idl::WireReader& reader);
-
-        std::vector<double> handPoses{};
-    };
-
-    class Reply :
-            public yarp::os::idl::WirePortable
-    {
-    public:
-        Reply() = default;
-        ~Reply() override = default;
-
-        bool write(yarp::os::ConnectionWriter& connection) const override;
-        bool read(yarp::os::ConnectionReader& connection) override;
-
-        bool write(const yarp::os::idl::WireWriter& writer) const override;
-        bool read(yarp::os::idl::WireReader& reader) override;
-
-        bool return_helper{false};
-    };
-
-    using funcptr_t = bool (*)(const std::vector<double>&);
-    void call(ManipulationInterface* ptr);
-
-    Command cmd;
-    Reply reply;
-
-    static constexpr const char* s_tag{"grasp_object"};
-    static constexpr size_t s_tag_len{2};
-    static constexpr size_t s_cmd_len{3};
-    static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::grasp_object(const std::vector<double>& handPoses)"};
-    static constexpr const char* s_help{""};
-};
-
-// is_finished helper class declaration
-class ManipulationInterface_is_finished_helper :
-        public yarp::os::Portable
-{
-public:
-    ManipulationInterface_is_finished_helper() = default;
+    CommandInterface_grasp_helper() = default;
     bool write(yarp::os::ConnectionWriter& connection) const override;
     bool read(yarp::os::ConnectionReader& connection) override;
 
@@ -122,7 +59,65 @@ public:
     };
 
     using funcptr_t = bool (*)();
-    void call(ManipulationInterface* ptr);
+    void call(CommandInterface* ptr);
+
+    Command cmd;
+    Reply reply;
+
+    static constexpr const char* s_tag{"grasp"};
+    static constexpr size_t s_tag_len{1};
+    static constexpr size_t s_cmd_len{1};
+    static constexpr size_t s_reply_len{1};
+    static constexpr const char* s_prototype{"bool CommandInterface::grasp()"};
+    static constexpr const char* s_help{""};
+};
+
+// is_finished helper class declaration
+class CommandInterface_is_finished_helper :
+        public yarp::os::Portable
+{
+public:
+    CommandInterface_is_finished_helper() = default;
+    bool write(yarp::os::ConnectionWriter& connection) const override;
+    bool read(yarp::os::ConnectionReader& connection) override;
+
+    class Command :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Command() = default;
+        ~Command() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
+        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
+
+        bool read(yarp::os::idl::WireReader& reader) override;
+        bool readTag(yarp::os::idl::WireReader& reader);
+        bool readArgs(yarp::os::idl::WireReader& reader);
+    };
+
+    class Reply :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Reply() = default;
+        ~Reply() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool read(yarp::os::idl::WireReader& reader) override;
+
+        bool return_helper{false};
+    };
+
+    using funcptr_t = bool (*)();
+    void call(CommandInterface* ptr);
 
     Command cmd;
     Reply reply;
@@ -131,145 +126,17 @@ public:
     static constexpr size_t s_tag_len{2};
     static constexpr size_t s_cmd_len{2};
     static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::is_finished()"};
+    static constexpr const char* s_prototype{"bool CommandInterface::is_finished()"};
     static constexpr const char* s_help{""};
 };
 
-// move_object_to_pose helper class declaration
-class ManipulationInterface_move_object_to_pose_helper :
+// perform_cartesian_action helper class declaration
+class CommandInterface_perform_cartesian_action_helper :
         public yarp::os::Portable
 {
 public:
-    ManipulationInterface_move_object_to_pose_helper() = default;
-    ManipulationInterface_move_object_to_pose_helper(const std::vector<double>& pose, const double time);
-    bool write(yarp::os::ConnectionWriter& connection) const override;
-    bool read(yarp::os::ConnectionReader& connection) override;
-
-    class Command :
-            public yarp::os::idl::WirePortable
-    {
-    public:
-        Command() = default;
-        Command(const std::vector<double>& pose, const double time);
-
-        ~Command() override = default;
-
-        bool write(yarp::os::ConnectionWriter& connection) const override;
-        bool read(yarp::os::ConnectionReader& connection) override;
-
-        bool write(const yarp::os::idl::WireWriter& writer) const override;
-        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
-        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
-
-        bool read(yarp::os::idl::WireReader& reader) override;
-        bool readTag(yarp::os::idl::WireReader& reader);
-        bool readArgs(yarp::os::idl::WireReader& reader);
-
-        std::vector<double> pose{};
-        double time{0.0};
-    };
-
-    class Reply :
-            public yarp::os::idl::WirePortable
-    {
-    public:
-        Reply() = default;
-        ~Reply() override = default;
-
-        bool write(yarp::os::ConnectionWriter& connection) const override;
-        bool read(yarp::os::ConnectionReader& connection) override;
-
-        bool write(const yarp::os::idl::WireWriter& writer) const override;
-        bool read(yarp::os::idl::WireReader& reader) override;
-
-        bool return_helper{false};
-    };
-
-    using funcptr_t = bool (*)(const std::vector<double>&, const double);
-    void call(ManipulationInterface* ptr);
-
-    Command cmd;
-    Reply reply;
-
-    static constexpr const char* s_tag{"move_object_to_pose"};
-    static constexpr size_t s_tag_len{4};
-    static constexpr size_t s_cmd_len{6};
-    static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::move_object_to_pose(const std::vector<double>& pose, const double time)"};
-    static constexpr const char* s_help{""};
-};
-
-// move_hands_to_pose helper class declaration
-class ManipulationInterface_move_hands_to_pose_helper :
-        public yarp::os::Portable
-{
-public:
-    ManipulationInterface_move_hands_to_pose_helper() = default;
-    ManipulationInterface_move_hands_to_pose_helper(const std::vector<double>& poses, const double time);
-    bool write(yarp::os::ConnectionWriter& connection) const override;
-    bool read(yarp::os::ConnectionReader& connection) override;
-
-    class Command :
-            public yarp::os::idl::WirePortable
-    {
-    public:
-        Command() = default;
-        Command(const std::vector<double>& poses, const double time);
-
-        ~Command() override = default;
-
-        bool write(yarp::os::ConnectionWriter& connection) const override;
-        bool read(yarp::os::ConnectionReader& connection) override;
-
-        bool write(const yarp::os::idl::WireWriter& writer) const override;
-        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
-        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
-
-        bool read(yarp::os::idl::WireReader& reader) override;
-        bool readTag(yarp::os::idl::WireReader& reader);
-        bool readArgs(yarp::os::idl::WireReader& reader);
-
-        std::vector<double> poses{};
-        double time{0.0};
-    };
-
-    class Reply :
-            public yarp::os::idl::WirePortable
-    {
-    public:
-        Reply() = default;
-        ~Reply() override = default;
-
-        bool write(yarp::os::ConnectionWriter& connection) const override;
-        bool read(yarp::os::ConnectionReader& connection) override;
-
-        bool write(const yarp::os::idl::WireWriter& writer) const override;
-        bool read(yarp::os::idl::WireReader& reader) override;
-
-        bool return_helper{false};
-    };
-
-    using funcptr_t = bool (*)(const std::vector<double>&, const double);
-    void call(ManipulationInterface* ptr);
-
-    Command cmd;
-    Reply reply;
-
-    static constexpr const char* s_tag{"move_hands_to_pose"};
-    static constexpr size_t s_tag_len{4};
-    static constexpr size_t s_cmd_len{6};
-    static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::move_hands_to_pose(const std::vector<double>& poses, const double time)"};
-    static constexpr const char* s_help{""};
-};
-
-// move_hands_by_action helper class declaration
-class ManipulationInterface_move_hands_by_action_helper :
-        public yarp::os::Portable
-{
-public:
-    ManipulationInterface_move_hands_by_action_helper() = default;
-    explicit ManipulationInterface_move_hands_by_action_helper(const std::string& actionName);
+    CommandInterface_perform_cartesian_action_helper() = default;
+    explicit CommandInterface_perform_cartesian_action_helper(const std::string& actionName);
     bool write(yarp::os::ConnectionWriter& connection) const override;
     bool read(yarp::os::ConnectionReader& connection) override;
 
@@ -313,26 +180,26 @@ public:
     };
 
     using funcptr_t = bool (*)(const std::string&);
-    void call(ManipulationInterface* ptr);
+    void call(CommandInterface* ptr);
 
     Command cmd;
     Reply reply;
 
-    static constexpr const char* s_tag{"move_hands_by_action"};
-    static constexpr size_t s_tag_len{4};
-    static constexpr size_t s_cmd_len{5};
+    static constexpr const char* s_tag{"perform_cartesian_action"};
+    static constexpr size_t s_tag_len{3};
+    static constexpr size_t s_cmd_len{4};
     static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::move_hands_by_action(const std::string& actionName)"};
+    static constexpr const char* s_prototype{"bool CommandInterface::perform_cartesian_action(const std::string& actionName)"};
     static constexpr const char* s_help{""};
 };
 
-// move_to_configuration helper class declaration
-class ManipulationInterface_move_to_configuration_helper :
+// perform_grasp_action helper class declaration
+class CommandInterface_perform_grasp_action_helper :
         public yarp::os::Portable
 {
 public:
-    ManipulationInterface_move_to_configuration_helper() = default;
-    ManipulationInterface_move_to_configuration_helper(const std::vector<double>& jointConfiguration, const double time);
+    CommandInterface_perform_grasp_action_helper() = default;
+    explicit CommandInterface_perform_grasp_action_helper(const std::string& actionName);
     bool write(yarp::os::ConnectionWriter& connection) const override;
     bool read(yarp::os::ConnectionReader& connection) override;
 
@@ -341,7 +208,7 @@ public:
     {
     public:
         Command() = default;
-        Command(const std::vector<double>& jointConfiguration, const double time);
+        explicit Command(const std::string& actionName);
 
         ~Command() override = default;
 
@@ -356,7 +223,198 @@ public:
         bool readTag(yarp::os::idl::WireReader& reader);
         bool readArgs(yarp::os::idl::WireReader& reader);
 
-        std::vector<double> jointConfiguration{};
+        std::string actionName{};
+    };
+
+    class Reply :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Reply() = default;
+        ~Reply() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool read(yarp::os::idl::WireReader& reader) override;
+
+        bool return_helper{false};
+    };
+
+    using funcptr_t = bool (*)(const std::string&);
+    void call(CommandInterface* ptr);
+
+    Command cmd;
+    Reply reply;
+
+    static constexpr const char* s_tag{"perform_grasp_action"};
+    static constexpr size_t s_tag_len{3};
+    static constexpr size_t s_cmd_len{4};
+    static constexpr size_t s_reply_len{1};
+    static constexpr const char* s_prototype{"bool CommandInterface::perform_grasp_action(const std::string& actionName)"};
+    static constexpr const char* s_help{""};
+};
+
+// perform_joint_space_action helper class declaration
+class CommandInterface_perform_joint_space_action_helper :
+        public yarp::os::Portable
+{
+public:
+    CommandInterface_perform_joint_space_action_helper() = default;
+    explicit CommandInterface_perform_joint_space_action_helper(const std::string& actionName);
+    bool write(yarp::os::ConnectionWriter& connection) const override;
+    bool read(yarp::os::ConnectionReader& connection) override;
+
+    class Command :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Command() = default;
+        explicit Command(const std::string& actionName);
+
+        ~Command() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
+        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
+
+        bool read(yarp::os::idl::WireReader& reader) override;
+        bool readTag(yarp::os::idl::WireReader& reader);
+        bool readArgs(yarp::os::idl::WireReader& reader);
+
+        std::string actionName{};
+    };
+
+    class Reply :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Reply() = default;
+        ~Reply() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool read(yarp::os::idl::WireReader& reader) override;
+
+        bool return_helper{false};
+    };
+
+    using funcptr_t = bool (*)(const std::string&);
+    void call(CommandInterface* ptr);
+
+    Command cmd;
+    Reply reply;
+
+    static constexpr const char* s_tag{"perform_joint_space_action"};
+    static constexpr size_t s_tag_len{4};
+    static constexpr size_t s_cmd_len{5};
+    static constexpr size_t s_reply_len{1};
+    static constexpr const char* s_prototype{"bool CommandInterface::perform_joint_space_action(const std::string& actionName)"};
+    static constexpr const char* s_help{""};
+};
+
+// move_hands_to_pose helper class declaration
+class CommandInterface_move_hands_to_pose_helper :
+        public yarp::os::Portable
+{
+public:
+    CommandInterface_move_hands_to_pose_helper() = default;
+    CommandInterface_move_hands_to_pose_helper(const yarp::sig::Matrix& leftPose, const yarp::sig::Matrix& rightPose, const double time);
+    bool write(yarp::os::ConnectionWriter& connection) const override;
+    bool read(yarp::os::ConnectionReader& connection) override;
+
+    class Command :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Command() = default;
+        Command(const yarp::sig::Matrix& leftPose, const yarp::sig::Matrix& rightPose, const double time);
+
+        ~Command() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
+        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
+
+        bool read(yarp::os::idl::WireReader& reader) override;
+        bool readTag(yarp::os::idl::WireReader& reader);
+        bool readArgs(yarp::os::idl::WireReader& reader);
+
+        yarp::sig::Matrix leftPose{};
+        yarp::sig::Matrix rightPose{};
+        double time{0.0};
+    };
+
+    class Reply :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Reply() = default;
+        ~Reply() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool read(yarp::os::idl::WireReader& reader) override;
+
+        bool return_helper{false};
+    };
+
+    using funcptr_t = bool (*)(const yarp::sig::Matrix&, const yarp::sig::Matrix&, const double);
+    void call(CommandInterface* ptr);
+
+    Command cmd;
+    Reply reply;
+
+    static constexpr const char* s_tag{"move_hands_to_pose"};
+    static constexpr size_t s_tag_len{4};
+    static constexpr size_t s_cmd_len{7};
+    static constexpr size_t s_reply_len{1};
+    static constexpr const char* s_prototype{"bool CommandInterface::move_hands_to_pose(const yarp::sig::Matrix& leftPose, const yarp::sig::Matrix& rightPose, const double time)"};
+    static constexpr const char* s_help{""};
+};
+
+// move_joints_to_position helper class declaration
+class CommandInterface_move_joints_to_position_helper :
+        public yarp::os::Portable
+{
+public:
+    CommandInterface_move_joints_to_position_helper() = default;
+    CommandInterface_move_joints_to_position_helper(const std::vector<double>& position, const double time);
+    bool write(yarp::os::ConnectionWriter& connection) const override;
+    bool read(yarp::os::ConnectionReader& connection) override;
+
+    class Command :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Command() = default;
+        Command(const std::vector<double>& position, const double time);
+
+        ~Command() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
+        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
+
+        bool read(yarp::os::idl::WireReader& reader) override;
+        bool readTag(yarp::os::idl::WireReader& reader);
+        bool readArgs(yarp::os::idl::WireReader& reader);
+
+        std::vector<double> position{};
         double time{0.0};
     };
 
@@ -377,26 +435,26 @@ public:
     };
 
     using funcptr_t = bool (*)(const std::vector<double>&, const double);
-    void call(ManipulationInterface* ptr);
+    void call(CommandInterface* ptr);
 
     Command cmd;
     Reply reply;
 
-    static constexpr const char* s_tag{"move_to_configuration"};
-    static constexpr size_t s_tag_len{3};
-    static constexpr size_t s_cmd_len{5};
+    static constexpr const char* s_tag{"move_joints_to_position"};
+    static constexpr size_t s_tag_len{4};
+    static constexpr size_t s_cmd_len{6};
     static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::move_to_configuration(const std::vector<double>& jointConfiguration, const double time)"};
+    static constexpr const char* s_prototype{"bool CommandInterface::move_joints_to_position(const std::vector<double>& position, const double time)"};
     static constexpr const char* s_help{""};
 };
 
-// move_to_named_configuration helper class declaration
-class ManipulationInterface_move_to_named_configuration_helper :
+// move_object_to_pose helper class declaration
+class CommandInterface_move_object_to_pose_helper :
         public yarp::os::Portable
 {
 public:
-    ManipulationInterface_move_to_named_configuration_helper() = default;
-    explicit ManipulationInterface_move_to_named_configuration_helper(const std::string& configName);
+    CommandInterface_move_object_to_pose_helper() = default;
+    CommandInterface_move_object_to_pose_helper(const yarp::sig::Matrix& pose, const double time);
     bool write(yarp::os::ConnectionWriter& connection) const override;
     bool read(yarp::os::ConnectionReader& connection) override;
 
@@ -405,7 +463,7 @@ public:
     {
     public:
         Command() = default;
-        explicit Command(const std::string& configName);
+        Command(const yarp::sig::Matrix& pose, const double time);
 
         ~Command() override = default;
 
@@ -420,7 +478,8 @@ public:
         bool readTag(yarp::os::idl::WireReader& reader);
         bool readArgs(yarp::os::idl::WireReader& reader);
 
-        std::string configName{};
+        yarp::sig::Matrix pose{};
+        double time{0.0};
     };
 
     class Reply :
@@ -439,26 +498,26 @@ public:
         bool return_helper{false};
     };
 
-    using funcptr_t = bool (*)(const std::string&);
-    void call(ManipulationInterface* ptr);
+    using funcptr_t = bool (*)(const yarp::sig::Matrix&, const double);
+    void call(CommandInterface* ptr);
 
     Command cmd;
     Reply reply;
 
-    static constexpr const char* s_tag{"move_to_named_configuration"};
+    static constexpr const char* s_tag{"move_object_to_pose"};
     static constexpr size_t s_tag_len{4};
-    static constexpr size_t s_cmd_len{5};
+    static constexpr size_t s_cmd_len{6};
     static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::move_to_named_configuration(const std::string& configName)"};
+    static constexpr const char* s_prototype{"bool CommandInterface::move_object_to_pose(const yarp::sig::Matrix& pose, const double time)"};
     static constexpr const char* s_help{""};
 };
 
 // release_object helper class declaration
-class ManipulationInterface_release_object_helper :
+class CommandInterface_release_object_helper :
         public yarp::os::Portable
 {
 public:
-    ManipulationInterface_release_object_helper() = default;
+    CommandInterface_release_object_helper() = default;
     bool write(yarp::os::ConnectionWriter& connection) const override;
     bool read(yarp::os::ConnectionReader& connection) override;
 
@@ -498,7 +557,7 @@ public:
     };
 
     using funcptr_t = bool (*)();
-    void call(ManipulationInterface* ptr);
+    void call(CommandInterface* ptr);
 
     Command cmd;
     Reply reply;
@@ -507,16 +566,16 @@ public:
     static constexpr size_t s_tag_len{2};
     static constexpr size_t s_cmd_len{2};
     static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::release_object()"};
+    static constexpr const char* s_prototype{"bool CommandInterface::release_object()"};
     static constexpr const char* s_help{""};
 };
 
 // stop helper class declaration
-class ManipulationInterface_stop_helper :
+class CommandInterface_stop_helper :
         public yarp::os::Portable
 {
 public:
-    ManipulationInterface_stop_helper() = default;
+    CommandInterface_stop_helper() = default;
     bool write(yarp::os::ConnectionWriter& connection) const override;
     bool read(yarp::os::ConnectionReader& connection) override;
 
@@ -551,12 +610,10 @@ public:
 
         bool write(const yarp::os::idl::WireWriter& writer) const override;
         bool read(yarp::os::idl::WireReader& reader) override;
-
-        bool return_helper{false};
     };
 
-    using funcptr_t = bool (*)();
-    void call(ManipulationInterface* ptr);
+    using funcptr_t = void (*)();
+    void call(CommandInterface* ptr) const;
 
     Command cmd;
     Reply reply;
@@ -564,33 +621,79 @@ public:
     static constexpr const char* s_tag{"stop"};
     static constexpr size_t s_tag_len{1};
     static constexpr size_t s_cmd_len{1};
-    static constexpr size_t s_reply_len{1};
-    static constexpr const char* s_prototype{"bool ManipulationInterface::stop()"};
+    static constexpr size_t s_reply_len{0};
+    static constexpr const char* s_prototype{"void CommandInterface::stop()"};
     static constexpr const char* s_help{""};
 };
 
-// grasp_object helper class implementation
-ManipulationInterface_grasp_object_helper::ManipulationInterface_grasp_object_helper(const std::vector<double>& handPoses) :
-        cmd{handPoses}
+// shut_down helper class declaration
+class CommandInterface_shut_down_helper :
+        public yarp::os::Portable
 {
-}
+public:
+    CommandInterface_shut_down_helper() = default;
+    bool write(yarp::os::ConnectionWriter& connection) const override;
+    bool read(yarp::os::ConnectionReader& connection) override;
 
-bool ManipulationInterface_grasp_object_helper::write(yarp::os::ConnectionWriter& connection) const
+    class Command :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Command() = default;
+        ~Command() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool writeTag(const yarp::os::idl::WireWriter& writer) const;
+        bool writeArgs(const yarp::os::idl::WireWriter& writer) const;
+
+        bool read(yarp::os::idl::WireReader& reader) override;
+        bool readTag(yarp::os::idl::WireReader& reader);
+        bool readArgs(yarp::os::idl::WireReader& reader);
+    };
+
+    class Reply :
+            public yarp::os::idl::WirePortable
+    {
+    public:
+        Reply() = default;
+        ~Reply() override = default;
+
+        bool write(yarp::os::ConnectionWriter& connection) const override;
+        bool read(yarp::os::ConnectionReader& connection) override;
+
+        bool write(const yarp::os::idl::WireWriter& writer) const override;
+        bool read(yarp::os::idl::WireReader& reader) override;
+    };
+
+    using funcptr_t = void (*)();
+    void call(CommandInterface* ptr) const;
+
+    Command cmd;
+    Reply reply;
+
+    static constexpr const char* s_tag{"shut_down"};
+    static constexpr size_t s_tag_len{2};
+    static constexpr size_t s_cmd_len{2};
+    static constexpr size_t s_reply_len{0};
+    static constexpr const char* s_prototype{"void CommandInterface::shut_down()"};
+    static constexpr const char* s_help{""};
+};
+
+// grasp helper class implementation
+bool CommandInterface_grasp_helper::write(yarp::os::ConnectionWriter& connection) const
 {
     return cmd.write(connection);
 }
 
-bool ManipulationInterface_grasp_object_helper::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_grasp_helper::read(yarp::os::ConnectionReader& connection)
 {
     return reply.read(connection);
 }
 
-ManipulationInterface_grasp_object_helper::Command::Command(const std::vector<double>& handPoses) :
-        handPoses{handPoses}
-{
-}
-
-bool ManipulationInterface_grasp_object_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_grasp_helper::Command::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     if (!writer.writeListHeader(s_cmd_len)) {
@@ -599,7 +702,7 @@ bool ManipulationInterface_grasp_object_helper::Command::write(yarp::os::Connect
     return write(writer);
 }
 
-bool ManipulationInterface_grasp_object_helper::Command::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_grasp_helper::Command::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     if (!reader.readListHeader()) {
@@ -609,7 +712,7 @@ bool ManipulationInterface_grasp_object_helper::Command::read(yarp::os::Connecti
     return read(reader);
 }
 
-bool ManipulationInterface_grasp_object_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_grasp_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writeTag(writer)) {
         return false;
@@ -620,7 +723,7 @@ bool ManipulationInterface_grasp_object_helper::Command::write(const yarp::os::i
     return true;
 }
 
-bool ManipulationInterface_grasp_object_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_grasp_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.writeTag(s_tag, 1, s_tag_len)) {
         return false;
@@ -628,21 +731,12 @@ bool ManipulationInterface_grasp_object_helper::Command::writeTag(const yarp::os
     return true;
 }
 
-bool ManipulationInterface_grasp_object_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_grasp_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
 {
-    if (!writer.writeListBegin(BOTTLE_TAG_FLOAT64, handPoses.size())) {
-        return false;
-    }
-    if (!writer.writeBlock(reinterpret_cast<const char*>(handPoses.data()), handPoses.size() * sizeof(double))) {
-        return false;
-    }
-    if (!writer.writeListEnd()) {
-        return false;
-    }
     return true;
 }
 
-bool ManipulationInterface_grasp_object_helper::Command::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_grasp_helper::Command::read(yarp::os::idl::WireReader& reader)
 {
     if (!readTag(reader)) {
         return false;
@@ -653,7 +747,7 @@ bool ManipulationInterface_grasp_object_helper::Command::read(yarp::os::idl::Wir
     return true;
 }
 
-bool ManipulationInterface_grasp_object_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+bool CommandInterface_grasp_helper::Command::readTag(yarp::os::idl::WireReader& reader)
 {
     std::string tag = reader.readTag(s_tag_len);
     if (reader.isError()) {
@@ -666,27 +760,8 @@ bool ManipulationInterface_grasp_object_helper::Command::readTag(yarp::os::idl::
     return true;
 }
 
-bool ManipulationInterface_grasp_object_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+bool CommandInterface_grasp_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
 {
-    if (reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    size_t _csize;
-    yarp::os::idl::WireState _etype;
-    reader.readListBegin(_etype, _csize);
-    // WireReader removes BOTTLE_TAG_LIST from the tag
-    constexpr int expected_tag = ((BOTTLE_TAG_FLOAT64) & (~BOTTLE_TAG_LIST));
-    if constexpr (expected_tag != 0) {
-        if (_csize != 0 && _etype.code != expected_tag) {
-            return false;
-        }
-    }
-    handPoses.resize(_csize);
-    if (_csize != 0 && !reader.readBlock(reinterpret_cast<char*>(handPoses.data()), handPoses.size() * sizeof(double))) {
-        return false;
-    }
-    reader.readListEnd();
     if (!reader.noMore()) {
         reader.fail();
         return false;
@@ -694,19 +769,19 @@ bool ManipulationInterface_grasp_object_helper::Command::readArgs(yarp::os::idl:
     return true;
 }
 
-bool ManipulationInterface_grasp_object_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_grasp_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     return write(writer);
 }
 
-bool ManipulationInterface_grasp_object_helper::Reply::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_grasp_helper::Reply::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     return read(reader);
 }
 
-bool ManipulationInterface_grasp_object_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_grasp_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.isNull()) {
         if (!writer.writeListHeader(s_reply_len)) {
@@ -719,7 +794,7 @@ bool ManipulationInterface_grasp_object_helper::Reply::write(const yarp::os::idl
     return true;
 }
 
-bool ManipulationInterface_grasp_object_helper::Reply::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_grasp_helper::Reply::read(yarp::os::idl::WireReader& reader)
 {
     if (!reader.readListReturn()) {
         return false;
@@ -735,23 +810,23 @@ bool ManipulationInterface_grasp_object_helper::Reply::read(yarp::os::idl::WireR
     return true;
 }
 
-void ManipulationInterface_grasp_object_helper::call(ManipulationInterface* ptr)
+void CommandInterface_grasp_helper::call(CommandInterface* ptr)
 {
-    reply.return_helper = ptr->grasp_object(cmd.handPoses);
+    reply.return_helper = ptr->grasp();
 }
 
 // is_finished helper class implementation
-bool ManipulationInterface_is_finished_helper::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_is_finished_helper::write(yarp::os::ConnectionWriter& connection) const
 {
     return cmd.write(connection);
 }
 
-bool ManipulationInterface_is_finished_helper::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_is_finished_helper::read(yarp::os::ConnectionReader& connection)
 {
     return reply.read(connection);
 }
 
-bool ManipulationInterface_is_finished_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_is_finished_helper::Command::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     if (!writer.writeListHeader(s_cmd_len)) {
@@ -760,7 +835,7 @@ bool ManipulationInterface_is_finished_helper::Command::write(yarp::os::Connecti
     return write(writer);
 }
 
-bool ManipulationInterface_is_finished_helper::Command::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_is_finished_helper::Command::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     if (!reader.readListHeader()) {
@@ -770,7 +845,7 @@ bool ManipulationInterface_is_finished_helper::Command::read(yarp::os::Connectio
     return read(reader);
 }
 
-bool ManipulationInterface_is_finished_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_is_finished_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writeTag(writer)) {
         return false;
@@ -781,7 +856,7 @@ bool ManipulationInterface_is_finished_helper::Command::write(const yarp::os::id
     return true;
 }
 
-bool ManipulationInterface_is_finished_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_is_finished_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.writeTag(s_tag, 1, s_tag_len)) {
         return false;
@@ -789,12 +864,12 @@ bool ManipulationInterface_is_finished_helper::Command::writeTag(const yarp::os:
     return true;
 }
 
-bool ManipulationInterface_is_finished_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
+bool CommandInterface_is_finished_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
 {
     return true;
 }
 
-bool ManipulationInterface_is_finished_helper::Command::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_is_finished_helper::Command::read(yarp::os::idl::WireReader& reader)
 {
     if (!readTag(reader)) {
         return false;
@@ -805,7 +880,7 @@ bool ManipulationInterface_is_finished_helper::Command::read(yarp::os::idl::Wire
     return true;
 }
 
-bool ManipulationInterface_is_finished_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+bool CommandInterface_is_finished_helper::Command::readTag(yarp::os::idl::WireReader& reader)
 {
     std::string tag = reader.readTag(s_tag_len);
     if (reader.isError()) {
@@ -818,7 +893,7 @@ bool ManipulationInterface_is_finished_helper::Command::readTag(yarp::os::idl::W
     return true;
 }
 
-bool ManipulationInterface_is_finished_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+bool CommandInterface_is_finished_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
 {
     if (!reader.noMore()) {
         reader.fail();
@@ -827,19 +902,19 @@ bool ManipulationInterface_is_finished_helper::Command::readArgs(yarp::os::idl::
     return true;
 }
 
-bool ManipulationInterface_is_finished_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_is_finished_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     return write(writer);
 }
 
-bool ManipulationInterface_is_finished_helper::Reply::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_is_finished_helper::Reply::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     return read(reader);
 }
 
-bool ManipulationInterface_is_finished_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_is_finished_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.isNull()) {
         if (!writer.writeListHeader(s_reply_len)) {
@@ -852,7 +927,7 @@ bool ManipulationInterface_is_finished_helper::Reply::write(const yarp::os::idl:
     return true;
 }
 
-bool ManipulationInterface_is_finished_helper::Reply::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_is_finished_helper::Reply::read(yarp::os::idl::WireReader& reader)
 {
     if (!reader.readListReturn()) {
         return false;
@@ -868,399 +943,33 @@ bool ManipulationInterface_is_finished_helper::Reply::read(yarp::os::idl::WireRe
     return true;
 }
 
-void ManipulationInterface_is_finished_helper::call(ManipulationInterface* ptr)
+void CommandInterface_is_finished_helper::call(CommandInterface* ptr)
 {
     reply.return_helper = ptr->is_finished();
 }
 
-// move_object_to_pose helper class implementation
-ManipulationInterface_move_object_to_pose_helper::ManipulationInterface_move_object_to_pose_helper(const std::vector<double>& pose, const double time) :
-        cmd{pose, time}
-{
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::write(yarp::os::ConnectionWriter& connection) const
-{
-    return cmd.write(connection);
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::read(yarp::os::ConnectionReader& connection)
-{
-    return reply.read(connection);
-}
-
-ManipulationInterface_move_object_to_pose_helper::Command::Command(const std::vector<double>& pose, const double time) :
-        pose{pose},
-        time{time}
-{
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Command::write(yarp::os::ConnectionWriter& connection) const
-{
-    yarp::os::idl::WireWriter writer(connection);
-    if (!writer.writeListHeader(s_cmd_len)) {
-        return false;
-    }
-    return write(writer);
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Command::read(yarp::os::ConnectionReader& connection)
-{
-    yarp::os::idl::WireReader reader(connection);
-    if (!reader.readListHeader()) {
-        reader.fail();
-        return false;
-    }
-    return read(reader);
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
-{
-    if (!writeTag(writer)) {
-        return false;
-    }
-    if (!writeArgs(writer)) {
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
-{
-    if (!writer.writeTag(s_tag, 1, s_tag_len)) {
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
-{
-    if (!writer.writeListBegin(BOTTLE_TAG_FLOAT64, pose.size())) {
-        return false;
-    }
-    if (!writer.writeBlock(reinterpret_cast<const char*>(pose.data()), pose.size() * sizeof(double))) {
-        return false;
-    }
-    if (!writer.writeListEnd()) {
-        return false;
-    }
-    if (!writer.writeFloat64(time)) {
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Command::read(yarp::os::idl::WireReader& reader)
-{
-    if (!readTag(reader)) {
-        return false;
-    }
-    if (!readArgs(reader)) {
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Command::readTag(yarp::os::idl::WireReader& reader)
-{
-    std::string tag = reader.readTag(s_tag_len);
-    if (reader.isError()) {
-        return false;
-    }
-    if (tag != s_tag) {
-        reader.fail();
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
-{
-    if (reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    size_t _csize;
-    yarp::os::idl::WireState _etype;
-    reader.readListBegin(_etype, _csize);
-    // WireReader removes BOTTLE_TAG_LIST from the tag
-    constexpr int expected_tag = ((BOTTLE_TAG_FLOAT64) & (~BOTTLE_TAG_LIST));
-    if constexpr (expected_tag != 0) {
-        if (_csize != 0 && _etype.code != expected_tag) {
-            return false;
-        }
-    }
-    pose.resize(_csize);
-    if (_csize != 0 && !reader.readBlock(reinterpret_cast<char*>(pose.data()), pose.size() * sizeof(double))) {
-        return false;
-    }
-    reader.readListEnd();
-    if (reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    if (!reader.readFloat64(time)) {
-        reader.fail();
-        return false;
-    }
-    if (!reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
-{
-    yarp::os::idl::WireWriter writer(connection);
-    return write(writer);
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Reply::read(yarp::os::ConnectionReader& connection)
-{
-    yarp::os::idl::WireReader reader(connection);
-    return read(reader);
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
-{
-    if (!writer.isNull()) {
-        if (!writer.writeListHeader(s_reply_len)) {
-            return false;
-        }
-        if (!writer.writeBool(return_helper)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_object_to_pose_helper::Reply::read(yarp::os::idl::WireReader& reader)
-{
-    if (!reader.readListReturn()) {
-        return false;
-    }
-    if (reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    if (!reader.readBool(return_helper)) {
-        reader.fail();
-        return false;
-    }
-    return true;
-}
-
-void ManipulationInterface_move_object_to_pose_helper::call(ManipulationInterface* ptr)
-{
-    reply.return_helper = ptr->move_object_to_pose(cmd.pose, cmd.time);
-}
-
-// move_hands_to_pose helper class implementation
-ManipulationInterface_move_hands_to_pose_helper::ManipulationInterface_move_hands_to_pose_helper(const std::vector<double>& poses, const double time) :
-        cmd{poses, time}
-{
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::write(yarp::os::ConnectionWriter& connection) const
-{
-    return cmd.write(connection);
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::read(yarp::os::ConnectionReader& connection)
-{
-    return reply.read(connection);
-}
-
-ManipulationInterface_move_hands_to_pose_helper::Command::Command(const std::vector<double>& poses, const double time) :
-        poses{poses},
-        time{time}
-{
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Command::write(yarp::os::ConnectionWriter& connection) const
-{
-    yarp::os::idl::WireWriter writer(connection);
-    if (!writer.writeListHeader(s_cmd_len)) {
-        return false;
-    }
-    return write(writer);
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Command::read(yarp::os::ConnectionReader& connection)
-{
-    yarp::os::idl::WireReader reader(connection);
-    if (!reader.readListHeader()) {
-        reader.fail();
-        return false;
-    }
-    return read(reader);
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
-{
-    if (!writeTag(writer)) {
-        return false;
-    }
-    if (!writeArgs(writer)) {
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
-{
-    if (!writer.writeTag(s_tag, 1, s_tag_len)) {
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
-{
-    if (!writer.writeListBegin(BOTTLE_TAG_FLOAT64, poses.size())) {
-        return false;
-    }
-    if (!writer.writeBlock(reinterpret_cast<const char*>(poses.data()), poses.size() * sizeof(double))) {
-        return false;
-    }
-    if (!writer.writeListEnd()) {
-        return false;
-    }
-    if (!writer.writeFloat64(time)) {
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Command::read(yarp::os::idl::WireReader& reader)
-{
-    if (!readTag(reader)) {
-        return false;
-    }
-    if (!readArgs(reader)) {
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Command::readTag(yarp::os::idl::WireReader& reader)
-{
-    std::string tag = reader.readTag(s_tag_len);
-    if (reader.isError()) {
-        return false;
-    }
-    if (tag != s_tag) {
-        reader.fail();
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
-{
-    if (reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    size_t _csize;
-    yarp::os::idl::WireState _etype;
-    reader.readListBegin(_etype, _csize);
-    // WireReader removes BOTTLE_TAG_LIST from the tag
-    constexpr int expected_tag = ((BOTTLE_TAG_FLOAT64) & (~BOTTLE_TAG_LIST));
-    if constexpr (expected_tag != 0) {
-        if (_csize != 0 && _etype.code != expected_tag) {
-            return false;
-        }
-    }
-    poses.resize(_csize);
-    if (_csize != 0 && !reader.readBlock(reinterpret_cast<char*>(poses.data()), poses.size() * sizeof(double))) {
-        return false;
-    }
-    reader.readListEnd();
-    if (reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    if (!reader.readFloat64(time)) {
-        reader.fail();
-        return false;
-    }
-    if (!reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
-{
-    yarp::os::idl::WireWriter writer(connection);
-    return write(writer);
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Reply::read(yarp::os::ConnectionReader& connection)
-{
-    yarp::os::idl::WireReader reader(connection);
-    return read(reader);
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
-{
-    if (!writer.isNull()) {
-        if (!writer.writeListHeader(s_reply_len)) {
-            return false;
-        }
-        if (!writer.writeBool(return_helper)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-bool ManipulationInterface_move_hands_to_pose_helper::Reply::read(yarp::os::idl::WireReader& reader)
-{
-    if (!reader.readListReturn()) {
-        return false;
-    }
-    if (reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    if (!reader.readBool(return_helper)) {
-        reader.fail();
-        return false;
-    }
-    return true;
-}
-
-void ManipulationInterface_move_hands_to_pose_helper::call(ManipulationInterface* ptr)
-{
-    reply.return_helper = ptr->move_hands_to_pose(cmd.poses, cmd.time);
-}
-
-// move_hands_by_action helper class implementation
-ManipulationInterface_move_hands_by_action_helper::ManipulationInterface_move_hands_by_action_helper(const std::string& actionName) :
+// perform_cartesian_action helper class implementation
+CommandInterface_perform_cartesian_action_helper::CommandInterface_perform_cartesian_action_helper(const std::string& actionName) :
         cmd{actionName}
 {
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_perform_cartesian_action_helper::write(yarp::os::ConnectionWriter& connection) const
 {
     return cmd.write(connection);
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_perform_cartesian_action_helper::read(yarp::os::ConnectionReader& connection)
 {
     return reply.read(connection);
 }
 
-ManipulationInterface_move_hands_by_action_helper::Command::Command(const std::string& actionName) :
+CommandInterface_perform_cartesian_action_helper::Command::Command(const std::string& actionName) :
         actionName{actionName}
 {
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_perform_cartesian_action_helper::Command::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     if (!writer.writeListHeader(s_cmd_len)) {
@@ -1269,7 +978,7 @@ bool ManipulationInterface_move_hands_by_action_helper::Command::write(yarp::os:
     return write(writer);
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Command::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_perform_cartesian_action_helper::Command::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     if (!reader.readListHeader()) {
@@ -1279,7 +988,7 @@ bool ManipulationInterface_move_hands_by_action_helper::Command::read(yarp::os::
     return read(reader);
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_perform_cartesian_action_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writeTag(writer)) {
         return false;
@@ -1290,7 +999,7 @@ bool ManipulationInterface_move_hands_by_action_helper::Command::write(const yar
     return true;
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_perform_cartesian_action_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.writeTag(s_tag, 1, s_tag_len)) {
         return false;
@@ -1298,7 +1007,7 @@ bool ManipulationInterface_move_hands_by_action_helper::Command::writeTag(const 
     return true;
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_perform_cartesian_action_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.writeString(actionName)) {
         return false;
@@ -1306,7 +1015,7 @@ bool ManipulationInterface_move_hands_by_action_helper::Command::writeArgs(const
     return true;
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Command::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_perform_cartesian_action_helper::Command::read(yarp::os::idl::WireReader& reader)
 {
     if (!readTag(reader)) {
         return false;
@@ -1317,7 +1026,7 @@ bool ManipulationInterface_move_hands_by_action_helper::Command::read(yarp::os::
     return true;
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+bool CommandInterface_perform_cartesian_action_helper::Command::readTag(yarp::os::idl::WireReader& reader)
 {
     std::string tag = reader.readTag(s_tag_len);
     if (reader.isError()) {
@@ -1330,7 +1039,7 @@ bool ManipulationInterface_move_hands_by_action_helper::Command::readTag(yarp::o
     return true;
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+bool CommandInterface_perform_cartesian_action_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
 {
     if (reader.noMore()) {
         reader.fail();
@@ -1347,19 +1056,19 @@ bool ManipulationInterface_move_hands_by_action_helper::Command::readArgs(yarp::
     return true;
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_perform_cartesian_action_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     return write(writer);
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Reply::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_perform_cartesian_action_helper::Reply::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     return read(reader);
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_perform_cartesian_action_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.isNull()) {
         if (!writer.writeListHeader(s_reply_len)) {
@@ -1372,7 +1081,7 @@ bool ManipulationInterface_move_hands_by_action_helper::Reply::write(const yarp:
     return true;
 }
 
-bool ManipulationInterface_move_hands_by_action_helper::Reply::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_perform_cartesian_action_helper::Reply::read(yarp::os::idl::WireReader& reader)
 {
     if (!reader.readListReturn()) {
         return false;
@@ -1388,34 +1097,33 @@ bool ManipulationInterface_move_hands_by_action_helper::Reply::read(yarp::os::id
     return true;
 }
 
-void ManipulationInterface_move_hands_by_action_helper::call(ManipulationInterface* ptr)
+void CommandInterface_perform_cartesian_action_helper::call(CommandInterface* ptr)
 {
-    reply.return_helper = ptr->move_hands_by_action(cmd.actionName);
+    reply.return_helper = ptr->perform_cartesian_action(cmd.actionName);
 }
 
-// move_to_configuration helper class implementation
-ManipulationInterface_move_to_configuration_helper::ManipulationInterface_move_to_configuration_helper(const std::vector<double>& jointConfiguration, const double time) :
-        cmd{jointConfiguration, time}
+// perform_grasp_action helper class implementation
+CommandInterface_perform_grasp_action_helper::CommandInterface_perform_grasp_action_helper(const std::string& actionName) :
+        cmd{actionName}
 {
 }
 
-bool ManipulationInterface_move_to_configuration_helper::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_perform_grasp_action_helper::write(yarp::os::ConnectionWriter& connection) const
 {
     return cmd.write(connection);
 }
 
-bool ManipulationInterface_move_to_configuration_helper::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_perform_grasp_action_helper::read(yarp::os::ConnectionReader& connection)
 {
     return reply.read(connection);
 }
 
-ManipulationInterface_move_to_configuration_helper::Command::Command(const std::vector<double>& jointConfiguration, const double time) :
-        jointConfiguration{jointConfiguration},
-        time{time}
+CommandInterface_perform_grasp_action_helper::Command::Command(const std::string& actionName) :
+        actionName{actionName}
 {
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_perform_grasp_action_helper::Command::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     if (!writer.writeListHeader(s_cmd_len)) {
@@ -1424,7 +1132,7 @@ bool ManipulationInterface_move_to_configuration_helper::Command::write(yarp::os
     return write(writer);
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Command::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_perform_grasp_action_helper::Command::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     if (!reader.readListHeader()) {
@@ -1434,7 +1142,7 @@ bool ManipulationInterface_move_to_configuration_helper::Command::read(yarp::os:
     return read(reader);
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_perform_grasp_action_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writeTag(writer)) {
         return false;
@@ -1445,7 +1153,7 @@ bool ManipulationInterface_move_to_configuration_helper::Command::write(const ya
     return true;
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_perform_grasp_action_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.writeTag(s_tag, 1, s_tag_len)) {
         return false;
@@ -1453,24 +1161,15 @@ bool ManipulationInterface_move_to_configuration_helper::Command::writeTag(const
     return true;
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_perform_grasp_action_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
 {
-    if (!writer.writeListBegin(BOTTLE_TAG_FLOAT64, jointConfiguration.size())) {
-        return false;
-    }
-    if (!writer.writeBlock(reinterpret_cast<const char*>(jointConfiguration.data()), jointConfiguration.size() * sizeof(double))) {
-        return false;
-    }
-    if (!writer.writeListEnd()) {
-        return false;
-    }
-    if (!writer.writeFloat64(time)) {
+    if (!writer.writeString(actionName)) {
         return false;
     }
     return true;
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Command::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_perform_grasp_action_helper::Command::read(yarp::os::idl::WireReader& reader)
 {
     if (!readTag(reader)) {
         return false;
@@ -1481,7 +1180,7 @@ bool ManipulationInterface_move_to_configuration_helper::Command::read(yarp::os:
     return true;
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+bool CommandInterface_perform_grasp_action_helper::Command::readTag(yarp::os::idl::WireReader& reader)
 {
     std::string tag = reader.readTag(s_tag_len);
     if (reader.isError()) {
@@ -1494,7 +1193,503 @@ bool ManipulationInterface_move_to_configuration_helper::Command::readTag(yarp::
     return true;
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+bool CommandInterface_perform_grasp_action_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+{
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readString(actionName)) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_perform_grasp_action_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    return write(writer);
+}
+
+bool CommandInterface_perform_grasp_action_helper::Reply::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    return read(reader);
+}
+
+bool CommandInterface_perform_grasp_action_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.isNull()) {
+        if (!writer.writeListHeader(s_reply_len)) {
+            return false;
+        }
+        if (!writer.writeBool(return_helper)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool CommandInterface_perform_grasp_action_helper::Reply::read(yarp::os::idl::WireReader& reader)
+{
+    if (!reader.readListReturn()) {
+        return false;
+    }
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readBool(return_helper)) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+void CommandInterface_perform_grasp_action_helper::call(CommandInterface* ptr)
+{
+    reply.return_helper = ptr->perform_grasp_action(cmd.actionName);
+}
+
+// perform_joint_space_action helper class implementation
+CommandInterface_perform_joint_space_action_helper::CommandInterface_perform_joint_space_action_helper(const std::string& actionName) :
+        cmd{actionName}
+{
+}
+
+bool CommandInterface_perform_joint_space_action_helper::write(yarp::os::ConnectionWriter& connection) const
+{
+    return cmd.write(connection);
+}
+
+bool CommandInterface_perform_joint_space_action_helper::read(yarp::os::ConnectionReader& connection)
+{
+    return reply.read(connection);
+}
+
+CommandInterface_perform_joint_space_action_helper::Command::Command(const std::string& actionName) :
+        actionName{actionName}
+{
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    if (!writer.writeListHeader(s_cmd_len)) {
+        return false;
+    }
+    return write(writer);
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Command::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    if (!reader.readListHeader()) {
+        reader.fail();
+        return false;
+    }
+    return read(reader);
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writeTag(writer)) {
+        return false;
+    }
+    if (!writeArgs(writer)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.writeTag(s_tag, 1, s_tag_len)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.writeString(actionName)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Command::read(yarp::os::idl::WireReader& reader)
+{
+    if (!readTag(reader)) {
+        return false;
+    }
+    if (!readArgs(reader)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+{
+    std::string tag = reader.readTag(s_tag_len);
+    if (reader.isError()) {
+        return false;
+    }
+    if (tag != s_tag) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+{
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readString(actionName)) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    return write(writer);
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Reply::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    return read(reader);
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.isNull()) {
+        if (!writer.writeListHeader(s_reply_len)) {
+            return false;
+        }
+        if (!writer.writeBool(return_helper)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool CommandInterface_perform_joint_space_action_helper::Reply::read(yarp::os::idl::WireReader& reader)
+{
+    if (!reader.readListReturn()) {
+        return false;
+    }
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readBool(return_helper)) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+void CommandInterface_perform_joint_space_action_helper::call(CommandInterface* ptr)
+{
+    reply.return_helper = ptr->perform_joint_space_action(cmd.actionName);
+}
+
+// move_hands_to_pose helper class implementation
+CommandInterface_move_hands_to_pose_helper::CommandInterface_move_hands_to_pose_helper(const yarp::sig::Matrix& leftPose, const yarp::sig::Matrix& rightPose, const double time) :
+        cmd{leftPose, rightPose, time}
+{
+}
+
+bool CommandInterface_move_hands_to_pose_helper::write(yarp::os::ConnectionWriter& connection) const
+{
+    return cmd.write(connection);
+}
+
+bool CommandInterface_move_hands_to_pose_helper::read(yarp::os::ConnectionReader& connection)
+{
+    return reply.read(connection);
+}
+
+CommandInterface_move_hands_to_pose_helper::Command::Command(const yarp::sig::Matrix& leftPose, const yarp::sig::Matrix& rightPose, const double time) :
+        leftPose{leftPose},
+        rightPose{rightPose},
+        time{time}
+{
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    if (!writer.writeListHeader(s_cmd_len)) {
+        return false;
+    }
+    return write(writer);
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Command::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    if (!reader.readListHeader()) {
+        reader.fail();
+        return false;
+    }
+    return read(reader);
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writeTag(writer)) {
+        return false;
+    }
+    if (!writeArgs(writer)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.writeTag(s_tag, 1, s_tag_len)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.writeNested(leftPose)) {
+        return false;
+    }
+    if (!writer.writeNested(rightPose)) {
+        return false;
+    }
+    if (!writer.writeFloat64(time)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Command::read(yarp::os::idl::WireReader& reader)
+{
+    if (!readTag(reader)) {
+        return false;
+    }
+    if (!readArgs(reader)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+{
+    std::string tag = reader.readTag(s_tag_len);
+    if (reader.isError()) {
+        return false;
+    }
+    if (tag != s_tag) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+{
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readNested(leftPose)) {
+        reader.fail();
+        return false;
+    }
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readNested(rightPose)) {
+        reader.fail();
+        return false;
+    }
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readFloat64(time)) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    return write(writer);
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Reply::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    return read(reader);
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.isNull()) {
+        if (!writer.writeListHeader(s_reply_len)) {
+            return false;
+        }
+        if (!writer.writeBool(return_helper)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool CommandInterface_move_hands_to_pose_helper::Reply::read(yarp::os::idl::WireReader& reader)
+{
+    if (!reader.readListReturn()) {
+        return false;
+    }
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readBool(return_helper)) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+void CommandInterface_move_hands_to_pose_helper::call(CommandInterface* ptr)
+{
+    reply.return_helper = ptr->move_hands_to_pose(cmd.leftPose, cmd.rightPose, cmd.time);
+}
+
+// move_joints_to_position helper class implementation
+CommandInterface_move_joints_to_position_helper::CommandInterface_move_joints_to_position_helper(const std::vector<double>& position, const double time) :
+        cmd{position, time}
+{
+}
+
+bool CommandInterface_move_joints_to_position_helper::write(yarp::os::ConnectionWriter& connection) const
+{
+    return cmd.write(connection);
+}
+
+bool CommandInterface_move_joints_to_position_helper::read(yarp::os::ConnectionReader& connection)
+{
+    return reply.read(connection);
+}
+
+CommandInterface_move_joints_to_position_helper::Command::Command(const std::vector<double>& position, const double time) :
+        position{position},
+        time{time}
+{
+}
+
+bool CommandInterface_move_joints_to_position_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    if (!writer.writeListHeader(s_cmd_len)) {
+        return false;
+    }
+    return write(writer);
+}
+
+bool CommandInterface_move_joints_to_position_helper::Command::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    if (!reader.readListHeader()) {
+        reader.fail();
+        return false;
+    }
+    return read(reader);
+}
+
+bool CommandInterface_move_joints_to_position_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writeTag(writer)) {
+        return false;
+    }
+    if (!writeArgs(writer)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_joints_to_position_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.writeTag(s_tag, 1, s_tag_len)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_joints_to_position_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.writeListBegin(BOTTLE_TAG_FLOAT64, position.size())) {
+        return false;
+    }
+    if (!writer.writeBlock(reinterpret_cast<const char*>(position.data()), position.size() * sizeof(double))) {
+        return false;
+    }
+    if (!writer.writeListEnd()) {
+        return false;
+    }
+    if (!writer.writeFloat64(time)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_joints_to_position_helper::Command::read(yarp::os::idl::WireReader& reader)
+{
+    if (!readTag(reader)) {
+        return false;
+    }
+    if (!readArgs(reader)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_joints_to_position_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+{
+    std::string tag = reader.readTag(s_tag_len);
+    if (reader.isError()) {
+        return false;
+    }
+    if (tag != s_tag) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_move_joints_to_position_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
 {
     if (reader.noMore()) {
         reader.fail();
@@ -1510,8 +1705,8 @@ bool ManipulationInterface_move_to_configuration_helper::Command::readArgs(yarp:
             return false;
         }
     }
-    jointConfiguration.resize(_csize);
-    if (_csize != 0 && !reader.readBlock(reinterpret_cast<char*>(jointConfiguration.data()), jointConfiguration.size() * sizeof(double))) {
+    position.resize(_csize);
+    if (_csize != 0 && !reader.readBlock(reinterpret_cast<char*>(position.data()), position.size() * sizeof(double))) {
         return false;
     }
     reader.readListEnd();
@@ -1530,19 +1725,19 @@ bool ManipulationInterface_move_to_configuration_helper::Command::readArgs(yarp:
     return true;
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_move_joints_to_position_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     return write(writer);
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Reply::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_move_joints_to_position_helper::Reply::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     return read(reader);
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_move_joints_to_position_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.isNull()) {
         if (!writer.writeListHeader(s_reply_len)) {
@@ -1555,7 +1750,7 @@ bool ManipulationInterface_move_to_configuration_helper::Reply::write(const yarp
     return true;
 }
 
-bool ManipulationInterface_move_to_configuration_helper::Reply::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_move_joints_to_position_helper::Reply::read(yarp::os::idl::WireReader& reader)
 {
     if (!reader.readListReturn()) {
         return false;
@@ -1571,33 +1766,34 @@ bool ManipulationInterface_move_to_configuration_helper::Reply::read(yarp::os::i
     return true;
 }
 
-void ManipulationInterface_move_to_configuration_helper::call(ManipulationInterface* ptr)
+void CommandInterface_move_joints_to_position_helper::call(CommandInterface* ptr)
 {
-    reply.return_helper = ptr->move_to_configuration(cmd.jointConfiguration, cmd.time);
+    reply.return_helper = ptr->move_joints_to_position(cmd.position, cmd.time);
 }
 
-// move_to_named_configuration helper class implementation
-ManipulationInterface_move_to_named_configuration_helper::ManipulationInterface_move_to_named_configuration_helper(const std::string& configName) :
-        cmd{configName}
+// move_object_to_pose helper class implementation
+CommandInterface_move_object_to_pose_helper::CommandInterface_move_object_to_pose_helper(const yarp::sig::Matrix& pose, const double time) :
+        cmd{pose, time}
 {
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_move_object_to_pose_helper::write(yarp::os::ConnectionWriter& connection) const
 {
     return cmd.write(connection);
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_move_object_to_pose_helper::read(yarp::os::ConnectionReader& connection)
 {
     return reply.read(connection);
 }
 
-ManipulationInterface_move_to_named_configuration_helper::Command::Command(const std::string& configName) :
-        configName{configName}
+CommandInterface_move_object_to_pose_helper::Command::Command(const yarp::sig::Matrix& pose, const double time) :
+        pose{pose},
+        time{time}
 {
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_move_object_to_pose_helper::Command::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     if (!writer.writeListHeader(s_cmd_len)) {
@@ -1606,7 +1802,7 @@ bool ManipulationInterface_move_to_named_configuration_helper::Command::write(ya
     return write(writer);
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Command::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_move_object_to_pose_helper::Command::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     if (!reader.readListHeader()) {
@@ -1616,7 +1812,7 @@ bool ManipulationInterface_move_to_named_configuration_helper::Command::read(yar
     return read(reader);
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_move_object_to_pose_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writeTag(writer)) {
         return false;
@@ -1627,7 +1823,7 @@ bool ManipulationInterface_move_to_named_configuration_helper::Command::write(co
     return true;
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_move_object_to_pose_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.writeTag(s_tag, 1, s_tag_len)) {
         return false;
@@ -1635,15 +1831,18 @@ bool ManipulationInterface_move_to_named_configuration_helper::Command::writeTag
     return true;
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_move_object_to_pose_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer) const
 {
-    if (!writer.writeString(configName)) {
+    if (!writer.writeNested(pose)) {
+        return false;
+    }
+    if (!writer.writeFloat64(time)) {
         return false;
     }
     return true;
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Command::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_move_object_to_pose_helper::Command::read(yarp::os::idl::WireReader& reader)
 {
     if (!readTag(reader)) {
         return false;
@@ -1654,7 +1853,7 @@ bool ManipulationInterface_move_to_named_configuration_helper::Command::read(yar
     return true;
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+bool CommandInterface_move_object_to_pose_helper::Command::readTag(yarp::os::idl::WireReader& reader)
 {
     std::string tag = reader.readTag(s_tag_len);
     if (reader.isError()) {
@@ -1667,13 +1866,21 @@ bool ManipulationInterface_move_to_named_configuration_helper::Command::readTag(
     return true;
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+bool CommandInterface_move_object_to_pose_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
 {
     if (reader.noMore()) {
         reader.fail();
         return false;
     }
-    if (!reader.readString(configName)) {
+    if (!reader.readNested(pose)) {
+        reader.fail();
+        return false;
+    }
+    if (reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    if (!reader.readFloat64(time)) {
         reader.fail();
         return false;
     }
@@ -1684,19 +1891,19 @@ bool ManipulationInterface_move_to_named_configuration_helper::Command::readArgs
     return true;
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_move_object_to_pose_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     return write(writer);
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Reply::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_move_object_to_pose_helper::Reply::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     return read(reader);
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_move_object_to_pose_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.isNull()) {
         if (!writer.writeListHeader(s_reply_len)) {
@@ -1709,7 +1916,7 @@ bool ManipulationInterface_move_to_named_configuration_helper::Reply::write(cons
     return true;
 }
 
-bool ManipulationInterface_move_to_named_configuration_helper::Reply::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_move_object_to_pose_helper::Reply::read(yarp::os::idl::WireReader& reader)
 {
     if (!reader.readListReturn()) {
         return false;
@@ -1725,23 +1932,23 @@ bool ManipulationInterface_move_to_named_configuration_helper::Reply::read(yarp:
     return true;
 }
 
-void ManipulationInterface_move_to_named_configuration_helper::call(ManipulationInterface* ptr)
+void CommandInterface_move_object_to_pose_helper::call(CommandInterface* ptr)
 {
-    reply.return_helper = ptr->move_to_named_configuration(cmd.configName);
+    reply.return_helper = ptr->move_object_to_pose(cmd.pose, cmd.time);
 }
 
 // release_object helper class implementation
-bool ManipulationInterface_release_object_helper::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_release_object_helper::write(yarp::os::ConnectionWriter& connection) const
 {
     return cmd.write(connection);
 }
 
-bool ManipulationInterface_release_object_helper::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_release_object_helper::read(yarp::os::ConnectionReader& connection)
 {
     return reply.read(connection);
 }
 
-bool ManipulationInterface_release_object_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_release_object_helper::Command::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     if (!writer.writeListHeader(s_cmd_len)) {
@@ -1750,7 +1957,7 @@ bool ManipulationInterface_release_object_helper::Command::write(yarp::os::Conne
     return write(writer);
 }
 
-bool ManipulationInterface_release_object_helper::Command::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_release_object_helper::Command::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     if (!reader.readListHeader()) {
@@ -1760,7 +1967,7 @@ bool ManipulationInterface_release_object_helper::Command::read(yarp::os::Connec
     return read(reader);
 }
 
-bool ManipulationInterface_release_object_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_release_object_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writeTag(writer)) {
         return false;
@@ -1771,7 +1978,7 @@ bool ManipulationInterface_release_object_helper::Command::write(const yarp::os:
     return true;
 }
 
-bool ManipulationInterface_release_object_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_release_object_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.writeTag(s_tag, 1, s_tag_len)) {
         return false;
@@ -1779,12 +1986,12 @@ bool ManipulationInterface_release_object_helper::Command::writeTag(const yarp::
     return true;
 }
 
-bool ManipulationInterface_release_object_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
+bool CommandInterface_release_object_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
 {
     return true;
 }
 
-bool ManipulationInterface_release_object_helper::Command::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_release_object_helper::Command::read(yarp::os::idl::WireReader& reader)
 {
     if (!readTag(reader)) {
         return false;
@@ -1795,7 +2002,7 @@ bool ManipulationInterface_release_object_helper::Command::read(yarp::os::idl::W
     return true;
 }
 
-bool ManipulationInterface_release_object_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+bool CommandInterface_release_object_helper::Command::readTag(yarp::os::idl::WireReader& reader)
 {
     std::string tag = reader.readTag(s_tag_len);
     if (reader.isError()) {
@@ -1808,7 +2015,7 @@ bool ManipulationInterface_release_object_helper::Command::readTag(yarp::os::idl
     return true;
 }
 
-bool ManipulationInterface_release_object_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+bool CommandInterface_release_object_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
 {
     if (!reader.noMore()) {
         reader.fail();
@@ -1817,19 +2024,19 @@ bool ManipulationInterface_release_object_helper::Command::readArgs(yarp::os::id
     return true;
 }
 
-bool ManipulationInterface_release_object_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_release_object_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     return write(writer);
 }
 
-bool ManipulationInterface_release_object_helper::Reply::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_release_object_helper::Reply::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     return read(reader);
 }
 
-bool ManipulationInterface_release_object_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_release_object_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.isNull()) {
         if (!writer.writeListHeader(s_reply_len)) {
@@ -1842,7 +2049,7 @@ bool ManipulationInterface_release_object_helper::Reply::write(const yarp::os::i
     return true;
 }
 
-bool ManipulationInterface_release_object_helper::Reply::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_release_object_helper::Reply::read(yarp::os::idl::WireReader& reader)
 {
     if (!reader.readListReturn()) {
         return false;
@@ -1858,23 +2065,23 @@ bool ManipulationInterface_release_object_helper::Reply::read(yarp::os::idl::Wir
     return true;
 }
 
-void ManipulationInterface_release_object_helper::call(ManipulationInterface* ptr)
+void CommandInterface_release_object_helper::call(CommandInterface* ptr)
 {
     reply.return_helper = ptr->release_object();
 }
 
 // stop helper class implementation
-bool ManipulationInterface_stop_helper::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_stop_helper::write(yarp::os::ConnectionWriter& connection) const
 {
     return cmd.write(connection);
 }
 
-bool ManipulationInterface_stop_helper::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_stop_helper::read(yarp::os::ConnectionReader& connection)
 {
     return reply.read(connection);
 }
 
-bool ManipulationInterface_stop_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_stop_helper::Command::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     if (!writer.writeListHeader(s_cmd_len)) {
@@ -1883,7 +2090,7 @@ bool ManipulationInterface_stop_helper::Command::write(yarp::os::ConnectionWrite
     return write(writer);
 }
 
-bool ManipulationInterface_stop_helper::Command::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_stop_helper::Command::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     if (!reader.readListHeader()) {
@@ -1893,7 +2100,7 @@ bool ManipulationInterface_stop_helper::Command::read(yarp::os::ConnectionReader
     return read(reader);
 }
 
-bool ManipulationInterface_stop_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_stop_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writeTag(writer)) {
         return false;
@@ -1904,7 +2111,7 @@ bool ManipulationInterface_stop_helper::Command::write(const yarp::os::idl::Wire
     return true;
 }
 
-bool ManipulationInterface_stop_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_stop_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.writeTag(s_tag, 1, s_tag_len)) {
         return false;
@@ -1912,12 +2119,12 @@ bool ManipulationInterface_stop_helper::Command::writeTag(const yarp::os::idl::W
     return true;
 }
 
-bool ManipulationInterface_stop_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
+bool CommandInterface_stop_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
 {
     return true;
 }
 
-bool ManipulationInterface_stop_helper::Command::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_stop_helper::Command::read(yarp::os::idl::WireReader& reader)
 {
     if (!readTag(reader)) {
         return false;
@@ -1928,7 +2135,7 @@ bool ManipulationInterface_stop_helper::Command::read(yarp::os::idl::WireReader&
     return true;
 }
 
-bool ManipulationInterface_stop_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+bool CommandInterface_stop_helper::Command::readTag(yarp::os::idl::WireReader& reader)
 {
     std::string tag = reader.readTag(s_tag_len);
     if (reader.isError()) {
@@ -1941,7 +2148,7 @@ bool ManipulationInterface_stop_helper::Command::readTag(yarp::os::idl::WireRead
     return true;
 }
 
-bool ManipulationInterface_stop_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+bool CommandInterface_stop_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
 {
     if (!reader.noMore()) {
         reader.fail();
@@ -1950,192 +2157,329 @@ bool ManipulationInterface_stop_helper::Command::readArgs(yarp::os::idl::WireRea
     return true;
 }
 
-bool ManipulationInterface_stop_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+bool CommandInterface_stop_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
 {
     yarp::os::idl::WireWriter writer(connection);
     return write(writer);
 }
 
-bool ManipulationInterface_stop_helper::Reply::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface_stop_helper::Reply::read(yarp::os::ConnectionReader& connection)
 {
     yarp::os::idl::WireReader reader(connection);
     return read(reader);
 }
 
-bool ManipulationInterface_stop_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+bool CommandInterface_stop_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
 {
     if (!writer.isNull()) {
         if (!writer.writeListHeader(s_reply_len)) {
             return false;
         }
-        if (!writer.writeBool(return_helper)) {
+    }
+    return true;
+}
+
+bool CommandInterface_stop_helper::Reply::read(yarp::os::idl::WireReader& reader)
+{
+    if (!reader.readListReturn()) {
+        return false;
+    }
+    return true;
+}
+
+void CommandInterface_stop_helper::call(CommandInterface* ptr) const
+{
+    ptr->stop();
+}
+
+// shut_down helper class implementation
+bool CommandInterface_shut_down_helper::write(yarp::os::ConnectionWriter& connection) const
+{
+    return cmd.write(connection);
+}
+
+bool CommandInterface_shut_down_helper::read(yarp::os::ConnectionReader& connection)
+{
+    return reply.read(connection);
+}
+
+bool CommandInterface_shut_down_helper::Command::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    if (!writer.writeListHeader(s_cmd_len)) {
+        return false;
+    }
+    return write(writer);
+}
+
+bool CommandInterface_shut_down_helper::Command::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    if (!reader.readListHeader()) {
+        reader.fail();
+        return false;
+    }
+    return read(reader);
+}
+
+bool CommandInterface_shut_down_helper::Command::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writeTag(writer)) {
+        return false;
+    }
+    if (!writeArgs(writer)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_shut_down_helper::Command::writeTag(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.writeTag(s_tag, 1, s_tag_len)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_shut_down_helper::Command::writeArgs(const yarp::os::idl::WireWriter& writer [[maybe_unused]]) const
+{
+    return true;
+}
+
+bool CommandInterface_shut_down_helper::Command::read(yarp::os::idl::WireReader& reader)
+{
+    if (!readTag(reader)) {
+        return false;
+    }
+    if (!readArgs(reader)) {
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_shut_down_helper::Command::readTag(yarp::os::idl::WireReader& reader)
+{
+    std::string tag = reader.readTag(s_tag_len);
+    if (reader.isError()) {
+        return false;
+    }
+    if (tag != s_tag) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_shut_down_helper::Command::readArgs(yarp::os::idl::WireReader& reader)
+{
+    if (!reader.noMore()) {
+        reader.fail();
+        return false;
+    }
+    return true;
+}
+
+bool CommandInterface_shut_down_helper::Reply::write(yarp::os::ConnectionWriter& connection) const
+{
+    yarp::os::idl::WireWriter writer(connection);
+    return write(writer);
+}
+
+bool CommandInterface_shut_down_helper::Reply::read(yarp::os::ConnectionReader& connection)
+{
+    yarp::os::idl::WireReader reader(connection);
+    return read(reader);
+}
+
+bool CommandInterface_shut_down_helper::Reply::write(const yarp::os::idl::WireWriter& writer) const
+{
+    if (!writer.isNull()) {
+        if (!writer.writeListHeader(s_reply_len)) {
             return false;
         }
     }
     return true;
 }
 
-bool ManipulationInterface_stop_helper::Reply::read(yarp::os::idl::WireReader& reader)
+bool CommandInterface_shut_down_helper::Reply::read(yarp::os::idl::WireReader& reader)
 {
     if (!reader.readListReturn()) {
-        return false;
-    }
-    if (reader.noMore()) {
-        reader.fail();
-        return false;
-    }
-    if (!reader.readBool(return_helper)) {
-        reader.fail();
         return false;
     }
     return true;
 }
 
-void ManipulationInterface_stop_helper::call(ManipulationInterface* ptr)
+void CommandInterface_shut_down_helper::call(CommandInterface* ptr) const
 {
-    reply.return_helper = ptr->stop();
+    ptr->shut_down();
 }
 
 // Constructor
-ManipulationInterface::ManipulationInterface()
+CommandInterface::CommandInterface()
 {
     yarp().setOwner(*this);
 }
 
-bool ManipulationInterface::grasp_object(const std::vector<double>& handPoses)
+bool CommandInterface::grasp()
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_grasp_object_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_grasp_helper::s_prototype);
     }
-    ManipulationInterface_grasp_object_helper helper{handPoses};
+    CommandInterface_grasp_helper helper{};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
 }
 
-bool ManipulationInterface::is_finished()
+bool CommandInterface::is_finished()
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_is_finished_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_is_finished_helper::s_prototype);
     }
-    ManipulationInterface_is_finished_helper helper{};
+    CommandInterface_is_finished_helper helper{};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
 }
 
-bool ManipulationInterface::move_object_to_pose(const std::vector<double>& pose, const double time)
+bool CommandInterface::perform_cartesian_action(const std::string& actionName)
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_move_object_to_pose_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_perform_cartesian_action_helper::s_prototype);
     }
-    ManipulationInterface_move_object_to_pose_helper helper{pose, time};
+    CommandInterface_perform_cartesian_action_helper helper{actionName};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
 }
 
-bool ManipulationInterface::move_hands_to_pose(const std::vector<double>& poses, const double time)
+bool CommandInterface::perform_grasp_action(const std::string& actionName)
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_move_hands_to_pose_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_perform_grasp_action_helper::s_prototype);
     }
-    ManipulationInterface_move_hands_to_pose_helper helper{poses, time};
+    CommandInterface_perform_grasp_action_helper helper{actionName};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
 }
 
-bool ManipulationInterface::move_hands_by_action(const std::string& actionName)
+bool CommandInterface::perform_joint_space_action(const std::string& actionName)
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_move_hands_by_action_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_perform_joint_space_action_helper::s_prototype);
     }
-    ManipulationInterface_move_hands_by_action_helper helper{actionName};
+    CommandInterface_perform_joint_space_action_helper helper{actionName};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
 }
 
-bool ManipulationInterface::move_to_configuration(const std::vector<double>& jointConfiguration, const double time)
+bool CommandInterface::move_hands_to_pose(const yarp::sig::Matrix& leftPose, const yarp::sig::Matrix& rightPose, const double time)
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_move_to_configuration_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_move_hands_to_pose_helper::s_prototype);
     }
-    ManipulationInterface_move_to_configuration_helper helper{jointConfiguration, time};
+    CommandInterface_move_hands_to_pose_helper helper{leftPose, rightPose, time};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
 }
 
-bool ManipulationInterface::move_to_named_configuration(const std::string& configName)
+bool CommandInterface::move_joints_to_position(const std::vector<double>& position, const double time)
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_move_to_named_configuration_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_move_joints_to_position_helper::s_prototype);
     }
-    ManipulationInterface_move_to_named_configuration_helper helper{configName};
+    CommandInterface_move_joints_to_position_helper helper{position, time};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
 }
 
-bool ManipulationInterface::release_object()
+bool CommandInterface::move_object_to_pose(const yarp::sig::Matrix& pose, const double time)
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_release_object_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_move_object_to_pose_helper::s_prototype);
     }
-    ManipulationInterface_release_object_helper helper{};
+    CommandInterface_move_object_to_pose_helper helper{pose, time};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
 }
 
-bool ManipulationInterface::stop()
+bool CommandInterface::release_object()
 {
     if (!yarp().canWrite()) {
-        yError("Missing server method '%s'?", ManipulationInterface_stop_helper::s_prototype);
+        yError("Missing server method '%s'?", CommandInterface_release_object_helper::s_prototype);
     }
-    ManipulationInterface_stop_helper helper{};
+    CommandInterface_release_object_helper helper{};
     bool ok = yarp().write(helper, helper);
     return ok ? helper.reply.return_helper : bool{};
+}
+
+void CommandInterface::stop()
+{
+    if (!yarp().canWrite()) {
+        yError("Missing server method '%s'?", CommandInterface_stop_helper::s_prototype);
+    }
+    CommandInterface_stop_helper helper{};
+    yarp().write(helper, helper);
+}
+
+void CommandInterface::shut_down()
+{
+    if (!yarp().canWrite()) {
+        yError("Missing server method '%s'?", CommandInterface_shut_down_helper::s_prototype);
+    }
+    CommandInterface_shut_down_helper helper{};
+    yarp().write(helper, helper);
 }
 
 // help method
-std::vector<std::string> ManipulationInterface::help(const std::string& functionName)
+std::vector<std::string> CommandInterface::help(const std::string& functionName)
 {
     bool showAll = (functionName == "--all");
     std::vector<std::string> helpString;
     if (showAll) {
         helpString.emplace_back("*** Available commands:");
-        helpString.emplace_back(ManipulationInterface_grasp_object_helper::s_tag);
-        helpString.emplace_back(ManipulationInterface_is_finished_helper::s_tag);
-        helpString.emplace_back(ManipulationInterface_move_object_to_pose_helper::s_tag);
-        helpString.emplace_back(ManipulationInterface_move_hands_to_pose_helper::s_tag);
-        helpString.emplace_back(ManipulationInterface_move_hands_by_action_helper::s_tag);
-        helpString.emplace_back(ManipulationInterface_move_to_configuration_helper::s_tag);
-        helpString.emplace_back(ManipulationInterface_move_to_named_configuration_helper::s_tag);
-        helpString.emplace_back(ManipulationInterface_release_object_helper::s_tag);
-        helpString.emplace_back(ManipulationInterface_stop_helper::s_tag);
+        helpString.emplace_back(CommandInterface_grasp_helper::s_tag);
+        helpString.emplace_back(CommandInterface_is_finished_helper::s_tag);
+        helpString.emplace_back(CommandInterface_perform_cartesian_action_helper::s_tag);
+        helpString.emplace_back(CommandInterface_perform_grasp_action_helper::s_tag);
+        helpString.emplace_back(CommandInterface_perform_joint_space_action_helper::s_tag);
+        helpString.emplace_back(CommandInterface_move_hands_to_pose_helper::s_tag);
+        helpString.emplace_back(CommandInterface_move_joints_to_position_helper::s_tag);
+        helpString.emplace_back(CommandInterface_move_object_to_pose_helper::s_tag);
+        helpString.emplace_back(CommandInterface_release_object_helper::s_tag);
+        helpString.emplace_back(CommandInterface_stop_helper::s_tag);
+        helpString.emplace_back(CommandInterface_shut_down_helper::s_tag);
         helpString.emplace_back("help");
     } else {
-        if (functionName == ManipulationInterface_grasp_object_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_grasp_object_helper::s_prototype);
+        if (functionName == CommandInterface_grasp_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_grasp_helper::s_prototype);
         }
-        if (functionName == ManipulationInterface_is_finished_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_is_finished_helper::s_prototype);
+        if (functionName == CommandInterface_is_finished_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_is_finished_helper::s_prototype);
         }
-        if (functionName == ManipulationInterface_move_object_to_pose_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_move_object_to_pose_helper::s_prototype);
+        if (functionName == CommandInterface_perform_cartesian_action_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_perform_cartesian_action_helper::s_prototype);
         }
-        if (functionName == ManipulationInterface_move_hands_to_pose_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_move_hands_to_pose_helper::s_prototype);
+        if (functionName == CommandInterface_perform_grasp_action_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_perform_grasp_action_helper::s_prototype);
         }
-        if (functionName == ManipulationInterface_move_hands_by_action_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_move_hands_by_action_helper::s_prototype);
+        if (functionName == CommandInterface_perform_joint_space_action_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_perform_joint_space_action_helper::s_prototype);
         }
-        if (functionName == ManipulationInterface_move_to_configuration_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_move_to_configuration_helper::s_prototype);
+        if (functionName == CommandInterface_move_hands_to_pose_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_move_hands_to_pose_helper::s_prototype);
         }
-        if (functionName == ManipulationInterface_move_to_named_configuration_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_move_to_named_configuration_helper::s_prototype);
+        if (functionName == CommandInterface_move_joints_to_position_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_move_joints_to_position_helper::s_prototype);
         }
-        if (functionName == ManipulationInterface_release_object_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_release_object_helper::s_prototype);
+        if (functionName == CommandInterface_move_object_to_pose_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_move_object_to_pose_helper::s_prototype);
         }
-        if (functionName == ManipulationInterface_stop_helper::s_tag) {
-            helpString.emplace_back(ManipulationInterface_stop_helper::s_prototype);
+        if (functionName == CommandInterface_release_object_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_release_object_helper::s_prototype);
+        }
+        if (functionName == CommandInterface_stop_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_stop_helper::s_prototype);
+        }
+        if (functionName == CommandInterface_shut_down_helper::s_tag) {
+            helpString.emplace_back(CommandInterface_shut_down_helper::s_prototype);
         }
         if (functionName == "help") {
             helpString.emplace_back("std::vector<std::string> help(const std::string& functionName = \"--all\")");
@@ -2151,7 +2495,7 @@ std::vector<std::string> ManipulationInterface::help(const std::string& function
 }
 
 // read from ConnectionReader
-bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
+bool CommandInterface::read(yarp::os::ConnectionReader& connection)
 {
     constexpr size_t max_tag_len = 4;
     size_t tag_len = 1;
@@ -2169,8 +2513,8 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
         tag = reader.readTag(1);
     }
     while (tag_len <= max_tag_len && !reader.isError()) {
-        if (tag == ManipulationInterface_grasp_object_helper::s_tag) {
-            ManipulationInterface_grasp_object_helper helper;
+        if (tag == CommandInterface_grasp_helper::s_tag) {
+            CommandInterface_grasp_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }
@@ -2184,8 +2528,8 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
             reader.accept();
             return true;
         }
-        if (tag == ManipulationInterface_is_finished_helper::s_tag) {
-            ManipulationInterface_is_finished_helper helper;
+        if (tag == CommandInterface_is_finished_helper::s_tag) {
+            CommandInterface_is_finished_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }
@@ -2199,8 +2543,8 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
             reader.accept();
             return true;
         }
-        if (tag == ManipulationInterface_move_object_to_pose_helper::s_tag) {
-            ManipulationInterface_move_object_to_pose_helper helper;
+        if (tag == CommandInterface_perform_cartesian_action_helper::s_tag) {
+            CommandInterface_perform_cartesian_action_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }
@@ -2214,8 +2558,8 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
             reader.accept();
             return true;
         }
-        if (tag == ManipulationInterface_move_hands_to_pose_helper::s_tag) {
-            ManipulationInterface_move_hands_to_pose_helper helper;
+        if (tag == CommandInterface_perform_grasp_action_helper::s_tag) {
+            CommandInterface_perform_grasp_action_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }
@@ -2229,8 +2573,8 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
             reader.accept();
             return true;
         }
-        if (tag == ManipulationInterface_move_hands_by_action_helper::s_tag) {
-            ManipulationInterface_move_hands_by_action_helper helper;
+        if (tag == CommandInterface_perform_joint_space_action_helper::s_tag) {
+            CommandInterface_perform_joint_space_action_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }
@@ -2244,8 +2588,8 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
             reader.accept();
             return true;
         }
-        if (tag == ManipulationInterface_move_to_configuration_helper::s_tag) {
-            ManipulationInterface_move_to_configuration_helper helper;
+        if (tag == CommandInterface_move_hands_to_pose_helper::s_tag) {
+            CommandInterface_move_hands_to_pose_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }
@@ -2259,8 +2603,8 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
             reader.accept();
             return true;
         }
-        if (tag == ManipulationInterface_move_to_named_configuration_helper::s_tag) {
-            ManipulationInterface_move_to_named_configuration_helper helper;
+        if (tag == CommandInterface_move_joints_to_position_helper::s_tag) {
+            CommandInterface_move_joints_to_position_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }
@@ -2274,8 +2618,8 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
             reader.accept();
             return true;
         }
-        if (tag == ManipulationInterface_release_object_helper::s_tag) {
-            ManipulationInterface_release_object_helper helper;
+        if (tag == CommandInterface_move_object_to_pose_helper::s_tag) {
+            CommandInterface_move_object_to_pose_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }
@@ -2289,8 +2633,38 @@ bool ManipulationInterface::read(yarp::os::ConnectionReader& connection)
             reader.accept();
             return true;
         }
-        if (tag == ManipulationInterface_stop_helper::s_tag) {
-            ManipulationInterface_stop_helper helper;
+        if (tag == CommandInterface_release_object_helper::s_tag) {
+            CommandInterface_release_object_helper helper;
+            if (!helper.cmd.readArgs(reader)) {
+                return false;
+            }
+
+            helper.call(this);
+
+            yarp::os::idl::WireWriter writer(reader);
+            if (!helper.reply.write(writer)) {
+                return false;
+            }
+            reader.accept();
+            return true;
+        }
+        if (tag == CommandInterface_stop_helper::s_tag) {
+            CommandInterface_stop_helper helper;
+            if (!helper.cmd.readArgs(reader)) {
+                return false;
+            }
+
+            helper.call(this);
+
+            yarp::os::idl::WireWriter writer(reader);
+            if (!helper.reply.write(writer)) {
+                return false;
+            }
+            reader.accept();
+            return true;
+        }
+        if (tag == CommandInterface_shut_down_helper::s_tag) {
+            CommandInterface_shut_down_helper helper;
             if (!helper.cmd.readArgs(reader)) {
                 return false;
             }

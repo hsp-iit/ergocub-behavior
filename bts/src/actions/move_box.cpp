@@ -49,16 +49,16 @@ NodeStatus MoveBox::tick()
 
     #ifdef MANIPULATION
     if(action=="up"){
-        manipulation_client_.up();
+        manipulation_client_.perform_joint_space_action("up");
     }
     else if (action=="down"){
-        manipulation_client_.down();
+        manipulation_client_.perform_joint_space_action("down");
     }
     else if (action=="right"){
-        manipulation_client_.right();
+        manipulation_client_.perform_joint_space_action("right");
     }
     else if (action=="left"){
-        manipulation_client_.left();
+        manipulation_client_.perform_joint_space_action("left");
     }
     #endif
     return NodeStatus::SUCCESS;

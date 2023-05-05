@@ -35,7 +35,7 @@ bool GoRelease::init(std::string name)
 NodeStatus GoRelease::tick()
 {
     #ifdef MANIPULATION   
-    manipulation_client_.release_object();
+    manipulation_client_.perform_joint_space_action("ready");
     #endif
     setOutput<std::string>("has_box", "no");
     return NodeStatus::SUCCESS;
