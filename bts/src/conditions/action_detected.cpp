@@ -37,7 +37,7 @@ NodeStatus ActionDetected::tick()
 {
     std::string action = ecub_perception_client_.get_action();
 
-    if(action == "release" || action == "wave" || action == "shake" || action == "stop"){
+    if(action == "release" || action == "wave" || action == "shake" || action == "stop" || action == "up" || action == "down" || action == "left" || action == "right"){
         setOutput<std::string>("action", action);
         return NodeStatus::SUCCESS;
     }

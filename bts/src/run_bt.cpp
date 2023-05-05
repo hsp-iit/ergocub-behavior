@@ -25,6 +25,7 @@
 #include <actions/go_ready.h>
 #include <actions/go_grasp.h>
 #include <actions/go_release.h>
+#include <actions/move_box.h>
 
 #include <conditions/box_detected.h>
 #include <conditions/face_detected.h>
@@ -52,6 +53,7 @@ int main(int argc, char **argv)
     bt_factory.registerNodeType<GoReady>("GoReady");
     bt_factory.registerNodeType<GoGrasp>("GoGrasp");
     bt_factory.registerNodeType<GoRelease>("GoRelease");
+     bt_factory.registerNodeType<MoveBox>("MoveBox");   
 
     bt_factory.registerNodeType<BoxDetected>("BoxDetected");
     bt_factory.registerNodeType<FaceDetected>("FaceDetected");

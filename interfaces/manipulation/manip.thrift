@@ -12,6 +12,8 @@ service ManipulationInterface {
     string out();
     string up();
     string down();
+    string left();
+    string right();
     string fore();
     string aft();
     string finished();

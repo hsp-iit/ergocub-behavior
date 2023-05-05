@@ -47,6 +47,10 @@ public:
 
     virtual std::string down();
 
+    virtual std::string left();
+
+    virtual std::string right();
+
     virtual std::string fore();
 
     virtual std::string aft();

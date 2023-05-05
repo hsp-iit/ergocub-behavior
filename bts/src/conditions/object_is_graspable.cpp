@@ -40,7 +40,7 @@ NodeStatus ObjectIsGraspable::tick()
     }
     std::vector<double> obj_pos = msg.value();
 
-    if(obj_pos[0]>-0.45 && obj_pos[0]<-0.35 &&  // between 35 and 45 centimeter distant from torso
+    if(obj_pos[0]>-0.45 && obj_pos[0]<-0.25 &&  // between 35 and 45 centimeter distant from torso
        obj_pos[1]>-0.05 && obj_pos[1]<0.05 &&  // 5 centemiters on left or right
        obj_pos[2]>0.    && obj_pos[2]<0.20
     )
