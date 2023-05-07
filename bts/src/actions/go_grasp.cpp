@@ -34,7 +34,8 @@ bool GoGrasp::init(std::string name)
 
 NodeStatus GoGrasp::tick(){
     #ifdef MANIPULATION
-    manipulation_client_.perform_joint_space_action("testgrasp");
+    auto hand_poses = ecub_perception_client_.get_poses();
+    manipulation_client_.move_hands_to_pose(hand_poses[0], hand_poses[1], 5.0);
     #endif
     setOutput<std::string>("has_box", "yes");
     return NodeStatus::SUCCESS;
