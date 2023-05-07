@@ -72,18 +72,24 @@ NodeStatus DoResponseAction::tick()
     std::cout << "has_box: " <<  has_box << std::endl;
     std::cout << "last_sent_command: " <<  last_sent_command << std::endl;
 
-    if(!fin){
+    if(fin){
 
         // HAS_BOX COMMANDS
         if(has_box == "yes"){
-            if(action == "release" && last_sent_command != "release"){
-                #ifdef MANIPULATION
-                manipulation_client_.release_object();
-                manipulation_client_.perform_joint_space_action("ready");
-                #endif
-                setOutput<std::string>("has_box_out", "no");
-                last_sent_command = "release";
-                return NodeStatus::SUCCESS;
+            if(action == "release"){
+                if(last_sent_command != "release"){
+                    #ifdef MANIPULATION
+                    manipulation_client_.release_object();
+                    manipulation_client_.perform_joint_space_action("ready");
+                    #endif
+                    setOutput<std::string>("has_box_out", "no");
+                    last_sent_command = action;
+                    return NodeStatus::SUCCESS;
+                }
+                else{
+                    return NodeStatus::FAILURE;
+                }
+                    
             }
         }
         // HRI COMMANDS
@@ -123,7 +129,6 @@ NodeStatus DoResponseAction::tick()
             }
             return NodeStatus::FAILURE;
         }
-        return NodeStatus::FAILURE;
     }
     return NodeStatus::FAILURE;
 }
