@@ -13,6 +13,7 @@ include_directories(
         actions
         conditions
         ${CMAKE_SOURCE_DIR}/components/manipulation/include
+        ${CMAKE_SOURCE_DIR}/components/gaze_control/include
         ${CMAKE_SOURCE_DIR}/components/move_camera/include
 )
 
@@ -44,6 +45,7 @@ target_link_libraries(custom_leaf_nodes
   PRIVATE
     manipulation_interface
     move_camera
+    gaze_control_interface
     BT::behaviortree_cpp_v3
     YARP::YARP_os
     iDynTree::idyntree-high-level

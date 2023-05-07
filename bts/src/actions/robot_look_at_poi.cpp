@@ -36,20 +36,20 @@ bool RobotLookAtPOI::init(std::string name){
 
     #ifdef GAZE
     // Connect to gaze controller
-    Property props;
-    props.put("device", "gazecontrollerclient");
-    props.put("local", "/FollowObject/iKinGazeCtrl");
-    props.put("remote", "/iKinGazeCtrl");
+    
+    std::string server_name = "/Components/GazeController";
+    std::string client_name = "/BT/GazeController";
 
-    bool ok = driver_gaze_.open(props) && driver_gaze_.view(gaze_) && (gaze_ != nullptr);
+    client_port.open(client_name);
 
-    if (!ok)
-        throw(std::runtime_error(log_name_ + "::ctor. Error: cannot open IGazeControl interface."));
+    if (!yarp.connect(client_name,server_name))
+    {
+        std::cout << "Error! Could not connect to server " << server_name << '\n';
+        exit(1);
+    }
 
-    gaze_->setTrackingMode(false);
-    gaze_->setNeckTrajTime(1);
-    // gaze_->blockEyes(0.0);
-    // gaze_->blockNeckRoll(0.0);
+    this->gaze_controller.yarp().attachAsClient(client_port);
+    this->gaze_controller.set_gain(0.001);
     #endif
     none_counter = 0;
     return true;
@@ -67,13 +67,10 @@ NodeStatus RobotLookAtPOI::tick()
     std::cout << "ROBOT LOOK AT POI: Robot says: " << msg.value() << std::endl;
 
     // Declare final point
-    yarp::sig::VectorOf<double> setpoint;
+    std::vector<double> setpoint;
 
     // Get poi_pos if there is poi
     if(msg!="none"){
-        #ifdef GAZE
-        gaze_->setNeckTrajTime(1);
-        #endif
         none_counter = 0;
         Optional<std::vector<double>> poi_pos = getInput<std::vector<double>>("poi_pos");
         if (!poi_pos)
@@ -91,22 +88,17 @@ NodeStatus RobotLookAtPOI::tick()
         setpoint.push_back(poi_position[1]);
         setpoint.push_back(poi_position[2]);  // offset for camera, remove it in ergoCub
         #ifdef GAZE
-        gaze_->setNeckTrajTime(1);
-        gaze_->lookAtFixationPoint(setpoint);
+        this->gaze_controller.look_at(setpoint);
         #endif
     }
     else{
         none_counter++;
         if(none_counter > none_counter_thr){
-            #ifdef GAZE
-            gaze_->setNeckTrajTime(2);
-            #endif
             setpoint.push_back(-1);
             setpoint.push_back(0);
             setpoint.push_back(0.7);
             #ifdef GAZE
-            gaze_->setNeckTrajTime(2);
-            gaze_->lookAtFixationPoint(setpoint);
+            this->gaze_controller.look_at(setpoint);
             #endif
         }
     }
