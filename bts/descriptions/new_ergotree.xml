@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<root main_tree_to_execute="BehaviorTree">
+    <!-- ////////// -->
+    <BehaviorTree ID="BehaviorTree">
+        <ReactiveSequence>
+            <ReactiveFallback>
+                <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
+                    <Condition ID="BoxDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
+                </BlackboardCheckString>
+                <Condition ID="FaceDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
+                <AlwaysSuccess/>
+            </ReactiveFallback>
+            <Action ID="RobotLookAtPOI" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
+            <Action ID="RobotChangeFace" has_box="{the_has_box}" poi="{the_poi}"/>
+            <ReactiveFallback>
+                <ReactiveSequence>
+                    <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_poi}" value_B="object">
+                        <Condition ID="ObjectIsGraspable" poi_pos="{the_poi_pos}"/>
+                    </BlackboardCheckString>
+                    <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
+                        <Action ID="GoReady"/>
+                    </BlackboardCheckString>
+                    <Action ID="GoGrasp" has_box="{the_has_box}"/>
+                </ReactiveSequence>
+                <ReactiveSequence>
+                    <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_poi}" value_B="face">
+                        <Condition ID="FocusDetected" focus="{the_focus}"/>
+                    </BlackboardCheckString>
+                    <Condition ID="ActionDetected" action="{the_action}"/>
+                    <Action ID="DoResponseAction" action="{the_action}" focus="{the_focus}" has_box_in="{the_has_box}" has_box_out="{the_has_box}"/>
+                </ReactiveSequence>
+            </ReactiveFallback>
+        </ReactiveSequence>
+    </BehaviorTree>
+    <!-- ////////// -->
+    <TreeNodesModel>
+        <Condition ID="ActionDetected">
+            <output_port name="action" type="std::string"/>
+        </Condition>
+        <Condition ID="BoxDetected">
+            <output_port name="poi" type="std::string"/>
+            <output_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
+        </Condition>
+        <Action ID="DoResponseAction">
+            <input_port name="action"/>
+            <input_port name="focus"/>
+            <input_port name="has_box_in"/>
+            <output_port name="has_box_out"/>
+        </Action>
+        <Condition ID="FaceDetected">
+            <output_port name="poi" type="std::string"/>
+            <output_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
+        </Condition>
+        <Condition ID="FocusDetected">
+            <output_port name="focus"/>
+        </Condition>
+        <Action ID="GoGrasp">
+            <output_port name="has_box" type="std::string"/>
+        </Action>
+        <Action ID="GoHome"/>
+        <Action ID="GoReady"/>
+        <Action ID="GoRelease">
+            <output_port name="has_box" type="std::string"/>
+        </Action>
+        <Condition ID="IsDoingAction">
+            <output_port name="is_doing_action"/>
+        </Condition>
+        <Action ID="MoveBox">
+            <input_port name="action"/>
+        </Action>
+        <Condition ID="ObjectIsGraspable">
+            <input_port name="poi_pos"/>
+        </Condition>
+        <Action ID="RobotChangeFace">
+            <input_port name="has_box"/>
+            <input_port name="poi"/>
+        </Action>
+        <Action ID="RobotLookAtPOI">
+            <input_port name="poi"/>
+            <input_port name="poi_pos"/>
+        </Action>
+    </TreeNodesModel>
+    <!-- ////////// -->
+</root>
