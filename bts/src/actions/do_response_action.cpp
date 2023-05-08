@@ -136,5 +136,5 @@ NodeStatus DoResponseAction::tick()
 
 PortsList DoResponseAction::providedPorts()
 {
-    return {InputPort<std::string>("action"), InputPort<std::string>("focus"), InputPort<std::string>("has_box_in"), InputPort<std::string>("has_box_out")};
+    return {InputPort<std::string>("action"), InputPort<std::string>("focus"), InputPort<std::string>("has_box_in"), OutputPort<std::string>("has_box_out")};
 }
