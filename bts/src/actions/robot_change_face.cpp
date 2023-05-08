@@ -46,7 +46,7 @@ NodeStatus RobotChangeFace::tick()
         emotion = "evi";
     }
     else if(msg=="none"){
-        emotion = "neu";
+        emotion = "hap";
     }
     else if(msg=="face"){
         emotion = "hap";

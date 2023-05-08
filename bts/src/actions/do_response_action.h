@@ -7,6 +7,8 @@
 #include <future>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
+#include <vector>
+#include <map>
 
 using namespace BT;
 using namespace std;
@@ -22,8 +24,6 @@ private:
     CommandInterface manipulation_client_;
     bool is_ok_{false};
     yarp::os::Network yarp;
+    std::string last_sent_command;
     yarp::os::Port man_client_port;
-    yarp::os::Port ar_client_port;
-    std::string last_action;
-    long last_time;
 };

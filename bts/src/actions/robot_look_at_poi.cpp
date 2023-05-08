@@ -103,7 +103,7 @@ NodeStatus RobotLookAtPOI::tick()
             #endif
             setpoint.push_back(-1);
             setpoint.push_back(0);
-            setpoint.push_back(0.7);
+            setpoint.push_back(0.8);
             #ifdef GAZE
             gaze_->setNeckTrajTime(2);
             gaze_->lookAtFixationPoint(setpoint);
