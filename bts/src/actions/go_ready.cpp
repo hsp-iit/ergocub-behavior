@@ -29,6 +29,7 @@ bool GoReady::init(std::string name)
     }
     manipulation_client_.yarp().attachAsClient(client_port);
     #endif
+    ready = false;
     return true;
 }
 
@@ -36,13 +37,23 @@ NodeStatus GoReady::onStart()
 {
     #ifdef MANIPULATION
     manipulation_client_.perform_joint_space_action("ready");
+    ready = false;
     #endif
     return NodeStatus::RUNNING;
 }
 
 NodeStatus GoReady::onRunning(){
     #ifdef MANIPULATION
-    if (manipulation_client_.is_finished()){
+    if (manipulation_client_.is_finished() && !ready){
+        ready = true;
+        manipulation_client_.perform_cartesian_action("testgrasp");
+        return NodeStatus::RUNNING;
+    }
+    if (manipulation_client_.is_finished() && ready){
+        ready = false;
+        setOutput<std::string>("has_box", "yes");
+        manipulation_client_.grasp();
+        std::cout << "HO GRASPAETOOOOOT" << std::endl;
         return NodeStatus::SUCCESS;
     }
     return NodeStatus::RUNNING;
@@ -58,5 +69,5 @@ void GoReady::onHalted(){
 
 PortsList GoReady::providedPorts()
 {
-    return {};
+    return {OutputPort<std::string>("has_box")};
 }

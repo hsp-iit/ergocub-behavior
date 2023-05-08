@@ -41,8 +41,8 @@ NodeStatus ObjectIsGraspable::tick()
     std::vector<double> obj_pos = msg.value();
 
     if(obj_pos[0]>-0.50 && obj_pos[0]<-0.20 &&  // between 25 and 45 centimeter distant from torso
-       obj_pos[1]>-0.1 && obj_pos[1]<0.1 &&  // 5 centemiters on left or right
-       obj_pos[2]>-0.1    && obj_pos[2]<0.20
+       obj_pos[1]>-0.10 && obj_pos[1]<0.10 &&  // 5 centemiters on left or right
+       obj_pos[2]>-0.10 && obj_pos[2]<0.40
     )
         return BT::NodeStatus::SUCCESS;
     else

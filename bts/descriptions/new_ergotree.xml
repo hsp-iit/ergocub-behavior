@@ -18,9 +18,8 @@
                         <Condition ID="ObjectIsGraspable" poi_pos="{the_poi_pos}"/>
                     </BlackboardCheckString>
                     <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
-                        <Action ID="GoReady"/>
+                        <Action ID="GoReady" has_box="{the_has_box}"/>
                     </BlackboardCheckString>
-                    <Action ID="GoGrasp" has_box="{the_has_box}"/>
                 </ReactiveSequence>
                 <ReactiveSequence>
                     <BlackboardCheckString return_on_mismatch="SUCCESS" value_A="{the_poi}" value_B="object">
@@ -58,7 +57,9 @@
         <Action ID="GoGrasp">
             <output_port name="has_box" type="std::string"/>
         </Action>
-        <Action ID="GoReady"/>
+        <Action ID="GoReady">
+            <output_port name="has_box"/>
+        </Action>
         <Condition ID="ObjectIsGraspable">
             <input_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
         </Condition>

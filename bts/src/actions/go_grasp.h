@@ -12,11 +12,13 @@
 using namespace BT;
 using namespace std;
 
-class GoGrasp :  public SyncActionNode
+class GoGrasp :  public StatefulActionNode
 {
 public:
     GoGrasp(string name, const NodeConfiguration &config);
-    NodeStatus tick() override;
+    NodeStatus onStart() override;
+    NodeStatus onRunning() override;
+    void onHalted() override;
     static PortsList providedPorts();
 private:
     bool init(std::string);

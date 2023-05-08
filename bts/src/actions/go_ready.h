@@ -25,4 +25,5 @@ private:
     bool is_ok_{false};
     yarp::os::Network yarp;
     yarp::os::Port client_port;
+    bool ready;
 };
