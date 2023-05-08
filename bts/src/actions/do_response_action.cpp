@@ -77,10 +77,10 @@ NodeStatus DoResponseAction::tick()
         // HAS_BOX COMMANDS
         if(has_box == "yes"){
             if(action == "release"){
-                if(last_sent_command != "release"){
+                if(last_sent_command != "release" && focus == "yes"){
                     #ifdef MANIPULATION
                     // manipulation_client_.release_object();
-                    manipulation_client_.perform_cartesian_action("give");
+                    manipulation_client_.perform_joint_space_action("ready");
                     #endif
                     setOutput<std::string>("has_box_out", "no");
                     last_sent_command = action;
