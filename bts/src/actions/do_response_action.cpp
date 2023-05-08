@@ -32,6 +32,7 @@ bool DoResponseAction::init(std::string name)
     #endif
 
     last_sent_command = "";
+    was_releasing = false;
     return true;
 }
 
@@ -76,20 +77,24 @@ NodeStatus DoResponseAction::tick()
 
         // HAS_BOX COMMANDS
         if(has_box == "yes"){
+            if(was_releasing){
+                manipulation_client_.release_object();
+                setOutput<std::string>("has_box_out", "no");
+                was_releasing = false;
+            }
             if(action == "release"){
                 if(last_sent_command != "release"){
                     #ifdef MANIPULATION
                     // manipulation_client_.release_object();
-                    manipulation_client_.perform_cartesian_action("give");
+                    manipulation_client_.perform_grasp_action("offer");
+                    was_releasing = true;
                     #endif
-                    setOutput<std::string>("has_box_out", "no");
                     last_sent_command = action;
                     return NodeStatus::SUCCESS;
                 }
                 else{
                     return NodeStatus::FAILURE;
                 }
-                    
             }
         }
         // HRI COMMANDS

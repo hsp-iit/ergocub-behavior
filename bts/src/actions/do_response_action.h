@@ -26,4 +26,5 @@ private:
     yarp::os::Network yarp;
     std::string last_sent_command;
     yarp::os::Port man_client_port;
+    bool was_releasing;
 };

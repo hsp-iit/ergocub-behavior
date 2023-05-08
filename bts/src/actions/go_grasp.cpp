@@ -9,7 +9,7 @@
 #include <fstream>
 
 GoGrasp::GoGrasp(string name, const NodeConfiguration& config) :
-    SyncActionNode(name, config)
+    StatefulActionNode(name, config)
 {
     is_ok_ = init(name);
 }
@@ -32,13 +32,32 @@ bool GoGrasp::init(std::string name)
     return true;
 }
 
-NodeStatus GoGrasp::tick(){
+
+NodeStatus GoGrasp::onStart()
+{
     #ifdef MANIPULATION
+    std::cout << "CIAOOOOOOOOO" << std::endl;
     manipulation_client_.perform_cartesian_action("testgrasp");
-    // manipulation_client_.grasp();
     #endif
-    setOutput<std::string>("has_box", "yes");
+    return NodeStatus::RUNNING;
+}
+
+NodeStatus GoGrasp::onRunning(){
+    #ifdef MANIPULATION
+    if (manipulation_client_.is_finished()){
+        setOutput<std::string>("has_box", "yes");
+        manipulation_client_.grasp();
+        return NodeStatus::SUCCESS;
+    }
+    return NodeStatus::RUNNING;
+    #endif
     return NodeStatus::SUCCESS;
+}
+
+void GoGrasp::onHalted(){
+    std::cout << "ALTATO" << std::endl;
+    manipulation_client_.perform_joint_space_action("home");
+    return;
 }
 
 
