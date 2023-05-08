@@ -35,7 +35,7 @@ bool GoGrasp::init(std::string name)
 NodeStatus GoGrasp::tick(){
     #ifdef MANIPULATION
     manipulation_client_.perform_cartesian_action("testgrasp");
-    manipulation_client_.grasp();
+    // manipulation_client_.grasp();
     #endif
     setOutput<std::string>("has_box", "yes");
     return NodeStatus::SUCCESS;

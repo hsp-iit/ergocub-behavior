@@ -79,8 +79,8 @@ NodeStatus DoResponseAction::tick()
             if(action == "release"){
                 if(last_sent_command != "release"){
                     #ifdef MANIPULATION
-                    manipulation_client_.release_object();
-                    manipulation_client_.perform_joint_space_action("ready");
+                    // manipulation_client_.release_object();
+                    manipulation_client_.perform_cartesian_action("give");
                     #endif
                     setOutput<std::string>("has_box_out", "no");
                     last_sent_command = action;
