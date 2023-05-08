@@ -35,12 +35,13 @@ NodeStatus FocusDetected::tick()
 {
     auto is_focused = ecub_perception_client_.is_focused();
     if(is_focused)
-        return BT::NodeStatus::SUCCESS;
+        setOutput("focus", "yes" );
     else
-        return  BT::NodeStatus::FAILURE;
+        setOutput("focus", "no" );
+    return  BT::NodeStatus::SUCCESS;
 }
 
 PortsList FocusDetected::providedPorts()
 {
-    return {};
+    return {OutputPort<std::string>("focus")};
 }

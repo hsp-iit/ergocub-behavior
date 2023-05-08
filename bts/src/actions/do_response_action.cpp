@@ -31,66 +31,110 @@ bool DoResponseAction::init(std::string name)
     manipulation_client_.yarp().attachAsClient(man_client_port);
     #endif
 
-    // Others
-    last_action = "";
-    auto now = std::chrono::system_clock::now();
-    last_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count() - 4;
+    last_sent_command = "";
     return true;
 }
 
 NodeStatus DoResponseAction::tick()
 {
 
-    auto now = std::chrono::system_clock::now();
-    long this_time = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
-
-    Optional<std::string> msg = getInput<std::string>("action");
-    if (!msg)
+    // READ MBLACKBOARD
+    Optional<std::string> msg1 = getInput<std::string>("action");
+    if (!msg1)
     {
-        throw BT::RuntimeError("missing required input [message]: ", msg.error() );
+        throw BT::RuntimeError("missing required input [message]: ", msg1.error() );
     }
-    std::string action = msg.value();
+    std::string action = msg1.value();
 
-    std::cout << "received action " << action << std::endl;
-    std::cout << "last action " << last_action << std::endl;
+    Optional<std::string> msg2 = getInput<std::string>("focus");
+    if (!msg2)
+    {
+        throw BT::RuntimeError("missing required input [message]: ", msg2.error() );
+    }
+    std::string focus = msg2.value();
 
-    if (action == "wave"){
-        if(last_action != action || (this_time - last_time) > 3){
-            std::cout << "WAVE" << std::endl;
-            #ifdef MANIPULATION
-            manipulation_client_.perform_joint_space_action("wave");
-            #endif
-            last_action = action;
-            last_time = this_time;
-        }
-        return NodeStatus::SUCCESS;
+    Optional<std::string> msg3 = getInput<std::string>("has_box_in");
+    if (!msg3)
+    {
+        throw BT::RuntimeError("missing required input [message]: ", msg3.error() );
     }
-    if (action == "shake"){
-        if(last_action != action || (this_time - last_time) > 3){
-            #ifdef MANIPULATION
-            manipulation_client_.perform_joint_space_action("shake");
-            #endif
-            last_action = action;
-            last_time = this_time;
+    std::string has_box = msg3.value();
+    
+    // std::cout << "received action " << action << std::endl;
+    // std::cout << "last_sent_command " << last_sent_command << std::endl;
+
+    // CHECK IF AN ACTION IS IN EXECUTION
+    auto fin = manipulation_client_.is_finished();
+    std::cout << "DEBUGGING DO RESPONSE ACTION " << std::endl << std::endl << std::endl << std::endl;
+    std::cout << "fin: " <<  fin << std::endl;
+    std::cout << "action: " << action << std::endl;
+    std::cout << "focus: " << focus << std::endl;
+    std::cout << "has_box: " <<  has_box << std::endl;
+    std::cout << "last_sent_command: " <<  last_sent_command << std::endl;
+
+    if(fin){
+
+        // HAS_BOX COMMANDS
+        if(has_box == "yes"){
+            if(action == "release"){
+                if(last_sent_command != "release" && focus == "yes"){
+                    #ifdef MANIPULATION
+                    // manipulation_client_.release_object();
+                    manipulation_client_.perform_joint_space_action("ready");
+                    #endif
+                    setOutput<std::string>("has_box_out", "no");
+                    last_sent_command = action;
+                    return NodeStatus::SUCCESS;
+                }
+                else{
+                    return NodeStatus::FAILURE;
+                }
+                    
+            }
         }
-        return NodeStatus::SUCCESS;
-    }
-    if (action == "stop"){
-        if(last_action != action || (this_time - last_time) > 3){
-            #ifdef MANIPULATION
-            manipulation_client_.stop();
-            #endif
-            last_action = action;
-            last_time = this_time;
+        // HRI COMMANDS
+        else{
+            // ACTIONS
+            if(action == "wave"){
+                if(last_sent_command != "wave" && focus == "yes"){
+                    #ifdef MANIPULATION
+                    manipulation_client_.perform_joint_space_action(action);
+                    #endif
+                    last_sent_command = action;
+                    return NodeStatus::SUCCESS;
+                }
+                else{
+                    return NodeStatus::FAILURE; 
+                }
+            }
+            else if(action == "shake"){
+                if(last_sent_command != "shake" && focus == "yes"){
+                    #ifdef MANIPULATION
+                    manipulation_client_.perform_joint_space_action(action);
+                    #endif
+                    last_sent_command = action;
+                    return NodeStatus::SUCCESS;
+                }
+                else{
+                    return NodeStatus::FAILURE;
+                }
+            }
+            // GO HOME
+            else if(last_sent_command != "home"){
+                #ifdef MANIPULATION
+                manipulation_client_.perform_joint_space_action("home");
+                #endif
+                last_sent_command = "home";
+                return NodeStatus::SUCCESS;
+            }
+            return NodeStatus::FAILURE;
         }
-        return NodeStatus::SUCCESS;
     }
-    last_action = -1;
     return NodeStatus::FAILURE;
 }
 
 
 PortsList DoResponseAction::providedPorts()
 {
-    return {InputPort<std::string>("action")};
+    return {InputPort<std::string>("action"), InputPort<std::string>("focus"), InputPort<std::string>("has_box_in"), OutputPort<std::string>("has_box_out")};
 }

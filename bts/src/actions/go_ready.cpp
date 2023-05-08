@@ -51,6 +51,7 @@ NodeStatus GoReady::onRunning(){
 }
 
 void GoReady::onHalted(){
+    manipulation_client_.perform_joint_space_action("home");
     return;
 }
 
