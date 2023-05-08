@@ -9,6 +9,7 @@
 #include <yarp/dev/PolyDriver.h>
 #include <yarp/dev/GazeControl.h>
 #include <yarp/os/BufferedPort.h>
+#include <RPCServerInterface.h>
 
 using namespace BT;
 using namespace std;
@@ -22,10 +23,9 @@ public:
     yarp::dev::IGazeControl& controller();
 private:
     bool init(std::string);
-    bool is_ok_{false};
-    yarp::dev::PolyDriver driver_gaze_;
-    yarp::dev::IGazeControl* gaze_;
-    const std::string log_name_ = "iCubGaze";
+    bool is_ok_{false};       
+    yarp::os::Port client_port;
+    RPCServerInterface gaze_controller;
     yarp::os::BufferedPort<yarp::os::Bottle> port;
     int none_counter;
     int none_counter_thr = 15;

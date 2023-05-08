@@ -83,7 +83,7 @@ NodeStatus DoResponseAction::tick()
                 was_releasing = false;
             }
             if(action == "release"){
-                if(last_sent_command != "release"){
+                if(last_sent_command != "release" && focus == "yes"){
                     #ifdef MANIPULATION
                     // manipulation_client_.release_object();
                     manipulation_client_.perform_grasp_action("offer");
