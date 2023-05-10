@@ -72,7 +72,7 @@ NodeStatus RobotChangeFace::tick()
         cmd.addString("hap");
         #endif
         #ifdef ECUB
-        cmd.addString("angry");
+        cmd.addString("neutral");
         #endif
         last_sent_emotion = "none";
     }
@@ -90,7 +90,7 @@ NodeStatus RobotChangeFace::tick()
         cmd.addString("evi");
         #endif
         #ifdef ECUB
-        cmd.addString("neutral");
+        cmd.addString("alert");
         #endif
         last_sent_emotion = "object";
     }
