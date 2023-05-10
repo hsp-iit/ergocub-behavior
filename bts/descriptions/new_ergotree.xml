@@ -15,7 +15,7 @@
             <ReactiveFallback>
                 <ReactiveSequence>
                     <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_poi}" value_B="object">
-                        <Condition ID="ObjectIsGraspable" poi_pos="{the_poi_pos}"/>
+                        <Condition ID="ObjectIsGraspable"/>
                     </BlackboardCheckString>
                     <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
                         <Action ID="GoReady" has_box="{the_has_box}"/>
@@ -60,9 +60,7 @@
         <Action ID="GoReady">
             <output_port name="has_box"/>
         </Action>
-        <Condition ID="ObjectIsGraspable">
-            <input_port name="poi_pos" type="std::vector&lt;double, std::allocator&lt;double&gt; &gt;"/>
-        </Condition>
+        <Condition ID="ObjectIsGraspable"/>
         <Action ID="RobotChangeFace">
             <input_port name="has_box" type="std::string"/>
             <input_port name="poi" type="std::string"/>
