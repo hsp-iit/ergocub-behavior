@@ -22,4 +22,5 @@ private:
     bool init(std::string);
     bool is_ok_{false};
     yarp::os::RpcClient port;
+    std::string last_sent_emotion;
 };
