@@ -3,6 +3,7 @@
 
 #include <behaviortree_cpp_v3/action_node.h>
 #include <ManipulationInterface.h>
+#include <eCubPerceptionInterface/eCubPerceptionInterface.h>
 #include <string>
 #include <future>
 #include <yarp/os/Network.h>
@@ -22,8 +23,10 @@ public:
 private:
     bool init(std::string);
     CommandInterface manipulation_client_;
-    bool is_ok_{false};
+    eCubPerceptionInterface ecub_perception_client_;
     yarp::os::Network yarp;
-    yarp::os::Port client_port;
+    yarp::os::Port manipulation_client_port;
+    yarp::os::Port perception_client_port;
     bool ready;
+    bool is_ok_{false};
 };
