@@ -65,7 +65,11 @@ NodeStatus DoResponseAction::tick()
     // std::cout << "last_sent_command " << last_sent_command << std::endl;
 
     // CHECK IF AN ACTION IS IN EXECUTION
+    #ifdef MANIPULATION
     auto fin = manipulation_client_.is_finished();
+    #else
+    bool fin = true;
+    #endif
     std::cout << "DEBUGGING DO RESPONSE ACTION " << std::endl << std::endl << std::endl << std::endl;
     std::cout << "fin: " <<  fin << std::endl;
     std::cout << "action: " << action << std::endl;
@@ -86,7 +90,7 @@ NodeStatus DoResponseAction::tick()
                 if(last_sent_command != "release" && focus == "yes"){
                     #ifdef MANIPULATION
                     // manipulation_client_.release_object();
-                    manipulation_client_.perform_grasp_action("offer");
+                    manipulation_client_.perform_cartesian_action("out");
                     was_releasing = true;
                     #endif
                     last_sent_command = action;
