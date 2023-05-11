@@ -81,14 +81,14 @@ NodeStatus GoReady::onRunning(){
             }
             std::cout << std::endl;
         }
-        manipulation_client_.move_hands_to_pose(left, right, 5.0);
+        // manipulation_client_.move_hands_to_pose(left, right, 5.0);
+        manipulation_client_.perform_cartesian_action("testgrasp");
         return NodeStatus::RUNNING;
     }
     if (manipulation_client_.is_finished() && ready){
         ready = false;
         setOutput<std::string>("has_box", "yes");
-        manipulation_client_.grasp();
-        std::cout << "HO GRASPAETOOOOOT" << std::endl;
+        // manipulation_client_.grasp();
         return NodeStatus::SUCCESS;
     }
     return NodeStatus::RUNNING;

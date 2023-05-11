@@ -43,14 +43,17 @@ NodeStatus ObjectIsGraspable::tick()
     double px, py, pz, cx, cy, cz, rx, ry, rz;
 
     // Check right hand
-    px = right[0][2];  // distance 
-    py = right[1][2];  // left-right
-    pz = right[2][2];  // height
+    px = right[0][3];  // distance 
+    py = right[1][3];  // left-right
+    pz = right[2][3];  // height
+
+    std::cout << "right hand" << px << " " << py << " " << pz << std::endl;
+
     if(px==-1 && py==-1 && pz==-1){
         return BT::NodeStatus::FAILURE;
     }
-    cx = 0.30;  // distance
-    cy = -0.30;  // left-right
+    cx = 0.60;  // distance
+    cy = -0.15;  // left-right
     cz = 0.15;  //height
     rx = 0.1;
     ry = 0.1;
@@ -60,14 +63,15 @@ NodeStatus ObjectIsGraspable::tick()
     }
 
     // Check left hand
-    px = left[0][2];  // distance 
-    py = left[1][2];  // left-right
-    pz = left[2][2];  // height
+    px = left[0][3];  // distance 
+    py = left[1][3];  // left-right
+    pz = left[2][3];  // height
+    std::cout << "left hand" << px << " " << py << " " << pz << std::endl;
     if(px==-1 && py==-1 && pz==-1){
         return BT::NodeStatus::FAILURE;
     }
-    cx = 0.30;  // distance
-    cy = 0.30;  // left-right
+    cx = 0.60;  // distance
+    cy = 0.15;  // left-right
     cz = 0.15;  //height
     rx = 0.1;
     ry = 0.1;

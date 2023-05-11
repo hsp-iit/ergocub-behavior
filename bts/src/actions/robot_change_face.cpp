@@ -23,7 +23,7 @@ bool RobotChangeFace::init(std::string){
     Network::connect("/BT/emotions/out","/icub/face/emotions/in");
     #endif
     #ifdef ECUB
-    Network::connect("/BT/emotions/out","/ergoCubEmotions");
+    Network::connect("/BT/emotions/out","/ergoCubEmotions/rpc");
     #endif
     #endif
     last_sent_emotion = "";
@@ -67,7 +67,7 @@ NodeStatus RobotChangeFace::tick()
         #endif
         last_sent_emotion = "has_box";
     }
-    else if(msg=="none" && last_sent_emotion!="none"){
+    else if(msg=="none" && last_sent_emotion!="none" && has_box=="no"){
         #ifdef ICUB
         cmd.addString("hap");
         #endif
@@ -76,7 +76,7 @@ NodeStatus RobotChangeFace::tick()
         #endif
         last_sent_emotion = "none";
     }
-    else if(msg=="face" && last_sent_emotion!="face"){
+    else if(msg=="face" && last_sent_emotion!="face" && has_box=="no"){
         #ifdef ICUB
         cmd.addString("hap");
         #endif
@@ -85,7 +85,7 @@ NodeStatus RobotChangeFace::tick()
         #endif
         last_sent_emotion = "face";
     }
-    else if(msg=="object" && last_sent_emotion!="object"){
+    else if(msg=="object" && last_sent_emotion!="object" && has_box=="no"){
         #ifdef ICUB
         cmd.addString("evi");
         #endif
