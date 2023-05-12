@@ -1,0 +1,10 @@
+{
+    "bt_description": "/home/btuc/ergocub-behavior/bts/descriptions/new_ergotree.xml",
+    "components": 
+    {
+        "manipulation": {"port": "/Componets/Manipulation", "required": true},
+        "emotions": {"port": "/ergoCubEmotions/rpc", "required": true},
+        "gaze": {"port": "/Componets/GazeController", "required": true},
+        "perception": {"port": "/eCubPerception/rpc:i", "required": true}
+    }
+}
