@@ -9,27 +9,23 @@
 #include <iostream>
 
 
-FocusDetected::FocusDetected(string name, const NodeConfiguration& config) :
-    ConditionNode(name, config)
-{
-    is_ok_ = init(name);
-}
-
-bool FocusDetected::init(std::string name)
+FocusDetected::FocusDetected(string name, const NodeConfiguration& nc, pt::ptree bt_config) :
+    ConditionNode(name, nc),
+    bt_config(bt_config)
 {
     std::string server_name = "/eCubPerception/rpc:i"s;
     std::string client_name = "/BT/" + name + "/eCubPerception"s;
 
     client_port.open(client_name);
 
-    if (!yarp.connect(client_name,server_name))
+    while (!yarp.connect(client_name,server_name))
     {
         std::cout << "Error! Could not connect to server " << server_name << '\n';
-        return false;
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     ecub_perception_client_.yarp().attachAsClient(client_port);
-    return true;
 }
+
 
 NodeStatus FocusDetected::tick()
 {

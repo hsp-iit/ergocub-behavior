@@ -10,42 +10,38 @@
 #include "go_ready.h"
 #include "common.h"
 
-GoReady::GoReady(string name, const NodeConfiguration& config) :
-    StatefulActionNode(name, config)
+GoReady::GoReady(string name, const NodeConfiguration& nc, pt::ptree bt_config) :
+    StatefulActionNode(name, nc),
+    bt_config(bt_config)
 {
-    is_ok_ = init(name);
-}
-
-bool GoReady::init(std::string name)
-{
-     // MANIPULATION
-    #ifdef MANIPULATION
-    std::string manipulation_server_name = "/Components/Manipulation"s;
-    std::string manipulation_client_name = "/BT/" + name + "/Manipulation"s;
+    // MANIPULATION
+    std::string manipulation_server_name =  bt_config.get<std::string>("components.manipulation.port");
+    std::string manipulation_client_name = "/BT/" + name + manipulation_server_name;
 
     manipulation_client_port.open(manipulation_client_name);
 
-    if (!yarp.connect(manipulation_client_name,manipulation_server_name))
+    while (!yarp.connect(manipulation_client_name,manipulation_server_name))
     {
-        throw BT::RuntimeError("Error! Could not connect to server ", manipulation_server_name);
+        std::cout << "Error! Could not connect to server " << manipulation_server_name << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     manipulation_client_.yarp().attachAsClient(manipulation_client_port);
-    #endif
 
     // PERCEPTION
-    std::string perception_server_name = "/eCubPerception/rpc:i"s;
-    std::string perception_client_name = "/BT/" + name + "/eCubPerception"s;
+    std::string perception_server_name =  bt_config.get<std::string>("components.perception.port");
+    std::string perception_client_name = "/BT/" + name + manipulation_server_name;
 
     perception_client_port.open(perception_client_name);
 
-    if (!yarp.connect(perception_client_name,perception_server_name))
+    while (!yarp.connect(perception_client_name, perception_server_name))
     {
-        std::cout << "Error! Could not connect to server " << perception_server_name << '\n';
-        return false;
+        std::cout << "Error! Could not connect to server " << perception_server_name << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     ecub_perception_client_.yarp().attachAsClient(perception_client_port);
-    return true;
 }
+
+
 
 NodeStatus GoReady::onStart()
 {

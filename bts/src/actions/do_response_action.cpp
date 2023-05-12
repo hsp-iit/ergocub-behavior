@@ -9,31 +9,26 @@
 #include <fstream>
 
 
-DoResponseAction::DoResponseAction(string name, const NodeConfiguration& config) :
-    SyncActionNode(name, config)
+DoResponseAction::DoResponseAction(string name, const NodeConfiguration& nc, pt::ptree bt_config) :
+    SyncActionNode(name, nc),
+    bt_config(bt_config)
 {
-    is_ok_ = init(name);
-}
-
-bool DoResponseAction::init(std::string name)
-{
-    #ifdef MANIPULATION
     // Connect to manipulation
-    std::string man_server_name = "/Components/Manipulation"s;
-    std::string man_client_name = "/BT/" + name + "/Manipulation"s;
+    std::string server_name =  bt_config.get<std::string>("components.manipulation.port");
+    std::string client_name = "/BT/" + name + server_name;
 
-    man_client_port.open(man_client_name);
+    man_client_port.open(client_name);
 
-    if (!yarp.connect(man_client_name,man_server_name))
+    while (!yarp.connect(client_name, server_name))
     {
-        throw BT::RuntimeError("Error! Could not connect to server ", man_server_name);
+        std::cout << "Error! Could not connect to server " << server_name << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
+
     manipulation_client_.yarp().attachAsClient(man_client_port);
-    #endif
 
     last_sent_command = "";
     was_releasing = false;
-    return true;
 }
 
 NodeStatus DoResponseAction::tick()

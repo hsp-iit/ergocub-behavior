@@ -13,10 +13,6 @@
 #include <yarp/dev/PolyDriver.h>
 #include <iostream>
 #include <list>
-#include <iDynTree/Core/Rotation.h>
-#include <iDynTree/Core/Direction.h>
-#include <iDynTree/Core/Transform.h>
-#include <iDynTree/Core/VectorFixSize.h>
 
 using yarp::os::BufferedPort;
 using yarp::os::Bottle;
@@ -24,36 +20,27 @@ using yarp::os::Property;
 using yarp::dev::PolyDriver;
 
 
-RobotLookAtPOI::RobotLookAtPOI(string name, const NodeConfiguration& config) :
-    SyncActionNode(name, config)
+RobotLookAtPOI::RobotLookAtPOI(string name, const NodeConfiguration& nc, pt::ptree bt_config) :
+    SyncActionNode(name, nc),
+    bt_config(bt_config)
 {
-    is_ok_ = init(name);
-}
-
-bool RobotLookAtPOI::init(std::string name){
-
-    yarp::os::Network yarp;
-
-    #ifdef GAZE
-    // Connect to gaze controller
+     yarp::os::Network yarp;
     
-    std::string server_name = "/Components/GazeController";
-    std::string client_name = "/BT/GazeController";
+    std::string server_name = bt_config.get<std::string>("components.gaze.port");
+    std::string client_name = "/BT/" + name + server_name;
 
     client_port.open(client_name);
 
-    if (!yarp.connect(client_name,server_name))
+    while (!yarp.connect(client_name,server_name))
     {
         std::cout << "Error! Could not connect to server " << server_name << '\n';
-        exit(1);
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
 
     this->gaze_controller.yarp().attachAsClient(client_port);
     this->gaze_controller.set_gain(0.01);
-    #endif
     none_counter = 0;
     last_poi = "";
-    return true;
 }
 
 NodeStatus RobotLookAtPOI::tick()
@@ -92,9 +79,7 @@ NodeStatus RobotLookAtPOI::tick()
         setpoint.push_back(poi_position[0]);
         setpoint.push_back(poi_position[1]);
         setpoint.push_back(poi_position[2]);  // offset for camera, remove it in ergoCub
-        #ifdef GAZE
         this->gaze_controller.look_at(setpoint);
-        #endif
     }
     else{
         if(last_poi != "none"){
@@ -106,9 +91,7 @@ NodeStatus RobotLookAtPOI::tick()
             setpoint.push_back(-1);
             setpoint.push_back(0);
             setpoint.push_back(0.8);
-            #ifdef GAZE
             this->gaze_controller.look_at(setpoint);
-            #endif
         }
     }
 
