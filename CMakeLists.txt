@@ -13,8 +13,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CONFIG_PATH}")
 find_package(ZMQ)
 find_package(Boost COMPONENTS coroutine REQUIRED)
 find_package(behaviortree_cpp_v3 REQUIRED)
-
-
 find_package(YARP COMPONENTS os idl_tools dev REQUIRED)
 
 if( ZMQ_FOUND )
