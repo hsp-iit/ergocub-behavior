@@ -5,8 +5,11 @@
 #include <thread>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
+#include <cmath>
 
 #include <iostream>
+
+using std::pow;
 
 
 ObjectIsGraspable::ObjectIsGraspable(string name, const NodeConfiguration& config) :
@@ -33,16 +36,67 @@ bool ObjectIsGraspable::init(std::string name)
 
 NodeStatus ObjectIsGraspable::tick()
 {
-    Optional<std::vector<double>> msg = getInput<std::vector<double>>("poi_pos");
-    if (!msg)
-    {
-        throw BT::RuntimeError("missing required input [message]: ", msg.error() );
-    }
-    std::vector<double> obj_pos = msg.value();
+    // BOTH HANDS POSITIONS
+    // std::vector<yarp::sig::Matrix> hand_poses = ecub_perception_client_.get_poses();
+    // yarp::sig::Matrix right = hand_poses[0];
+    // yarp::sig::Matrix left = hand_poses[1];
 
-    if(obj_pos[0]>-0.50 && obj_pos[0]<-0.20 &&  // between 25 and 45 centimeter distant from torso
-       obj_pos[1]>-0.10 && obj_pos[1]<0.10 &&  // 5 centemiters on left or right
-       obj_pos[2]>-0.10 && obj_pos[2]<0.40
+    // double px, py, pz, cx, cy, cz, rx, ry, rz;
+
+    // // Check right hand
+    // px = right[0][3];  // distance 
+    // py = right[1][3];  // left-right
+    // pz = right[2][3];  // height
+
+    // std::cout << "right hand" << px << " " << py << " " << pz << std::endl;
+
+    // if(px==-1 && py==-1 && pz==-1){
+    //     return BT::NodeStatus::FAILURE;
+    // }
+    // cx = 0.60;  // distance
+    // cy = -0.15;  // left-right
+    // cz = 0.15;  //height
+    // rx = 0.2;
+    // ry = 0.2;
+    // rz = 0.2;
+    // if ((pow(px-cx, 2)/rx) + (pow(py-cy, 2)/ry) + (pow(pz-cz, 2)/rz) > 1){
+    //     return BT::NodeStatus::FAILURE;
+    // }
+
+    // // Check left hand
+    // px = left[0][3];  // distance 
+    // py = left[1][3];  // left-right
+    // pz = left[2][3];  // height
+    // std::cout << "left hand" << px << " " << py << " " << pz << std::endl;
+    // if(px==-1 && py==-1 && pz==-1){
+    //     return BT::NodeStatus::FAILURE;
+    // }
+    // cx = 0.60;  // distance
+    // cy = 0.15;  // left-right
+    // cz = 0.15;  //height
+    // rx = 0.2;
+    // ry = 0.2;
+    // rz = 0.2;
+    // if ((pow(px-cx, 2)/rx) + (pow(py-cy, 2)/ry) + (pow(pz-cz, 2)/rz) > 1){
+    //     return BT::NodeStatus::FAILURE;
+    // }
+
+    // return BT::NodeStatus::SUCCESS;
+
+
+    // CENTER
+    auto obj_pos_yarp = ecub_perception_client_.get_center();
+    std::vector<double> obj_pos;
+    for(int i=0; i<3; i++){
+        obj_pos.push_back(obj_pos_yarp[i]);
+        std::cout << obj_pos[i] << std::endl;
+    }
+
+    
+
+    if(obj_pos[0]>0.30 && obj_pos[0]<0.60 &&  // between 25 and 45 centimeter distant from torso
+       obj_pos[1]>-0.20 && obj_pos[1]<0.20 &&  // 5 centemiters on left or right
+       obj_pos[2]>0.20 && obj_pos[2]<0.40
     )
         return BT::NodeStatus::SUCCESS;
     else
@@ -58,5 +112,5 @@ NodeStatus ObjectIsGraspable::tick()
 
 PortsList ObjectIsGraspable::providedPorts()
 {
-    return {InputPort<std::vector<double>>("poi_pos")};
+    return {};
 }

@@ -19,8 +19,14 @@ RobotChangeFace::RobotChangeFace(string name, const NodeConfiguration& config) :
 bool RobotChangeFace::init(std::string){
     #ifdef EMOTIONS
     port.open("/BT/emotions/out");
+    #ifdef ICUB
     Network::connect("/BT/emotions/out","/icub/face/emotions/in");
     #endif
+    #ifdef ECUB
+    Network::connect("/BT/emotions/out","/ergoCubEmotions/rpc");
+    #endif
+    #endif
+    last_sent_emotion = "";
     return true;
 }
 
@@ -41,26 +47,54 @@ NodeStatus RobotChangeFace::tick()
     }
 
     // change face depending on object
-    std::string emotion = "";
-    if(has_box=="yes"){
-        emotion = "evi";
-    }
-    else if(msg=="none"){
-        emotion = "hap";
-    }
-    else if(msg=="face"){
-        emotion = "hap";
-    }
-    else if(msg=="object"){
-        emotion = "evi";
-    }
-
+    #ifdef EMOTIONS
     Bottle cmd;
+    Bottle response;
+    #ifdef ICUB
     cmd.addString("set");
     cmd.addString("all");
-    cmd.addString(emotion);
-    Bottle response;
-    #ifdef EMOTIONS
+    #endif
+    #ifdef ECUB
+    cmd.addString("setEmotion");
+    #endif
+
+    if(has_box=="yes" && last_sent_emotion!="has_box"){
+        #ifdef ICUB
+        cmd.addString("evi");
+        #endif
+        #ifdef ECUB
+        cmd.addString("shy");
+        #endif
+        last_sent_emotion = "has_box";
+    }
+    else if(msg=="none" && last_sent_emotion!="none" && has_box=="no"){
+        #ifdef ICUB
+        cmd.addString("hap");
+        #endif
+        #ifdef ECUB
+        cmd.addString("neutral");
+        #endif
+        last_sent_emotion = "none";
+    }
+    else if(msg=="face" && last_sent_emotion!="face" && has_box=="no"){
+        #ifdef ICUB
+        cmd.addString("hap");
+        #endif
+        #ifdef ECUB
+        cmd.addString("happy");
+        #endif
+        last_sent_emotion = "face";
+    }
+    else if(msg=="object" && last_sent_emotion!="object" && has_box=="no"){
+        #ifdef ICUB
+        cmd.addString("evi");
+        #endif
+        #ifdef ECUB
+        cmd.addString("alert");
+        #endif
+        last_sent_emotion = "object";
+    }
+
     if (port.write(cmd, response)) {
         cout << response.toString() << endl;
     }

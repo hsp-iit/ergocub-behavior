@@ -49,9 +49,10 @@ bool RobotLookAtPOI::init(std::string name){
     }
 
     this->gaze_controller.yarp().attachAsClient(client_port);
-    this->gaze_controller.set_gain(0.001);
+    this->gaze_controller.set_gain(0.01);
     #endif
     none_counter = 0;
+    last_poi = "";
     return true;
 }
 
@@ -71,6 +72,10 @@ NodeStatus RobotLookAtPOI::tick()
 
     // Get poi_pos if there is poi
     if(msg!="none"){
+        if(last_poi != "not none"){
+            this->gaze_controller.set_gain(0.01);
+            last_poi = "not none";
+        }
         none_counter = 0;
         Optional<std::vector<double>> poi_pos = getInput<std::vector<double>>("poi_pos");
         if (!poi_pos)
@@ -92,9 +97,13 @@ NodeStatus RobotLookAtPOI::tick()
         #endif
     }
     else{
+        if(last_poi != "none"){
+            this->gaze_controller.set_gain(0.001);
+            last_poi = "none";
+        }
         none_counter++;
         if(none_counter > none_counter_thr){
-            setpoint.push_back(-1);
+            setpoint.push_back( 1);
             setpoint.push_back(0);
             setpoint.push_back(0.8);
             #ifdef GAZE
