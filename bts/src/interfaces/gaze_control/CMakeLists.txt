@@ -6,24 +6,14 @@
 ################################################################################
 
 # IMPORT
-cmake_minimum_required(VERSION 3.12)
 
-project(ecub_emotions LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
  # Create the component (navigation client)
 find_package(YARP COMPONENTS os dev REQUIRED)
-include_directories(include)
 
-add_library(ecub_emotions_interface)  # ADDED
-target_sources(ecub_emotions_interface  # DECOMMENfED
-        PRIVATE
-        ergoCubEmotions_IDL.cpp)  # DECOMMENTED
-target_link_libraries(ecub_emotions_interface  # DECOMMENTED
-        PRIVATE
-        YARP::YARP_os
-        YARP::YARP_init
-        YARP::YARP_dev)
+yarp_idl_to_dir(INPUT_FILES gaze-controller.thrift
+                OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}
+                PLACEMENT SEPARATE
+                )
+
+target_include_directories(custom_leaf_nodes PUBLIC include)
