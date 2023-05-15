@@ -16,4 +16,5 @@ yarp_idl_to_dir(INPUT_FILES idl.thrift
                 HEADER_VAR IDL_H
                 )
 
+file(REMOVE idl_index.txt)
 target_include_directories(custom_leaf_nodes PUBLIC include)

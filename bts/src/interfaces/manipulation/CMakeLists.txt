@@ -22,5 +22,5 @@ yarp_idl_to_dir(INPUT_FILES CommandInterface.thrift
                 SOURCES_VAR IDL_SRC
                 HEADERS_VAR IDL_H
                 )
-
+file(REMOVE CommandInterface_index.txt)
 target_include_directories(custom_leaf_nodes PUBLIC include)

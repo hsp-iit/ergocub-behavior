@@ -16,4 +16,5 @@ yarp_idl_to_dir(INPUT_FILES gaze-controller.thrift
                 PLACEMENT SEPARATE
                 )
 
+file(REMOVE gaze-controller_index.txt)
 target_include_directories(custom_leaf_nodes PUBLIC include)
