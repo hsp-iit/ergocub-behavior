@@ -23,7 +23,6 @@ private:
     bool init(std::string);
     pt::ptree bt_config;
     CommandInterface manipulation_client_;
-    bool is_ok_{false};
     yarp::os::Network yarp;
     yarp::os::Port client_port;
 };

@@ -28,7 +28,6 @@ IsDoingAction::IsDoingAction(string name, const NodeConfiguration& nc, pt::ptree
 
 NodeStatus IsDoingAction::tick()
 {
-    #ifdef MANIPULATION
     auto fin = manipulation_client_.is_finished();
     if (fin){
         setOutput("is_doing_action", "yes");
@@ -36,7 +35,6 @@ NodeStatus IsDoingAction::tick()
     else{
         setOutput("is_doing_action", "no");
     }
-    #endif
     return NodeStatus::SUCCESS;
 }
 
