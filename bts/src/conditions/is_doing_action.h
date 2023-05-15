@@ -2,7 +2,7 @@
 
 
 #include <behaviortree_cpp_v3/action_node.h>
-#include <ManipulationInterface.h>
+#include <CommandInterface.h>
 #include <string>
 #include <future>
 #include <yarp/os/Network.h>
