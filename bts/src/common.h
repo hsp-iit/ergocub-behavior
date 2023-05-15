@@ -20,3 +20,12 @@ BT::NodeBuilder build_node (boost::property_tree::ptree config) {
         return std::make_unique<T>(name, nc, config);
     };
 }
+
+template <class T>
+std::vector<T> as_vector(pt::ptree const& pt, pt::ptree::key_type const& key)
+{
+    std::vector<T> r;
+    for (auto& item : pt.get_child(key))
+        r.push_back(item.second.get_value<T>());
+    return r;
+};
