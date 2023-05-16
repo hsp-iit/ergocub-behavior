@@ -16,22 +16,14 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/components/ecub_emotions/include
 )
 
+file(GLOB BT_NODES    
+    "actions/*.cpp"
+    "conditions/*.cpp"
+)
+
 target_sources(custom_leaf_nodes
   PRIVATE
-  actions/robot_change_face.cpp
-  actions/robot_look_at_poi.cpp
-  actions/do_response_action.cpp
-  actions/go_home.cpp
-  actions/go_ready.cpp
-  actions/go_grasp.cpp
-  actions/go_release.cpp
-  actions/move_box.cpp
-  conditions/box_detected.cpp
-  conditions/face_detected.cpp
-  conditions/object_is_graspable.cpp
-  conditions/focus_detected.cpp
-  conditions/action_detected.cpp
-  conditions/is_doing_action.cpp
+  ${BT_NODES}
   common.cpp
 )
 

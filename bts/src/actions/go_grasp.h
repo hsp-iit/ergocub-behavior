@@ -29,4 +29,5 @@ private:
     yarp::os::Network yarp;
     yarp::os::Port manipulation_client_port;
     yarp::os::Port perception_client_port;
+    bool ready;
 };
