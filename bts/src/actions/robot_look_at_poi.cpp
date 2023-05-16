@@ -103,7 +103,7 @@ NodeStatus RobotLookAtPOI::tick()
         }
         none_counter++;
         if(none_counter > none_counter_thr){
-            setpoint.push_back(-1);
+            setpoint.push_back( 1);
             setpoint.push_back(0);
             setpoint.push_back(0.8);
             #ifdef GAZE
