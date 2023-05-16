@@ -11,22 +11,23 @@
 
 using namespace BT;
 using namespace std;
+#include <boost/property_tree/ptree.hpp>
+namespace pt = boost::property_tree;
 
 class GoReady :  public StatefulActionNode
 {
 public:
-    GoReady(string name, const NodeConfiguration &config);
+    GoReady(string name, const NodeConfiguration &nc, pt::ptree bt_config);
     NodeStatus onStart() override;
     NodeStatus onRunning() override;
     void onHalted() override;
     static PortsList providedPorts();
 private:
-    bool init(std::string);
+    pt::ptree bt_config;
     CommandInterface manipulation_client_;
     eCubPerceptionInterface ecub_perception_client_;
     yarp::os::Network yarp;
     yarp::os::Port manipulation_client_port;
     yarp::os::Port perception_client_port;
     bool ready;
-    bool is_ok_{false};
 };

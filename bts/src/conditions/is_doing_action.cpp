@@ -8,33 +8,26 @@
 #include <unistd.h>
 #include <fstream>
 
-IsDoingAction::IsDoingAction(string name, const NodeConfiguration& config) :
-    SyncActionNode(name, config)
+IsDoingAction::IsDoingAction(string name, const NodeConfiguration& nc, pt::ptree bt_config) :
+    SyncActionNode(name, nc),
+    bt_config(bt_config)
 {
-    is_ok_ = init(name);
-}
-
-bool IsDoingAction::init(std::string name)
-{
-    // MANIPULATION
-    #ifdef MANIPULATION
-    std::string server_name = "/Components/Manipulation"s;
-    std::string client_name = "/BT/" + name + "/Manipulation"s;
+    std::string server_name =  bt_config.get<std::string>("components.manipulation.port");
+    std::string client_name = "/BT/" + name + server_name;
 
     client_port.open(client_name);
 
-    if (!yarp.connect(client_name,server_name))
+    while (!yarp.connect(client_name,server_name))
     {
-        throw BT::RuntimeError("Error! Could not connect to server ", server_name);
+        std::cout << "Error! Could not connect to server " << server_name << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     manipulation_client_.yarp().attachAsClient(client_port);
-    #endif
-    return true;
 }
+
 
 NodeStatus IsDoingAction::tick()
 {
-    #ifdef MANIPULATION
     auto fin = manipulation_client_.is_finished();
     if (fin){
         setOutput("is_doing_action", "yes");
@@ -42,7 +35,6 @@ NodeStatus IsDoingAction::tick()
     else{
         setOutput("is_doing_action", "no");
     }
-    #endif
     return NodeStatus::SUCCESS;
 }
 

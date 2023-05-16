@@ -7,4 +7,4 @@
 
 add_subdirectory(manipulation)
 add_subdirectory(gaze_control)
-add_subdirectory(move_camera)
+add_subdirectory(ecub_emotions)

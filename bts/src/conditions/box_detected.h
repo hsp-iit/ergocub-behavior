@@ -10,19 +10,19 @@
 
 using namespace BT;
 using namespace std;
+#include <boost/property_tree/ptree.hpp>
+namespace pt = boost::property_tree;
 
 class BoxDetected :  public ConditionNode
 {
 public:
-    BoxDetected(string name, const NodeConfiguration &config);
+    BoxDetected(string name, const NodeConfiguration &nc, pt::ptree bt_config);
     NodeStatus tick() override;
     static PortsList providedPorts();
 private:
-    bool init(std::string);
     eCubPerceptionInterface ecub_perception_client_;
-    bool is_ok_{false};
+    pt::ptree bt_config;
     yarp::os::Network yarp;
     yarp::os::Port client_port;
     bool was_true;
-    int threshold = 1000;
 };
