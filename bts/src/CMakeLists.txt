@@ -7,36 +7,29 @@
 
 # Create the custom_leaf_nodes library
 add_library(custom_leaf_nodes STATIC)
+
+add_subdirectory(interfaces)
+add_subdirectory(mock_components)
+
 find_package(eCubPerceptionInterface REQUIRED)
 include_directories(
+        ${CMAKE_CURRENT_SOURCE_DIR}
         actions
         conditions
-        ${CMAKE_SOURCE_DIR}/components/manipulation/include
-        ${CMAKE_SOURCE_DIR}/components/gaze_control/include
-        ${CMAKE_SOURCE_DIR}/components/ecub_emotions/include
 )
 
-file(GLOB BT_NODES    
-    "actions/*.cpp"
-    "conditions/*.cpp"
-)
+file(GLOB BT_NODES "actions/*.cpp" "conditions/*.cpp")
+file(GLOB COMPONENTS "interfaces/*/src/*.cpp")
 
 target_sources(custom_leaf_nodes
   PRIVATE
   ${BT_NODES}
+  ${COMPONENTS}
   common.cpp
 )
 
-target_include_directories(custom_leaf_nodes
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-
 target_link_libraries(custom_leaf_nodes
   PRIVATE
-    manipulation_interface
-    gaze_control_interface
-    ecub_emotions_interface
     eCubPerceptionInterface::eCubPerceptionInterface
     BT::behaviortree_cpp_v3
     YARP::YARP_os
@@ -44,7 +37,6 @@ target_link_libraries(custom_leaf_nodes
 
 
 add_executable(run_bt)
-
 target_sources(run_bt
     PRIVATE
     run_bt.cpp

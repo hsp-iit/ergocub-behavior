@@ -8,7 +8,7 @@
 // This is an automatically generated file.
 // It could get re-generated if the ALLOW_IDL_GENERATION flag is on.
 
-#include <ManipulationInterface.h>
+#include <CommandInterface.h>
 
 #include <yarp/os/idl/WireTypes.h>
 

@@ -23,6 +23,4 @@ else()
     message(WARNING "ZeroMQ NOT found. The execution of the BT will not be visible with Groot.")
 endif()
 
-# add_subdirectory(interfaces)
-add_subdirectory(components)
 add_subdirectory(bts/src)
