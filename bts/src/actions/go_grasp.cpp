@@ -29,7 +29,7 @@ GoGrasp::GoGrasp(string name, const NodeConfiguration& nc, pt::ptree bt_config) 
 
     // PERCEPTION
     std::string perception_server_name =  bt_config.get<std::string>("components.perception.port");
-    std::string perception_client_name = "/BT/" + name + manipulation_server_name;
+    std::string perception_client_name = "/BT/" + name + perception_server_name;
 
     perception_client_port.open(perception_client_name);
 
@@ -45,10 +45,10 @@ GoGrasp::GoGrasp(string name, const NodeConfiguration& nc, pt::ptree bt_config) 
 
 NodeStatus GoGrasp::onStart()
 {
-    #ifdef MANIPULATION
+    std::cout << "Before ready" << std::endl;
     manipulation_client_.perform_joint_space_action("ready");
+    std::cout << "After ready" << std::endl;
     ready = false;
-    #endif
     return NodeStatus::RUNNING;
 }
 
@@ -65,7 +65,6 @@ NodeStatus GoGrasp::onRunning(){
     //         }
     //     }
 
-    #ifdef MANIPULATION
     if (manipulation_client_.is_finished() && !ready){
         ready = true;
         std::vector<yarp::sig::Matrix> hand_poses = ecub_perception_client_.get_poses();
@@ -88,8 +87,6 @@ NodeStatus GoGrasp::onRunning(){
         return NodeStatus::SUCCESS;
     }
     return NodeStatus::RUNNING;
-    #endif
-    return NodeStatus::SUCCESS;
 }
 
 void GoGrasp::onHalted(){

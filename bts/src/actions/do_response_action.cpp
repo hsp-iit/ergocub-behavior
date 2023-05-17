@@ -57,11 +57,7 @@ NodeStatus DoResponseAction::tick()
     std::string has_box = msg3.value();
 
     // CHECK IF AN ACTION IS IN EXECUTION
-    #ifdef MANIPULATION
     auto fin = manipulation_client_.is_finished();
-    #else
-    bool fin = true;
-    #endif
     std::cout << "DEBUGGING DO RESPONSE ACTION " << std::endl << std::endl << std::endl << std::endl;
     std::cout << "fin: " <<  fin << std::endl;
     std::cout << "action: " << action << std::endl;
@@ -80,11 +76,9 @@ NodeStatus DoResponseAction::tick()
             }
             if(action == "release"){
                 if(last_sent_command != "release" && focus == "yes"){
-                    #ifdef MANIPULATION
                     // manipulation_client_.release_object();
                     manipulation_client_.perform_cartesian_action("out");
                     was_releasing = true;
-                    #endif
                     last_sent_command = action;
                     return NodeStatus::SUCCESS;
                 }
@@ -94,9 +88,7 @@ NodeStatus DoResponseAction::tick()
             }
             if(action == "up" || action == "down" || action == "left" || action == "right" || action == "forward" || action == "back"){
                 if(last_sent_command != action && focus == "yes"){
-                    #ifdef MANIPULATION
                     manipulation_client_.perform_cartesian_action(action);
-                    #endif
                     last_sent_command = action;
                     return NodeStatus::SUCCESS;
                 }
@@ -110,9 +102,7 @@ NodeStatus DoResponseAction::tick()
             // ACTIONS
             if(action == "wave" || action == "shake" || action == "dance" || action == "bored"){
                 if(last_sent_command != action && focus == "yes"){
-                    #ifdef MANIPULATION
                     manipulation_client_.perform_joint_space_action(action);
-                    #endif
                     last_sent_command = action;
                     return NodeStatus::SUCCESS;
                 }
@@ -122,9 +112,7 @@ NodeStatus DoResponseAction::tick()
             }
             // GO HOME
             else if(last_sent_command != "home"){
-                #ifdef MANIPULATION
                 manipulation_client_.perform_joint_space_action("home");
-                #endif
                 last_sent_command = "home";
                 return NodeStatus::SUCCESS;
             }
