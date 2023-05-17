@@ -26,7 +26,6 @@ namespace pt = boost::property_tree;
 #include <actions/robot_change_face.h>
 #include <actions/do_response_action.h>
 #include <actions/go_home.h>
-#include <actions/go_ready.h>
 #include <actions/go_grasp.h>
 #include <actions/go_release.h>
 #include <actions/move_box.h>
@@ -58,7 +57,6 @@ int main(int argc, char **argv)
     bt_factory.registerBuilder<RobotChangeFace>("RobotChangeFace", build_node<RobotChangeFace>(config));
     bt_factory.registerBuilder<DoResponseAction>("DoResponseAction", build_node<DoResponseAction>(config));
     bt_factory.registerBuilder<GoHome>("GoHome", build_node<GoHome>(config));
-    bt_factory.registerBuilder<GoReady>("GoReady", build_node<GoReady>(config));
     bt_factory.registerBuilder<GoGrasp>("GoGrasp", build_node<GoGrasp>(config));
     bt_factory.registerBuilder<GoRelease>("GoRelease", build_node<GoRelease>(config));
     bt_factory.registerBuilder<MoveBox>("MoveBox", build_node<MoveBox>(config));   

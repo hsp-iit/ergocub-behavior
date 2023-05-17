@@ -2,7 +2,7 @@
 
 
 #include <behaviortree_cpp_v3/action_node.h>
-#include <ManipulationInterface.h>
+#include <CommandInterface.h>
 #include <eCubPerceptionInterface/eCubPerceptionInterface.h>
 #include <string>
 #include <future>
@@ -29,4 +29,5 @@ private:
     yarp::os::Network yarp;
     yarp::os::Port manipulation_client_port;
     yarp::os::Port perception_client_port;
+    bool ready;
 };
