@@ -55,9 +55,6 @@ NodeStatus DoResponseAction::tick()
         throw BT::RuntimeError("missing required input [message]: ", msg3.error() );
     }
     std::string has_box = msg3.value();
-    
-    // std::cout << "received action " << action << std::endl;
-    // std::cout << "last_sent_command " << last_sent_command << std::endl;
 
     // CHECK IF AN ACTION IS IN EXECUTION
     #ifdef MANIPULATION
@@ -77,7 +74,7 @@ NodeStatus DoResponseAction::tick()
         // HAS_BOX COMMANDS
         if(has_box == "yes"){
             if(was_releasing){
-                manipulation_client_.release_object();
+                // manipulation_client_.release_object();
                 setOutput<std::string>("has_box_out", "no");
                 was_releasing = false;
             }
@@ -95,12 +92,24 @@ NodeStatus DoResponseAction::tick()
                     return NodeStatus::FAILURE;
                 }
             }
+            if(action == "up" || action == "down" || action == "left" || action == "right" || action == "forward" || action == "back"){
+                if(last_sent_command != action && focus == "yes"){
+                    #ifdef MANIPULATION
+                    manipulation_client_.perform_cartesian_action(action);
+                    #endif
+                    last_sent_command = action;
+                    return NodeStatus::SUCCESS;
+                }
+                else{
+                    return NodeStatus::FAILURE;
+                }
+            }
         }
         // HRI COMMANDS
         else{
             // ACTIONS
-            if(action == "wave"){
-                if(last_sent_command != "wave" && focus == "yes"){
+            if(action == "wave" || action == "shake" || action == "dance" || action == "bored"){
+                if(last_sent_command != action && focus == "yes"){
                     #ifdef MANIPULATION
                     manipulation_client_.perform_joint_space_action(action);
                     #endif
@@ -109,18 +118,6 @@ NodeStatus DoResponseAction::tick()
                 }
                 else{
                     return NodeStatus::FAILURE; 
-                }
-            }
-            else if(action == "shake"){
-                if(last_sent_command != "shake" && focus == "yes"){
-                    #ifdef MANIPULATION
-                    manipulation_client_.perform_joint_space_action(action);
-                    #endif
-                    last_sent_command = action;
-                    return NodeStatus::SUCCESS;
-                }
-                else{
-                    return NodeStatus::FAILURE;
                 }
             }
             // GO HOME

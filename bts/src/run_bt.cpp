@@ -25,17 +25,13 @@ namespace pt = boost::property_tree;
 #include <actions/robot_look_at_poi.h>
 #include <actions/robot_change_face.h>
 #include <actions/do_response_action.h>
-#include <actions/go_home.h>
 #include <actions/go_grasp.h>
-#include <actions/go_release.h>
-#include <actions/move_box.h>
 
 #include <conditions/box_detected.h>
 #include <conditions/face_detected.h>
 #include <conditions/object_is_graspable.h>
 #include <conditions/focus_detected.h>
 #include <conditions/action_detected.h>
-#include <conditions/is_doing_action.h>
 
 #include "common.h"
 
@@ -56,21 +52,18 @@ int main(int argc, char **argv)
     bt_factory.registerBuilder<RobotLookAtPOI>("RobotLookAtPOI", build_node<RobotLookAtPOI>(config));
     bt_factory.registerBuilder<RobotChangeFace>("RobotChangeFace", build_node<RobotChangeFace>(config));
     bt_factory.registerBuilder<DoResponseAction>("DoResponseAction", build_node<DoResponseAction>(config));
-    bt_factory.registerBuilder<GoHome>("GoHome", build_node<GoHome>(config));
-    bt_factory.registerBuilder<GoGrasp>("GoGrasp", build_node<GoGrasp>(config));
-    bt_factory.registerBuilder<GoRelease>("GoRelease", build_node<GoRelease>(config));
-    bt_factory.registerBuilder<MoveBox>("MoveBox", build_node<MoveBox>(config));   
+    bt_factory.registerBuilder<GoGrasp>("GoGrasp", build_node<GoGrasp>(config));  
 
     bt_factory.registerBuilder<BoxDetected>("BoxDetected", build_node<BoxDetected>(config));
     bt_factory.registerBuilder<FaceDetected>("FaceDetected", build_node<FaceDetected>(config));
     bt_factory.registerBuilder<ObjectIsGraspable>("ObjectIsGraspable", build_node<ObjectIsGraspable>(config));
     bt_factory.registerBuilder<FocusDetected>("FocusDetected", build_node<FocusDetected>(config));
     bt_factory.registerBuilder<ActionDetected>("ActionDetected", build_node<ActionDetected>(config));
-    bt_factory.registerBuilder<IsDoingAction>("IsDoingAction", build_node<IsDoingAction>(config));
 
     // Initialize Blackboard and set default values
     auto blackboard = BT::Blackboard::create();
     blackboard->set("the_has_box", "no");
+    blackboard->set("the_poi", "no");
     auto tree = bt_factory.createTreeFromFile(bt_description, blackboard);
 
     // Create some logger

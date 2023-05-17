@@ -1,10 +1,10 @@
 {
-    "bt_description": "/home/btuc/ergocub-behavior/bts/descriptions/refactored_ergotree.xml",
+    "bt_description": "/home/btuc/ergocub-behavior/bts/descriptions/ergotree.xml",
     "components": 
     {
-        "manipulation": {"port": "/Componets/Manipulation", "required": true},
+        "manipulation": {"port": "/Components/Manipulation", "required": true},
         "emotions": {"port": "/ergoCubEmotions/rpc", "required": true},
-        "gaze": {"port": "/Componets/GazeController", "required": true},
+        "gaze": {"port": "/Components/GazeController", "required": true},
         "perception": {"port": "/eCubPerception/rpc:i", "required": true}
     },
 
