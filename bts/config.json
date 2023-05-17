@@ -10,7 +10,8 @@
 
     "nodes":
     {
-        "is_graspable": {"r_ellipse_center": [0.60, -0.15, 0.15], "r_ellipse_radius": [0.1, 0.1, 0.1],
-                         "l_ellipse_center": [0.60,  0.15, 0.15], "l_ellipse_radius": [0.1, 0.1, 0.1]}
+        "is_graspable": {"r_ellipse_center": [0.60, -0.15, 0.15], "r_ellipse_radius": [0.2, 0.2, 0.2],
+                         "l_ellipse_center": [0.60,  0.15, 0.15], "l_ellipse_radius": [0.2, 0.2, 0.2]},
+        "robot_look_at_poi": {"none_counter_thr": 12}
     }
 }

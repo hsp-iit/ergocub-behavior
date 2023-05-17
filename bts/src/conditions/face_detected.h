@@ -24,5 +24,4 @@ private:
     pt::ptree bt_config;
     yarp::os::Network yarp;
     yarp::os::Port client_port;
-    bool was_true;
 };

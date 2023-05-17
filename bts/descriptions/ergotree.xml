@@ -3,13 +3,13 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
-            <ReactiveSequence name="">
+            <ReactiveSequence>
                 <ReactiveFallback>
                     <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">
                         <Condition ID="BoxDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
                     </BlackboardCheckString>
                     <Condition ID="FaceDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
-                    <AlwaysSuccess/>
+                    <SetBlackboard output_key="none" value="{the_poi}"/>
                 </ReactiveFallback>
                 <Action ID="RobotLookAtPOI" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
             </ReactiveSequence>

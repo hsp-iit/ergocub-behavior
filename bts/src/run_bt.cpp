@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     // Initialize Blackboard and set default values
     auto blackboard = BT::Blackboard::create();
     blackboard->set("the_has_box", "no");
-    blackboard->set("the_poi", "no");
+    blackboard->set("the_poi", "none");
     auto tree = bt_factory.createTreeFromFile(bt_description, blackboard);
 
     // Create some logger

@@ -29,6 +29,6 @@ private:
     RPCServerInterface gaze_controller;
     yarp::os::BufferedPort<yarp::os::Bottle> port;
     int none_counter;
-    int none_counter_thr = 12;
+    int none_counter_thr;
     std::string last_poi;
 };

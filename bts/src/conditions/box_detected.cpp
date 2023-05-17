@@ -32,27 +32,15 @@ NodeStatus BoxDetected::tick()
 {
     auto object_position_yarp = ecub_perception_client_.get_center();
     std::vector<double> object_position(3);
+
     for (std::size_t i = 0; i < 3; ++i)
         object_position[i] = object_position_yarp[i];
 
-    // std::cout << distance << std::endl;
     if (are_all_elements_zero(object_position)){
        throw(std::runtime_error("box_detected: received (0,0,0) as target position (maybe segmentation is dead?"));
     }
     if (are_all_elements_minus_one(object_position)){
-        setOutput("poi", "none" );
         return BT::NodeStatus::FAILURE;
-    }
-    if(are_all_elements_minus_two(object_position)){
-        if (was_true){  // continue following (special value)
-            setOutput("poi", "object");
-            setOutput("poi_pos", object_position);
-            return  BT::NodeStatus::SUCCESS;
-        }
-        else{  // do not follow
-        setOutput("poi", "none" );
-        return BT::NodeStatus::FAILURE;
-        }
     }
     setOutput("poi", "object" );
     setOutput("poi_pos", object_position);

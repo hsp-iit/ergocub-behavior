@@ -25,7 +25,6 @@ FaceDetected::FaceDetected(string name, const NodeConfiguration& nc, pt::ptree b
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
     ecub_perception_client_.yarp().attachAsClient(client_port);
-    was_true = false;
 }
 
 
@@ -33,28 +32,18 @@ NodeStatus FaceDetected::tick()
 {
     auto face_position_yarp = ecub_perception_client_.get_face_position();
     std::vector<double> face_position(3);
+
     for (std::size_t i = 0; i < 3; ++i)
         face_position[i] = face_position_yarp[i];
 
-    if(are_all_elements_minus_one(face_position)){
-        setOutput("poi", "none" );
-        was_true = false;
-        return BT::NodeStatus::FAILURE;
+    if (are_all_elements_zero(face_position)){
+       throw(std::runtime_error("face_detected: received (0,0,0) as target position (maybe focus is dead?"));
     }
-    if(are_all_elements_minus_two(face_position)){
-        if (was_true){  // continue following (special value)
-            setOutput("poi", "face");
-            setOutput("poi_pos", face_position);
-            return  BT::NodeStatus::SUCCESS;
-        }
-        else{  // do not follow
-        setOutput("poi", "none" );
+    if(are_all_elements_minus_one(face_position)){
         return BT::NodeStatus::FAILURE;
-        }
     }
     setOutput("poi", "face");
     setOutput("poi_pos", face_position);
-    was_true = true;
     return  BT::NodeStatus::SUCCESS;
 }
 
