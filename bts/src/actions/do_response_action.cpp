@@ -77,7 +77,8 @@ NodeStatus DoResponseAction::tick()
             if(action == "release"){
                 if(last_sent_command != "release" && focus == "yes"){
                     // manipulation_client_.release_object();
-                    manipulation_client_.perform_cartesian_action("out");
+                    // manipulation_client_.perform_cartesian_action("out");
+                    manipulation_client_.perform_joint_space_action("ready");
                     was_releasing = true;
                     last_sent_command = action;
                     return NodeStatus::SUCCESS;

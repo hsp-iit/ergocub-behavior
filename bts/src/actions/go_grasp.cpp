@@ -67,6 +67,7 @@ NodeStatus GoGrasp::onRunning(){
 
     if (manipulation_client_.is_finished() && !ready){
         ready = true;
+        setOutput<std::string>("has_box", "yes");
         std::vector<yarp::sig::Matrix> hand_poses = ecub_perception_client_.get_poses();
         yarp::sig::Matrix right = hand_poses[0];
         yarp::sig::Matrix left = hand_poses[1];
@@ -77,12 +78,11 @@ NodeStatus GoGrasp::onRunning(){
             std::cout << std::endl;
         }
         // manipulation_client_.move_hands_to_pose(left, right, 5.0);
-        manipulation_client_.perform_cartesian_action("testgrasp");
+        manipulation_client_.perform_joint_space_action("bottom_grasp");
         return NodeStatus::RUNNING;
     }
     if (manipulation_client_.is_finished() && ready){
         ready = false;
-        setOutput<std::string>("has_box", "yes");
         // manipulation_client_.grasp();
         return NodeStatus::SUCCESS;
     }
@@ -90,7 +90,9 @@ NodeStatus GoGrasp::onRunning(){
 }
 
 void GoGrasp::onHalted(){
-    manipulation_client_.perform_joint_space_action("home");
+    if(!ready){
+        manipulation_client_.perform_joint_space_action("home");
+    }
     return;
 }
 

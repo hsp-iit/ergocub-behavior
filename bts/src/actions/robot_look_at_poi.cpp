@@ -89,7 +89,7 @@ NodeStatus RobotLookAtPOI::tick()
             last_poi = "none";
         }
         none_counter++;
-        if(none_counter > none_counter_thr){
+        if(none_counter > 12){
             setpoint.push_back(1);
             setpoint.push_back(0);
             setpoint.push_back(0.8);

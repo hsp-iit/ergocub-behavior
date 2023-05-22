@@ -69,28 +69,29 @@ NodeStatus ObjectIsGraspable::tick()
 
 
     // JUST CENTER
-    auto obj_pos_yarp = ecub_perception_client_.get_center();
-    std::vector<double> obj_pos;
-    for(int i=0; i<3; i++){
-        obj_pos.push_back(obj_pos_yarp[i]);
-        std::cout << obj_pos[i] << std::endl;
-    }
+    // auto obj_pos_yarp = ecub_perception_client_.get_center();
+    // std::vector<double> obj_pos;
+    // for(int i=0; i<3; i++){
+    //     obj_pos.push_back(obj_pos_yarp[i]);
+    //     std::cout << obj_pos[i] << std::endl;
+    // }
 
-    if(obj_pos[0]>0.30 && obj_pos[0]<0.60 &&  // between 25 and 45 centimeter distant from torso
-       obj_pos[1]>-0.20 && obj_pos[1]<0.20 &&  // 5 centemiters on left or right
-       obj_pos[2]>0.20 && obj_pos[2]<0.40
-    )
-        return BT::NodeStatus::SUCCESS;
-    else
-        return BT::NodeStatus::FAILURE;
+    // if(obj_pos[0]>0.30 && obj_pos[0]<0.60 &&  // between 25 and 45 centimeter distant from torso
+    //    obj_pos[1]>-0.20 && obj_pos[1]<0.20 &&  // 5 centemiters on left or right
+    //    obj_pos[2]>0.20 && obj_pos[2]<0.40
+    // )
+    //     return BT::NodeStatus::SUCCESS;
+    // else
+    //     return BT::NodeStatus::FAILURE;
 
 
     // JUST DISTANCE
-    // std::cout << distance << std::endl;
-    // if (distance == -1 or distance == 0 or distance >= threshold){
-    //     return BT::NodeStatus::FAILURE;
-    // }
-    // return  BT::NodeStatus::SUCCESS;
+    int distance = ecub_perception_client_.get_distance();
+    std::cout << distance << std::endl;
+    if (distance == -1 or distance == 0 or distance >= 350){
+        return BT::NodeStatus::FAILURE;
+    }
+    return  BT::NodeStatus::SUCCESS;
 }
 
 PortsList ObjectIsGraspable::providedPorts()
