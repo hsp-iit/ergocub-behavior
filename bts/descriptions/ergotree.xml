@@ -9,7 +9,7 @@
                         <Condition ID="BoxDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
                     </BlackboardCheckString>
                     <Condition ID="FaceDetected" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
-                    <SetBlackboard output_key="none" value="{the_poi}"/>
+                    <SetBlackboard output_key="{the_poi}" value="none"/>
                 </ReactiveFallback>
                 <Action ID="RobotLookAtPOI" poi="{the_poi}" poi_pos="{the_poi_pos}"/>
             </ReactiveSequence>
