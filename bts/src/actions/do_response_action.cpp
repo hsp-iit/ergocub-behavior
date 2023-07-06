@@ -87,21 +87,21 @@ NodeStatus DoResponseAction::tick()
                     return NodeStatus::FAILURE;
                 }
             }
-            if(action == "up" || action == "down" || action == "left" || action == "right" || action == "forward" || action == "back"){
-                if(last_sent_command != action && focus == "yes"){
-                    manipulation_client_.perform_cartesian_action(action);
-                    last_sent_command = action;
-                    return NodeStatus::SUCCESS;
-                }
-                else{
-                    return NodeStatus::FAILURE;
-                }
-            }
+            // if(action == "up" || action == "down" || action == "left" || action == "right" || action == "forward" || action == "back"){
+            //     if(last_sent_command != action && focus == "yes"){
+            //         manipulation_client_.perform_cartesian_action(action);
+            //         last_sent_command = action;
+            //         return NodeStatus::SUCCESS;
+            //     }
+            //     else{
+            //         return NodeStatus::FAILURE;
+            //     }
+            // }
         }
         // HRI COMMANDS
         else{
             // ACTIONS
-            if(action == "wave" || action == "shake" || action == "dance" || action == "bored"){
+            if(action == "wave" || action == "shake"){
                 if(last_sent_command != action && focus == "yes"){
                     manipulation_client_.perform_joint_space_action(action);
                     last_sent_command = action;
