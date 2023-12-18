@@ -1,5 +1,5 @@
 {
-    "bt_description": "/home/btuc/ergocub-behavior/bts/descriptions/ergotree.xml",
+    "bt_description": "/usr/local/src/robot/hsp/ergocub-behavior/bts/descriptions/ergotree.xml",
     "components": 
     {
         "manipulation": {"port": "/Components/Manipulation", "required": true},

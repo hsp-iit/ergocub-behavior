@@ -41,7 +41,7 @@ using namespace BT;
 
 int main(int argc, char **argv)
 {
-    std::string config_file = "/home/btuc/ergocub-behavior/bts/config.json";
+    std::string config_file = "/usr/local/src/robot/hsp/ergocub-behavior/bts/config.json";
     pt::ptree config;
     pt::read_json(config_file, config);
     std::string bt_description = config.get<std::string>("bt_description");

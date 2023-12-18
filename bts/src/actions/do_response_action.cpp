@@ -101,7 +101,7 @@ NodeStatus DoResponseAction::tick()
         // HRI COMMANDS
         else{
             // ACTIONS
-            if(action == "wave" || action == "shake"){
+            if(action == "wave" || action == "shake" || action == "t_pose"){
                 if(last_sent_command != action && focus == "yes"){
                     manipulation_client_.perform_joint_space_action(action);
                     last_sent_command = action;
