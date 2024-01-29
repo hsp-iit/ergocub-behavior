@@ -6,28 +6,27 @@
 #include <unistd.h>
 #include <yarp/os/Network.h>
 
-using yarp::os::Network;
 using yarp::os::Bottle;
 
 
-RobotChangeFace::RobotChangeFace(string name, const NodeConfiguration& config) :
-    SyncActionNode(name, config)
+RobotChangeFace::RobotChangeFace(string name, const NodeConfiguration& nc, pt::ptree bt_config) :
+    SyncActionNode(name, nc),
+    bt_config(bt_config)
 {
-    is_ok_ = init(name);
-}
+    std::string server_name =  bt_config.get<std::string>("components.emotions.port");
+    std::string client_name = "/BT/" + name + server_name;
 
-bool RobotChangeFace::init(std::string){
-    #ifdef EMOTIONS
-    port.open("/BT/emotions/out");
-    #ifdef ICUB
-    Network::connect("/BT/emotions/out","/icub/face/emotions/in");
-    #endif
-    #ifdef ECUB
-    Network::connect("/BT/emotions/out","/ergoCubEmotions/rpc");
-    #endif
-    #endif
+    client_port.open(client_name);
+
+    while (!yarp.connect(client_name,server_name))
+    {
+        std::cout << "Error! Could not connect to server " << server_name << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+    }
+
+    ecub_emotions_client.yarp().attachAsClient(client_port);
+
     last_sent_emotion = "";
-    return true;
 }
 
 NodeStatus RobotChangeFace::tick()
@@ -47,58 +46,24 @@ NodeStatus RobotChangeFace::tick()
     }
 
     // change face depending on object
-    #ifdef EMOTIONS
-    Bottle cmd;
-    Bottle response;
-    #ifdef ICUB
-    cmd.addString("set");
-    cmd.addString("all");
-    #endif
-    #ifdef ECUB
-    cmd.addString("setEmotion");
-    #endif
 
     if(has_box=="yes" && last_sent_emotion!="has_box"){
-        #ifdef ICUB
-        cmd.addString("evi");
-        #endif
-        #ifdef ECUB
-        cmd.addString("shy");
-        #endif
+        ecub_emotions_client.setEmotion("shy");
         last_sent_emotion = "has_box";
     }
     else if(msg=="none" && last_sent_emotion!="none" && has_box=="no"){
-        #ifdef ICUB
-        cmd.addString("hap");
-        #endif
-        #ifdef ECUB
-        cmd.addString("neutral");
-        #endif
+        ecub_emotions_client.setEmotion("neutral");
         last_sent_emotion = "none";
     }
     else if(msg=="face" && last_sent_emotion!="face" && has_box=="no"){
-        #ifdef ICUB
-        cmd.addString("hap");
-        #endif
-        #ifdef ECUB
-        cmd.addString("happy");
-        #endif
+        ecub_emotions_client.setEmotion("happy");
         last_sent_emotion = "face";
     }
     else if(msg=="object" && last_sent_emotion!="object" && has_box=="no"){
-        #ifdef ICUB
-        cmd.addString("evi");
-        #endif
-        #ifdef ECUB
-        cmd.addString("alert");
-        #endif
+        ecub_emotions_client.setEmotion("alert");
         last_sent_emotion = "object";
     }
 
-    if (port.write(cmd, response)) {
-        cout << response.toString() << endl;
-    }
-    #endif
     return NodeStatus::SUCCESS;
 }
 

@@ -1,40 +1,40 @@
-#ifdef ZMQ_FOUND
-#include "behaviortree_cpp_v3/loggers/bt_zmq_publisher.h"
-#endif
-
 #include <iostream>
-#include <behaviortree_cpp_v3/behavior_tree.h>
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>         // std::chrono::seconds
-#include <yarp/os/LogStream.h>
-#include <behaviortree_cpp_v3/bt_factory.h>
 
+// Include BehaviorTree.CPP
+#include <behaviortree_cpp_v3/behavior_tree.h>
+#include <behaviortree_cpp_v3/bt_factory.h>
 #include <behaviortree_cpp_v3/loggers/bt_cout_logger.h>
 #include <behaviortree_cpp_v3/loggers/bt_minitrace_logger.h>
 #include <behaviortree_cpp_v3/loggers/bt_file_logger.h>
+#include "behaviortree_cpp_v3/loggers/bt_zmq_publisher.h" // This makes Groot work
 
+// Include YARP
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
 #include <yarp/os/ResourceFinder.h>
+#include <yarp/os/LogStream.h>
+
+// Include Boost (to read config file)
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+namespace pt = boost::property_tree;
 
 /* INCLUDE NODES */
 #include <actions/robot_look_at_poi.h>
 #include <actions/robot_change_face.h>
 #include <actions/do_response_action.h>
-#include <actions/go_home.h>
-#include <actions/go_ready.h>
 #include <actions/go_grasp.h>
-#include <actions/go_release.h>
-#include <actions/move_box.h>
 
 #include <conditions/box_detected.h>
 #include <conditions/face_detected.h>
 #include <conditions/object_is_graspable.h>
 #include <conditions/focus_detected.h>
 #include <conditions/action_detected.h>
-#include <conditions/is_doing_action.h>
+#include <conditions/robot_navigating.h>
 
-/* END */
+#include "common.h"
 
 using namespace std;
 using namespace BT;
@@ -42,58 +42,44 @@ using namespace BT;
 
 int main(int argc, char **argv)
 {
-    std::string fileName = "/home/btuc/ergocub-behavior/bts/descriptions/new_ergotree.xml";
+    std::string config_file = "/usr/local/src/robot/hsp/ergocub-behavior/bts/config.json";
+    pt::ptree config;
+    pt::read_json(config_file, config);
+    std::string bt_description = config.get<std::string>("bt_description");
 
     BehaviorTreeFactory bt_factory;
 
     /* REGISTER NODES */
-    bt_factory.registerNodeType<RobotLookAtPOI>("RobotLookAtPOI");
-    bt_factory.registerNodeType<RobotChangeFace>("RobotChangeFace");
-    bt_factory.registerNodeType<DoResponseAction>("DoResponseAction");
-    bt_factory.registerNodeType<GoHome>("GoHome");
-    bt_factory.registerNodeType<GoReady>("GoReady");
-    bt_factory.registerNodeType<GoGrasp>("GoGrasp");
-    bt_factory.registerNodeType<GoRelease>("GoRelease");
-     bt_factory.registerNodeType<MoveBox>("MoveBox");   
+    bt_factory.registerBuilder<RobotLookAtPOI>("RobotLookAtPOI", build_node<RobotLookAtPOI>(config));
+    bt_factory.registerBuilder<RobotChangeFace>("RobotChangeFace", build_node<RobotChangeFace>(config));
+    bt_factory.registerBuilder<DoResponseAction>("DoResponseAction", build_node<DoResponseAction>(config));
+    bt_factory.registerBuilder<GoGrasp>("GoGrasp", build_node<GoGrasp>(config));  
 
-    bt_factory.registerNodeType<BoxDetected>("BoxDetected");
-    bt_factory.registerNodeType<FaceDetected>("FaceDetected");
-    bt_factory.registerNodeType<ObjectIsGraspable>("ObjectIsGraspable");
-    bt_factory.registerNodeType<FocusDetected>("FocusDetected");
-    bt_factory.registerNodeType<ActionDetected>("ActionDetected");
-    bt_factory.registerNodeType<IsDoingAction>("IsDoingAction");
-    /* END */
+    bt_factory.registerBuilder<BoxDetected>("BoxDetected", build_node<BoxDetected>(config));
+    bt_factory.registerBuilder<FaceDetected>("FaceDetected", build_node<FaceDetected>(config));
+    bt_factory.registerBuilder<ObjectIsGraspable>("ObjectIsGraspable", build_node<ObjectIsGraspable>(config));
+    bt_factory.registerBuilder<FocusDetected>("FocusDetected", build_node<FocusDetected>(config));
+    bt_factory.registerBuilder<ActionDetected>("ActionDetected", build_node<ActionDetected>(config));
+    bt_factory.registerBuilder<RobotNavigating>("RobotNavigating", build_node<RobotNavigating>(config));
 
-//    auto tree = bt_factory.createTreeFromFile(fileName);
-     auto blackboard = BT::Blackboard::create();
-     blackboard->set("the_has_box", "no");
-     auto tree = bt_factory.createTreeFromFile(fileName, blackboard);
+    // Initialize Blackboard and set default values
+    auto blackboard = BT::Blackboard::create();
+    blackboard->set("the_has_box", "no");
+    blackboard->set("the_poi", "none");
+    auto tree = bt_factory.createTreeFromFile(bt_description, blackboard);
 
     // Create some logger
     StdCoutLogger logger_cout(tree);
     MinitraceLogger logger_minitrace(tree, "/tmp/bt_trace.json");
     FileLogger logger_file(tree, "/tmp/bt_trace.fbl");
 
-#ifdef ZMQ_FOUND
     PublisherZMQ publisher_zmq(tree);
-#endif
     printTreeRecursively(tree.rootNode());
-
 
     while(true)
     {
             auto status = tree.tickRoot();
             std::this_thread::sleep_for (std::chrono::milliseconds(50));
-
-            //if (status == BT::NodeStatus::SUCCESS) {
-                // std::cout << "Success" << std::endl;
-//                break;
-            //}
-
-            //if (status == BT::NodeStatus::FAILURE) {
-                // std::cout << "Failure" << std::endl;
-//                break;
-            //}
     }
 
     return 0;

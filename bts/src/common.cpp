@@ -17,12 +17,3 @@ bool are_all_elements_zero(const std::vector<double>& vec) {
     }
     return true;
 }
-
-bool are_all_elements_minus_two(const std::vector<double>& vec) {
-    for (double element : vec) {
-        if (element != -2.) {
-            return false;
-        }
-    }
-    return true;
-}
