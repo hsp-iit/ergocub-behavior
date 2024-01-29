@@ -32,6 +32,7 @@ namespace pt = boost::property_tree;
 #include <conditions/object_is_graspable.h>
 #include <conditions/focus_detected.h>
 #include <conditions/action_detected.h>
+#include <conditions/robot_navigating.h>
 
 #include "common.h"
 
@@ -59,6 +60,7 @@ int main(int argc, char **argv)
     bt_factory.registerBuilder<ObjectIsGraspable>("ObjectIsGraspable", build_node<ObjectIsGraspable>(config));
     bt_factory.registerBuilder<FocusDetected>("FocusDetected", build_node<FocusDetected>(config));
     bt_factory.registerBuilder<ActionDetected>("ActionDetected", build_node<ActionDetected>(config));
+    bt_factory.registerBuilder<RobotNavigating>("RobotNavigating", build_node<RobotNavigating>(config));
 
     // Initialize Blackboard and set default values
     auto blackboard = BT::Blackboard::create();

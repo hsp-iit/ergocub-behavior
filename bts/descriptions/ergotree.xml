@@ -3,6 +3,7 @@
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <ReactiveSequence>
+            <Condition ID="RobotNavigating"/>
             <ReactiveSequence>
                 <ReactiveFallback>
                     <BlackboardCheckString return_on_mismatch="FAILURE" value_A="{the_has_box}" value_B="no">

@@ -5,7 +5,8 @@
         "manipulation": {"port": "/Components/Manipulation", "required": true},
         "emotions": {"port": "/ergoCubEmotions/rpc", "required": true},
         "gaze": {"port": "/Components/GazeController", "required": true},
-        "perception": {"port": "/eCubPerception/rpc:i", "required": true}
+        "perception": {"port": "/eCubPerception/rpc:i", "required": true},
+        "navigation": {"port": "/is_goal_reached_bt/goal_reached:o", "required": "false"}
     },
 
     "nodes":
