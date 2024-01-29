@@ -88,7 +88,7 @@ NodeStatus ObjectIsGraspable::tick()
     // JUST DISTANCE
     int distance = ecub_perception_client_.get_distance();
     std::cout << distance << std::endl;
-    if (distance == -1 or distance == 0 or distance < 300  or distance >= 400){
+    if (distance == -1 or distance == 0 or distance < 250  or distance >= 400){
         return BT::NodeStatus::FAILURE;
     }
     return  BT::NodeStatus::SUCCESS;
