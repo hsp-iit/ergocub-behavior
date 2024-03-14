@@ -7,8 +7,11 @@
 #include <future>
 #include <yarp/os/Network.h>
 #include <yarp/os/Port.h>
+#include <yarp/os/BufferedPort.h>
+#include <yarp/os/Bottle.h>
 #include <vector>
 #include <map>
+#include <eCubPerceptionInterface/eCubPerceptionInterface.h>
 
 using namespace BT;
 using namespace std;
@@ -27,5 +30,9 @@ private:
     yarp::os::Network yarp;
     std::string last_sent_command;
     yarp::os::Port man_client_port;
+    yarp::os::Port per_client_port;
+    eCubPerceptionInterface ecub_perception_client_;
     bool was_releasing;
+    yarp::os::BufferedPort<yarp::os::Bottle> m_posePort;
+    std::string m_posePortName;
 };

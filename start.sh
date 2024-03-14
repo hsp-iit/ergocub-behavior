@@ -18,12 +18,13 @@ do
 done
 
 # Start the container with the right options
+# removed   -v "${XAUTHORITY}":/home/btuc/.Xauthority:rw \
 docker run -itd --rm --network=host --ipc=host \
   --env DISPLAY=:0 --env QT_X11_NO_MITSHM=1 --env XDG_RUNTIME_DIR=/root/1000 --env XAUTHORITY=/home/btuc/.Xauthority \
-  -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v "${XAUTHORITY}":/home/btuc/.Xauthority:rw \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
   -v "$(pwd)":/home/btuc/ergocub-behavior \
   --name $DOCKER_CONTAINER_NAME \
-  ar0s/bt-assignment bash
+  ar0s/ergocub-behaviour-image bash
 
 # Create tmux session
 tmux new-session -d -s $TMUX_NAME
