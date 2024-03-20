@@ -18,21 +18,23 @@ RobotNavigating::RobotNavigating(string name, const NodeConfiguration& nc, pt::p
     reader_name = "/BT/" + name;
 
     reader_port.open(reader_name);
+    yarp::os::Network::connect(writer_name, reader_name);
 }
 
 
 NodeStatus RobotNavigating::tick()
 {
     yarp::os::Bottle *data = reader_port.read(false);
-    
-    if (data == nullptr){
-        return NodeStatus::SUCCESS;
+
+    if (data != nullptr){
+        auto cmd = data->get(0).asInt32();
+        if (cmd == 0){
+            is_navigating = true;
+        } else {
+            is_navigating = false;
+        }
     }
 
-    if (data->get(0).asInt16() == 0){
-        return NodeStatus::SUCCESS;
-    }
-
-    return NodeStatus::FAILURE;
+    return is_navigating ? NodeStatus::FAILURE : NodeStatus::SUCCESS;
 }
 
