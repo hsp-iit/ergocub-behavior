@@ -40,10 +40,10 @@ DoResponseAction::DoResponseAction(string name, const NodeConfiguration& nc, pt:
         std::cout << "Error! Could not connect to server " << server_name << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
-    while (!yarp.connect(client_pose_name, m_posePortName))
+    if (!yarp.connect(client_pose_name, m_posePortName))
     {
         std::cout << "Error! Could not connect to server " << m_posePortName << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        //std::this_thread::sleep_for(std::chrono::seconds(5));
     }
 
     manipulation_client_.yarp().attachAsClient(man_client_port);
