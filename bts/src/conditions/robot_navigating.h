@@ -25,4 +25,6 @@ private:
     std::string reader_name;
     std::string writer_name;
     yarp::os::BufferedPort<yarp::os::Bottle> reader_port;
+
+    bool is_navigating = false;
 };

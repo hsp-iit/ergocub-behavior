@@ -7,7 +7,7 @@
         "gaze": {"port": "/Components/GazeController", "required": true},
         "perception": {"port": "/eCubPerception/rpc:i", "required": true},
         "navigation": {"port": "/is_goal_reached_bt/goal_reached:o", "required": "false"},
-        "human_position": {"port": "/human_state/pose", "required": false}
+        "human_position": {"port": "human_state/pose:o", "required": false}
     },
 
     "nodes":
