@@ -75,8 +75,6 @@ NodeStatus RobotLookAtPOI::tick()
         }
         std::vector<double> poi_pos = msg2.value();
 
-        // std::vector<double> poi_pos = msg2.value();
-        // std::cout << poi_pos[0] << " " <<  poi_pos[1] << " " <<  poi_pos[2] << std::endl;
 
         setpoint.push_back(poi_pos[0]);
         setpoint.push_back(poi_pos[1]);

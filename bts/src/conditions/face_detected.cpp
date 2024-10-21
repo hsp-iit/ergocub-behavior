@@ -35,11 +35,11 @@ NodeStatus FaceDetected::tick()
 
     for (std::size_t i = 0; i < 3; ++i)
         face_position[i] = face_position_yarp[i];
-
     if (are_all_elements_zero(face_position)){
        throw(std::runtime_error("face_detected: received (0,0,0) as target position (maybe focus is dead?"));
     }
     if(are_all_elements_minus_one(face_position)){
+        setOutput("poi", "none");
         return BT::NodeStatus::FAILURE;
     }
     setOutput("poi", "face");

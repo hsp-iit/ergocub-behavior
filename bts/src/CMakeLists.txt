@@ -48,4 +48,5 @@ target_link_libraries(run_bt
     YARP::YARP_os
     YARP::YARP_init
     YARP::YARP_dev
+    BT::behaviortree_cpp_v3
     )
