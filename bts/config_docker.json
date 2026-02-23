@@ -1,0 +1,19 @@
+{
+    "bt_description": "/home/ecub_docker/ergocub-behavior/bts/descriptions/ergotree.xml",    
+    "components": 
+    {
+        "manipulation": {"port": "/Components/Manipulation", "required": true},
+        "emotions": {"port": "/ergoCubEmotions/rpc", "required": true},
+        "gaze": {"port": "/Components/GazeController", "required": true},
+        "perception": {"port": "/eCubPerception/rpc:i", "required": true},
+        "navigation": {"port": "/is_goal_reached_bt/goal_reached:o", "required": "false"},
+        "human_position": {"port": "human_state/pose:o", "required": false}
+    },
+
+    "nodes":
+    {
+        "is_graspable": {"r_ellipse_center": [0.60, -0.15, 0.15], "r_ellipse_radius": [0.2, 0.2, 0.2],
+                         "l_ellipse_center": [0.60,  0.15, 0.15], "l_ellipse_radius": [0.2, 0.2, 0.2]},
+        "robot_look_at_poi": {"none_counter_thr": 12}
+    }
+}

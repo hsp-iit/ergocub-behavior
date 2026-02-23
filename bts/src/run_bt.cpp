@@ -44,6 +44,26 @@ int main(int argc, char **argv)
 {
     std::string config_file = "/usr/local/src/robot/hsp/ergocub-behavior/bts/config.json";
     pt::ptree config;
+    try
+    {
+        pt::read_json(config_file, config);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << " Couldn't read file at: " <<  config_file << std::endl;
+        try
+        {
+            config_file = "/home/ecub_docker/ergocub-behavior/bts/config_docker.json";
+            std::cout << "Trying to read from docker: " << config_file << std::endl;
+            pt::read_json(config_file, config);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << "Failed also on " <<  config_file << std::endl;
+            return -1;
+        }
+    }
+    
     pt::read_json(config_file, config);
     std::string bt_description = config.get<std::string>("bt_description");
 

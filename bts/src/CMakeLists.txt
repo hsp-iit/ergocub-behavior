@@ -45,6 +45,7 @@ target_sources(run_bt
 target_link_libraries(run_bt
     PRIVATE
     custom_leaf_nodes
+    BT::behaviortree_cpp_v3
     YARP::YARP_os
     YARP::YARP_init
     YARP::YARP_dev
